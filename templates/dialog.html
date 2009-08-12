@@ -1,5 +1,12 @@
 <div class="codeGlassWrapper displayNone">
 	<span class="description">{{ description }}</span>
+	<span class="theme">
+		<select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
+			<option value="tundra">Tundra</option>
+			<option value="nihilo">Nihilo</option>
+			<option value="soria">Soria</option>
+		</select>
+	</span>
 	<span class="close" dojoAttachEvent="onclick: hide"></span>
-	<iframe dojoAttachPoint="iframe"></iframe>
+	<div dojoAttachPoint="iframeContainer"></div>
 </div>

@@ -1,10 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-<head>
-	{{ csscode|safe }}
-	{{ javascriptcode|safe }}
-</head>
-<body>
-	{{ htmlcode|safe }}
-</body>
+	<head>
+		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/{{ version|safe }}/dijit/themes/{{ theme|safe }}/{{ theme|safe }}.css">
+		<style type="text/css">
+			body, html {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+		</style>
+		{{ csscode|safe }}
+		{{ javascriptcode|safe }}
+	</head>
+	<body class="{{ theme|safe }}">
+		{{ htmlcode|safe }}
+	</body>
 </html>
