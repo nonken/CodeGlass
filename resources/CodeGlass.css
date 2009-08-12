@@ -24,6 +24,7 @@
 	z-index: 9999999;
 	position: absolute;
 	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
 	padding: 3px 8px 8px;
 }
 

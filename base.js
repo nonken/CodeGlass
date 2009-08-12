@@ -95,7 +95,7 @@ dojo.declare("CodeGlass.Dialog",
 		// summary:
 		//      do all necessary setup and create background overlay. FIXME: should we add this to the template maybe?
 		
-		this.bg = d.create("div", {
+		this.bg = dojo.create("div", {
 			className: "codeGlassBg"
 		}, dojo.body());
 		
