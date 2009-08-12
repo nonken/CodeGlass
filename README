@@ -1,9 +1,15 @@
 README
 ======
 
+Author: Nikolai Onken - onken@uxebu.com
+
 CodeGlass is a widget to display executeable demos of code for documentation purpose
 
 Usage
 -----
 
 To test the widget simply run the tests/test_CodeGlass.html
+more detailed information on the format CodeGlass expects
+to be able to generate executable demos will be added here
+soon.
+
