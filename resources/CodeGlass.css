@@ -1,0 +1,50 @@
+.displayNone {
+	display: none;
+}
+
+.codeGlass .show {
+	background: url(view.png) no-repeat;
+	width: 129px;
+	height: 42px;
+	cursor: pointer;
+}
+
+.codeGlassBg {
+	background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    z-index: 9999998;
+}
+
+.codeGlassWrapper {
+    padding: 10px;
+    background: white;
+    z-index: 9999999;
+	position: absolute;
+	-moz-border-radius: 6px;
+	padding: 3px 8px 8px;
+}
+
+.codeGlassWrapper iframe {
+	background: white;
+	border: none;
+	display:block;
+	border: 1px dotted #ccc;
+}
+
+.codeGlassWrapper .close {
+	display: inline-block;
+	background: url(close.png) no-repeat;
+	width: 10px;
+	height: 11px;
+	position: absolute;
+	right: 7px;
+	top: 6px;
+	cursor: pointer;
+}
+
+.codeGlassWrapper .description {
+	font-family: Tahoma;
+}
