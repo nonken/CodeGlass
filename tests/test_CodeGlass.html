@@ -4,6 +4,8 @@
 		<title>CodeGlass test</title>
 		<link type="text/css" rel="stylesheet" href="../resources/CodeGlass.css" />
 		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.3/dojox/highlight/resources/highlight.css" />
+		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.3/dojox/highlight/resources/pygments/colorful.css" />
+		
 		<style type="text/css">
 			html, body {
 				height: 100%;
@@ -21,7 +23,7 @@
 			dojo.require("CodeGlass.base");
 			
 			dojo.addOnLoad(function(){
-				dojo.query("#demo").CodeGlass();
+				dojo.query("#demo, #charting").CodeGlass();
 			});
 		</script>
 	</head>
@@ -36,7 +38,7 @@
 		In this example we create a completely self contained Dojo layout which you can copy and past into your environment and which will work out of the box for you
 	</p>
 	<p>The new Dojo docs will convert simple reST syntax into escaped HTML, check the source to see what CodeGlass does.</p>
-	<div dojoType="CodeGlass.base" id="demo">
+	<div id="demo">
 		<p>First we declare the CSS</p>
 		<div label="The CSS" lang="css">
 			<pre>&lt;style type=&quot;text/css&quot;&gt;
@@ -113,6 +115,46 @@
 					dojo.parser.parse();
 				});
 			&lt;/script&gt;
+			</pre>
+		</div>
+	</div>
+	<h1>Dojo charting</h1>
+	<p>Take a look at the frickin cool Dojo charting</p>
+	<div id="charting">
+		<p>This is how you get the cool charting to run</p>
+		<div label="JavaScript" lang="javascript"><pre>
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+dojo.require(&quot;dojox.charting.Chart2D&quot;);
+dojo.require(&quot;dojox.charting.themes.Wetland&quot;);
+
+dojo.addOnLoad(function(){
+  var c = new dojox.charting.Chart2D(&quot;chartOne&quot;);
+  c.addPlot(&quot;default&quot;, {type: &quot;StackedAreas&quot;, tension:3})
+      .addAxis(&quot;x&quot;, {fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;})
+      .addAxis(&quot;y&quot;, {vertical: true, fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;, min: 0})
+      .setTheme(dojox.charting.themes.Wetland)
+      .addSeries(&quot;Series A&quot;, [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+      .addSeries(&quot;Series B&quot;, [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+      .addSeries(&quot;Series C&quot;, [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+      .render();
+});
+&lt;/script&gt;</pre>
+		</div>
+		<div label="HTML" lang="html">
+			<p>Very simple</p>
+			<pre>&lt;div id=&quot;chartOne&quot; style=&quot;margin: 0 100px; width: 400px; height: 240px;&quot;&gt;&lt;/div&gt;</pre>
+		</div>
+		<div label="CSS" lang="css">
+			<p>Some simple CSS</p>
+			<pre>
+				&lt;style type=&quot;text/css&quot;&gt;
+			#chartOne {
+				padding-top:60px;
+				font-family: Arial;
+				font-size: 12px;
+			}
+		&lt;/style&gt;
 			</pre>
 		</div>
 	</div>
