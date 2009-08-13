@@ -18,10 +18,6 @@ dojo.declare("CodeGlass.base",
 	//      main template to be used
 	templatePath: dojo.moduleUrl("CodeGlass", "templates/codeglass.html"),
 	
-	// content:
-	//      the actual content for the widget
-	content: {},
-	
 	// dialogBox:
 	//      dimensions of the dialog to be opened
 	dialogBox: {w: "805px", h: "415px"},
@@ -35,6 +31,10 @@ dojo.declare("CodeGlass.base",
 			tarea = dojo.doc.createElement('textarea'),
 			code, cNode;
 
+		// content:
+		//      the actual content for the widget
+		this.content = {};
+	
 		while (el){
 			// The logic is kinda reverse and the markup confusing - we are putting every node before a node with the lang attribute into an 
 			// object with the node with the actual attribute.
