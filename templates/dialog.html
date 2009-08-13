@@ -1,12 +1,37 @@
 <div class="codeGlassWrapper displayNone">
-	<span class="description">{{ description }}</span>
-	<span class="theme">
-		<select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
+	<div class="header">
+	<!--<span class="description">{{ description }}</span>-->
+	<div class="theme"
+		><select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
 			<option value="tundra">Tundra</option>
 			<option value="nihilo">Nihilo</option>
 			<option value="soria">Soria</option>
-		</select>
-	</span>
-	<span class="close" dojoAttachEvent="onclick: hide"></span>
-	<div dojoAttachPoint="iframeContainer"></div>
+		</select
+	></div
+	><ul dojoAttachEvent="onclick: _toggleView"
+		><li title="containerIframe">Demo</li><li title="containerFull">Copy&Paste</li><li title="containerJs">JavaScript</li><li title="containerHtml">HTML</li><li title="containerCss">CSS</li>
+	</ul>
+	<div class="close" dojoAttachEvent="onclick: hide"></div>
+	</div>
+	<div dojoAttachPoint="containerIframe" class="iframe container"></div>
+	<div dojoAttachPoint="containerFull" class="full container displayNone">
+		<textarea>
+			{{ renderedContent }}
+		</textarea>
+	</div>
+	<div dojoAttachPoint="containerJs" class="js container displayNone">
+		<textarea>
+			{{ javascriptcode }}
+		</textarea>
+	</div>
+	<div dojoAttachPoint="containerHtml" class="html container displayNone">
+		<textarea>
+			{{ htmlcode }}
+		</textarea>
+	</div>
+	<div dojoAttachPoint="containerCss" class="css container displayNone">
+		<textarea>
+			{{ csscode }}
+		</textarea>
+	</div>
 </div>

@@ -91,6 +91,15 @@ dojo.declare("CodeGlass.Dialog",
 	//      the CDN version to load
 	version: "1.3",
 	
+	currentView: "containerIframe",
+	
+	postMixInProperties: function(){
+		// summary:
+		//		Sets up the data to be rendered
+		
+		this._buildTemplate();
+	},
+	
 	postCreate: function(){
 		// summary:
 		//      do all necessary setup and create background overlay. FIXME: should we add this to the template maybe?
@@ -100,7 +109,7 @@ dojo.declare("CodeGlass.Dialog",
 		}, dojo.body());
 		
 		// setting the iframes width/height
-		dojo.style(this.iframeContainer, {
+		dojo.query(".container", this.domNode).style({
 			width: this.dialogBox.w ? this.dialogBox.w : "500px",
 			height: this.dialogBox.h ? this.dialogBox.h : "400px",
 		});
@@ -155,8 +164,8 @@ dojo.declare("CodeGlass.Dialog",
 			dd = dojo.doc.documentElement;
 
 		dojo.style(this.domNode, {
-			top: dim.h/2-dojo.style(this.iframeContainer, "height")/2+"px",
-			left: dim.w/2-dojo.style(this.iframeContainer, "width")/2+"px"
+			top: dim.h/2-dojo.style(this.containerIframe, "height")/2+"px",
+			left: dim.w/2-dojo.style(this.containerIframe, "width")/2+"px"
 		});
 
 		dojo.style(this.bg, {
@@ -164,15 +173,12 @@ dojo.declare("CodeGlass.Dialog",
 			height: dd.scrollHeight + "px"
 		});
 	},
-
-	_setupIframe: function(){
-		// summary:
-		//      creates iframe with the actual code to be executed
-		
+	
+	_buildTemplate: function(){
 		var t = {}, type, key;
 		for (type in this.content){
 			for (key in this.content[type]){
-				t[type+""+key] = this.content[type][key];
+				this[type+""+key] = t[type+""+key] = this.content[type][key];
 			}
 		}
 		
@@ -184,15 +190,22 @@ dojo.declare("CodeGlass.Dialog",
 		var template = new dojox.dtl.Template(this.iframeTemplate),
 			context = new dojox.dtl.Context(t);
 			
+		this.renderedContent = template.render(context);
+	},
+
+	_setupIframe: function(){
+		// summary:
+		//      creates iframe with the actual code to be executed
+
 // FIXME: I bet this doesn't work in IE :P
 		// Clear iframe
 		if (this.iframe){
 			dojo.destroy(this.iframe);
 		}
 		
-		this.iframe = dojo.create("iframe", {}, this.iframeContainer);
+		this.iframe = dojo.create("iframe", {}, this.containerIframe);
 		this.iframe.contentDocument.open();
-		this.iframe.contentDocument.write(template.render(context));
+		this.iframe.contentDocument.write(this.renderedContent);
 		this.iframe.contentDocument.close();
 	},
 	
@@ -200,7 +213,18 @@ dojo.declare("CodeGlass.Dialog",
 		this.theme = this.themeInput.value;
 
 		// redraw iframe content
+		this._buildTemplate();
 		this._setupIframe();
+	},
+	
+	_toggleView: function(e){
+		var type = dojo.attr(e.target, "title");
+		
+		if (this[type]){
+			dojo.toggleClass(this[this.currentView], "displayNone");
+			dojo.toggleClass(this[type], "displayNone");
+			this.currentView = type;
+		}
 	}
 });
 

@@ -19,13 +19,40 @@
 }
 
 .codeGlassWrapper {
-	padding: 10px;
+	font-family: Helvetica;
+	font-size: 0.8em;
 	background: white;
 	z-index: 9999999;
 	position: absolute;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	padding: 3px 8px 8px;
+}
+
+.codeGlassWrapper .header ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: inline;
+}
+
+.codeGlassWrapper .header ul li,
+.codeGlassWrapper .header .theme {
+	background: url(bgHead.png) repeat-x bottom left;
+	float: left;
+	padding: 8px 8px;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	height: 18px;
+}
+
+.codeGlassWrapper .header ul li {
+	padding: 10px 8px 6px 8px;
+	cursor: pointer;
+}
+
+.codeGlassWrapper .header .theme {
+	-moz-border-radius-topleft: 6px;
+	-webkit-border-top-left-radius: 6px;
 }
 
 .codeGlassWrapper iframe {
@@ -37,18 +64,24 @@
 	height: 100%;
 }
 
-.codeGlassWrapper iframe body {
-	margin: 0;
+.codeGlassWrapper .container {
+	padding: 5px 8px 8px 5px;
+	clear: both;
+}
+
+.codeGlassWrapper textarea {
+	width: 100%;
+	height: 100%;
 }
 
 .codeGlassWrapper .close {
 	display: inline-block;
 	background: url(close.png) no-repeat;
-	width: 10px;
-	height: 11px;
+	width: 15px;
+	height: 18px;
 	position: absolute;
-	right: 7px;
-	top: 6px;
+	right: 9px;
+	top: 8px;
 	cursor: pointer;
 }
 
