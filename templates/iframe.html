@@ -11,9 +11,16 @@
 			}
 		</style>
 		{{ csscode|safe }}
-		{{ javascriptcode|safe }}
 	</head>
 	<body class="{{ theme|safe }}">
 		{{ htmlcode|safe }}
 	</body>
+	{{ javascriptcode|safe }}
+	<script type="text/javascript">
+		dojo.addOnLoad(function(){
+			if (window.pub){
+				window.pub();
+			}
+		});
+	</script>
 </html>

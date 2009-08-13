@@ -123,6 +123,15 @@ dojo.declare("CodeGlass.Dialog",
 		}, this);
 		
 		dojo.connect(window, "onresize", this, "_position");
+		dojo.subscribe("codeglass/loaded", this, function(){
+			console.log(111);
+			dojo.fadeOut({
+				node: this.loader,
+				onEnd: dojo.hitch(this, function(){
+					dojo.addClass(this.loader, "displayNone");
+				})
+			}).play();
+		});
 	},
 		
 	show: function(){
@@ -216,6 +225,13 @@ dojo.declare("CodeGlass.Dialog",
 		this.iframe.contentDocument.open();
 		this.iframe.contentDocument.write(this.renderedContent);
 		this.iframe.contentDocument.close();
+
+		// setup pub hook for notification when everything is ready
+		dojo.query(this.loader).removeClass("displayNone").style("opacity", 1);
+		
+		this.iframe.contentWindow.pub = dojo.hitch(this, function(){
+			dojo.publish("codeglass/loaded", []);
+		})
 	},
 	
 	_changeTheme: function(){
@@ -223,6 +239,7 @@ dojo.declare("CodeGlass.Dialog",
 
 		// redraw iframe content
 		this._buildTemplate();
+		this._toggleView();
 		this._setupIframe();
 	},
 	
