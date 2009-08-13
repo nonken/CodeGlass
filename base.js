@@ -124,7 +124,6 @@ dojo.declare("CodeGlass.Dialog",
 		
 		dojo.connect(window, "onresize", this, "_position");
 		dojo.subscribe("codeglass/loaded", this, function(){
-			console.log(111);
 			dojo.fadeOut({
 				node: this.loader,
 				onEnd: dojo.hitch(this, function(){
@@ -164,12 +163,17 @@ dojo.declare("CodeGlass.Dialog",
 		dojo.fx.combine([dojo.fadeOut({
 			node: this.domNode,
 			onEnd: dojo.hitch(this, function(){
-			  dojo.addClass(this.domNode, "displayNone");  
+				dojo.addClass(this.domNode, "displayNone");  
 			})
 		}), dojo.fadeOut({
 			node: this.bg,
 			onEnd: dojo.hitch(this, function(){
-			  dojo.addClass(this.bg, "displayNone");  
+				dojo.addClass(this.bg, "displayNone");
+				
+				// clear iframe
+				this.iframe.contentDocument.open();
+				this.iframe.contentDocument.write("");
+				this.iframe.contentDocument.close();
 			})
 		})]).play();
 	},
