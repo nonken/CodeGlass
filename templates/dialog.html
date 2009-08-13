@@ -9,27 +9,42 @@
 		</select
 	></div
 	><ul dojoAttachEvent="onclick: _toggleView"
-		><li title="containerIframe">Demo</li><li title="containerFull">Copy&Paste</li><li title="containerJs">JavaScript</li><li title="containerHtml">HTML</li><li title="containerCss">CSS</li>
+		><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li><li title="containerJs" class="javascript">JavaScript</li><li title="containerHtml" class="html">HTML</li><li title="containerCss" class="css">CSS</li>
 	</ul>
 	<div class="close" dojoAttachEvent="onclick: hide"></div>
 	</div>
 	<div dojoAttachPoint="containerIframe" class="iframe container"></div>
 	<div dojoAttachPoint="containerFull" class="full container displayNone">
+		<div class="info">
+			<p>To run the demo in your own environment, copy and paste the full source into an editor and open it in a browser.</p>
+		</div>
 		<textarea>
 			{{ renderedContent }}
 		</textarea>
 	</div>
 	<div dojoAttachPoint="containerJs" class="js container displayNone">
+		<div class="info">
+			<h1>{{ javascriptlabel|safe }}</h1>
+			<p>{{ javascriptcontent|safe }}</p>
+		</div>
 		<textarea>
 			{{ javascriptcode }}
 		</textarea>
 	</div>
 	<div dojoAttachPoint="containerHtml" class="html container displayNone">
+		<div class="info">
+			<h1>{{ htmllabel|safe }}</h1>
+			<p>{{ htmlcontent|safe }}</p>
+		</div>
 		<textarea>
 			{{ htmlcode }}
 		</textarea>
 	</div>
 	<div dojoAttachPoint="containerCss" class="css container displayNone">
+		<div class="info">
+			<h1>{{ csslabel|safe }}</h1>
+			<p>{{ csscontent|safe }}</p>
+		</div>
 		<textarea>
 			{{ csscode }}
 		</textarea>

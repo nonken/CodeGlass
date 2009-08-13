@@ -29,10 +29,9 @@ dojo.declare("CodeGlass.base",
 		//      parse the child nodes and put the contents into the content object which then can be used by the dialog or other content display mechanisms
 		
 		var el = this.srcNodeRef.firstChild,
-			i = 0,
-			content = [],
+			i = 0, content = [],
 			tarea = dojo.doc.createElement('textarea'),
-			code;
+			code, cNode;
 
 		while (el){
 			// The logic is kinda reverse and the markup confusing - we are putting every node before a node with the lang attribute into an 
@@ -42,15 +41,21 @@ dojo.declare("CodeGlass.base",
 				
 				(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
 				code = tarea.value;
-				this.content[el.lang] = {"content": content, "label": dojo.attr(el, "label"), "lang": el.lang, "code": code, "index": i};   
-				content = [];         
+				
+				// stringify content
+				cNode = dojo.doc.createElement("div");
+				dojo.forEach(content, function(n){
+					cNode.appendChild(n);
+				});
+				this.content[el.lang] = {"content": cNode.innerHTML, "label": dojo.attr(el, "label"), "lang": el.lang, "code": code, "index": i};   
+				content = [];
 			}else{
 				content.push(el);
 			}
 			
 			el = el.nextSibling;
 			i++;
-		}		
+		}
 	},
 	
 	show: function(){
@@ -109,10 +114,13 @@ dojo.declare("CodeGlass.Dialog",
 		}, dojo.body());
 		
 		// setting the iframes width/height
-		dojo.query(".container", this.domNode).style({
-			width: this.dialogBox.w ? this.dialogBox.w : "500px",
-			height: this.dialogBox.h ? this.dialogBox.h : "400px",
-		});
+		var info;
+		dojo.query(".container", this.domNode).forEach(function(n){
+			dojo.style(n, {
+				width: this.dialogBox.w ? this.dialogBox.w : "500px",
+				height: this.dialogBox.h ? this.dialogBox.h : "400px"
+			});
+		}, this);
 		
 		dojo.connect(window, "onresize", this, "_position");
 	},
@@ -122,6 +130,7 @@ dojo.declare("CodeGlass.Dialog",
 		//      show the dialog and position it correctly on screen
 		
 		this._position();
+		this._toggleView();
 		dojo.fx.combine([dojo.fadeIn({
 			node: this.domNode,
 			beforeBegin: dojo.hitch(this, function(){
@@ -218,12 +227,21 @@ dojo.declare("CodeGlass.Dialog",
 	},
 	
 	_toggleView: function(e){
-		var type = dojo.attr(e.target, "title");
-		
+		var attr = e ? dojo.attr(e.target, "title") : null,
+			type = attr ? attr : "containerIframe";
 		if (this[type]){
+			dojo.query('[title$=\"'+this.currentView+'\"]').removeClass("active");
 			dojo.toggleClass(this[this.currentView], "displayNone");
+			dojo.query('[title$=\"'+type+'\"]').addClass("active");
 			dojo.toggleClass(this[type], "displayNone");
 			this.currentView = type;
+			
+			// size inner elements properly
+			var info = dojo.query("> div", this[type])[0];
+			if (info){
+// FIXME: the size calculations are odd here!!!
+				dojo.query("textarea", this[type]).style("height", (dojo.coords(this[type]).h-dojo.marginBox(info).h-13)+"px");
+			}
 		}
 	}
 });
