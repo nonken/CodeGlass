@@ -3,6 +3,8 @@ dojo.provide("CodeGlass.base");
 dojo.require("dijit._Widget");
 dojo.require("dojox.dtl._DomTemplated");
 dojo.require("dojo.fx");
+dojo.require("dojox.highlight");
+dojo.require("dojox.highlight.languages._www");
 
 dojo.declare("CodeGlass.base",
 	[dijit._Widget, dojox.dtl._DomTemplated],
@@ -261,7 +263,11 @@ dojo.declare("CodeGlass.Dialog",
 			var info = dojo.query("> div", this[type])[0];
 			if (info){
 // FIXME: the size calculations are odd here!!!
-				dojo.query("textarea", this[type]).style("height", (dojo.coords(this[type]).h-dojo.marginBox(info).h-13)+"px");
+				var typeCoords = dojo.coords(this[type]),
+					infoCoords = dojo.marginBox(info);
+				dojo.query("textarea", this[type]).style("height", (typeCoords.h-infoCoords.h-13)+"px");
+				dojo.query("code", this[type]).forEach(dojox.highlight.init);
+				dojo.query("pre", this[type]).style("height", (typeCoords.h-infoCoords.h-13)+"px");
 			}
 		}
 	}

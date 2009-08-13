@@ -122,7 +122,26 @@
 }
 
 .codeGlassWrapper .container .info {
-	border :1px solid white; // to fix uncalculatable margins from inner elements
+	border :1px solid #ccc; /* to fix uncalculatable margins from inner elements */
+	background: #f3f3f3;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+.codeGlassWrapper .container code {
+	white-space:pre-wrap;
+	word-wrap:break-word;
+}
+
+.codeGlassWrapper .container pre {
+	background-color: #EEFFCC;
+	border: 1px solid #AACC99;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	overflow-y: auto;
+	margin: 0;
 }
 
 .codeGlassWrapper .container h1 {

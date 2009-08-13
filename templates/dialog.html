@@ -29,26 +29,32 @@
 			<h1>{{ javascriptlabel|safe }}</h1>
 			<p>{{ javascriptcontent|safe }}</p>
 		</div>
-		<textarea>
-			{{ javascriptcode }}
-		</textarea>
+		<pre>
+			<code class="javascript">
+				{{ javascriptcode }}
+			</code>
+		</pre>
 	</div>
 	<div dojoAttachPoint="containerHtml" class="html container displayNone">
 		<div class="info">
 			<h1>{{ htmllabel|safe }}</h1>
 			<p>{{ htmlcontent|safe }}</p>
 		</div>
-		<textarea>
-			{{ htmlcode }}
-		</textarea>
+		<pre>
+			<code class="html">
+				{{ htmlcode }}
+			</code>
+		</pre>
 	</div>
 	<div dojoAttachPoint="containerCss" class="css container displayNone">
 		<div class="info">
 			<h1>{{ csslabel|safe }}</h1>
 			<p>{{ csscontent|safe }}</p>
 		</div>
-		<textarea>
-			{{ csscode }}
-		</textarea>
+		<pre>
+			<code class="css">
+				{{ csscode }}
+			</code>
+		</pre>
 	</div>
 </div>
