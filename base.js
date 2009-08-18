@@ -2,29 +2,34 @@ dojo.provide("CodeGlass.base");
 
 dojo.require("dijit._Widget");
 dojo.require("dojox.dtl._DomTemplated");
+
+// make it fancy
 dojo.require("dojo.fx");
+
+// Code beautifying
 dojo.require("dojox.highlight");
 dojo.require("dojox.highlight.languages._www");
+dojo.require("CodeGlass.HTML-Beautify");
 
 dojo.declare("CodeGlass.base",
 	[dijit._Widget, dojox.dtl._DomTemplated],
 	{
 	// summary:
-	//      Simple widget allowing you to create complex demos for documentation projects
+	//		Simple widget allowing you to create complex demos for documentation projects
 	// description:
-	//      CodeClass allows...
+	//		CodeClass allows...
 	
 	// templatePath:
-	//      main template to be used
+	//		main template to be used
 	templatePath: dojo.moduleUrl("CodeGlass", "templates/codeglass.html"),
 	
 	// dialogBox:
-	//      dimensions of the dialog to be opened
-	dialogBox: {w: "805px", h: "415px"},
+	//		dimensions of the dialog to be opened
+	dialogBox: {w: "805", h: "415"},
 	
 	postMixInProperties: function(){
 		// summary:
-		//      parse the child nodes and put the contents into the content object which then can be used by the dialog or other content display mechanisms
+		//		parse the child nodes and put the contents into the content object which then can be used by the dialog or other content display mechanisms
 		
 		var el = this.srcNodeRef.firstChild,
 			i = 0, content = [],
@@ -32,7 +37,7 @@ dojo.declare("CodeGlass.base",
 			code, cNode;
 
 		// content:
-		//      the actual content for the widget
+		//		the actual content for the widget
 		this.content = {};
 	
 		while (el){
@@ -42,7 +47,7 @@ dojo.declare("CodeGlass.base",
 				code = dojo.query("pre", el).attr("innerHTML");
 				
 				(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
-				code = tarea.value;
+				code = style_html(tarea.value, 4);
 				
 				// stringify content
 				cNode = dojo.doc.createElement("div");
@@ -60,16 +65,16 @@ dojo.declare("CodeGlass.base",
 		}
 	},
 	
-	show: function(){
+	show: function(e){
 		// summary:
-		//      shows the dialog with the iframe
+		//		shows the dialog with the iframe
 		
 		if (!this.dialog){
 			// DTL bug doesn't allow us to render the widget without DOM so we create the node
 			var node = dojo.create("div", {}, dojo.body(), "last");
 			this.dialog = new CodeGlass.Dialog({content: this.content, dialogBox: this.dialogBox, description: "This is an example"}, node);
 		}
-		this.dialog.show();
+		this.dialog.show(e);
 	}
 });
 
@@ -79,23 +84,23 @@ dojo.declare("CodeGlass.Dialog",
 	{
 	
 	// templatePath:
-	//      path to the dialog template    
+	//		path to the dialog template    
 	templatePath: dojo.moduleUrl("CodeGlass", "templates/dialog.html"),
 	
 	// iframeTemplate:
-	//      template for the actual content of the iframe
+	//		template for the actual content of the iframe
 	iframeTemplate: dojo.moduleUrl("CodeGlass", "templates/iframe.html"),
 	
 	// dialogBox:
-	//      dimensions of the dialog to be opened
+	//		dimensions of the dialog to be opened
 	dialogBox: {},
 	
 	// theme:
-	//      the currently shown dojo theme
+	//		the currently shown dojo theme
 	theme: "tundra",
 	
 	// version:
-	//      the CDN version to load
+	//		the CDN version to load
 	version: "1.3",
 	
 	currentView: "containerIframe",
@@ -103,27 +108,26 @@ dojo.declare("CodeGlass.Dialog",
 	postMixInProperties: function(){
 		// summary:
 		//		Sets up the data to be rendered
-		
+
+		this.dialogBox = dojo.mixin({
+			w: 500,
+			h :400
+		}, this.dialogBox);
+
 		this._buildTemplate();
 	},
-	
+
 	postCreate: function(){
 		// summary:
-		//      do all necessary setup and create background overlay. FIXME: should we add this to the template maybe?
-		
-		this.bg = dojo.create("div", {
-			className: "codeGlassBg"
-		}, dojo.body());
-		
+		//		do all necessary setup and create background overlay. FIXME: should we add this to the template maybe?
+
 		// setting the iframes width/height
 		var info;
-		dojo.query(".container", this.domNode).forEach(function(n){
-			dojo.style(n, {
-				width: this.dialogBox.w ? this.dialogBox.w : "500px",
-				height: this.dialogBox.h ? this.dialogBox.h : "400px"
-			});
-		}, this);
-		
+		dojo.style(this.domNode, {
+			width: this.dialogBox.w + "px",
+			height: this.dialogBox.h + "px"
+		});
+
 		dojo.connect(window, "onresize", this, "_position");
 		dojo.subscribe("codeglass/loaded", this, function(){
 			dojo.fadeOut({
@@ -135,69 +139,70 @@ dojo.declare("CodeGlass.Dialog",
 		});
 	},
 		
-	show: function(){
+	show: function(e){
 		// summary:
-		//      show the dialog and position it correctly on screen
-		
+		//		show the dialog and position it correctly on screen
+
 		this._position();
 		this._toggleView();
-		dojo.fx.combine([dojo.fadeIn({
+
+		this.ce = dojo.coords(e.target)
+
+		dojo.query(".wrapper", this.domNode).addClass("displayNone");
+		dojo.animateProperty({
 			node: this.domNode,
 			beforeBegin: dojo.hitch(this, function(){
-			  dojo.removeClass(this.domNode, "displayNone");  
-			})
-		}), dojo.fadeIn({
-			node: this.bg,
-			end: 0.7,
-			beforeBegin: dojo.hitch(this, function(){
-			  dojo.removeClass(this.bg, "displayNone");  
+				dojo.removeClass(this.domNode, "displayNone");
 			}),
+			properties: {
+				width: { start: this.ce.w, end: this.dialogBox.w},
+				height: { start: this.ce.h, end: this.dialogBox.h},
+				top: { start: this.ce.t, end: this.top },
+				left: { start: this.ce.l, end: this.left }
+			},
+			duration: 300,
 			onEnd: dojo.hitch(this, function(){
+				dojo.query(".wrapper", this.domNode).removeClass("displayNone");
 				this._setupIframe();
 			})
-		})]).play();
+		}).play();
 	},
 
 	hide: function(){
 		// summary:
-		//      hide dialog
-		
-		dojo.fx.combine([dojo.fadeOut({
+		//		hide dialog
+
+		dojo.query(".wrapper", this.domNode).addClass("displayNone");
+		dojo.animateProperty({
 			node: this.domNode,
+			properties: {
+				width: this.ce.w,
+				height: this.ce.h,
+				top: this.ce.t,
+				left: this.ce.l
+			},
 			onEnd: dojo.hitch(this, function(){
-				dojo.addClass(this.domNode, "displayNone");  
+				dojo.addClass(this.domNode, "displayNone");
 			})
-		}), dojo.fadeOut({
-			node: this.bg,
-			onEnd: dojo.hitch(this, function(){
-				dojo.addClass(this.bg, "displayNone");
-				
-				// clear iframe
-				this.iframe.contentDocument.open();
-				this.iframe.contentDocument.write("");
-				this.iframe.contentDocument.close();
-			})
-		})]).play();
+		}).play();
 	},
 
 	_position: function(){
 		// summary:
-		//      positions dialog and background layer and additionally sizes background layer correctly
-		
+		//		positions dialog and background layer and additionally sizes background layer correctly
+
 		var dim = dijit.getViewport(),
 			dd = dojo.doc.documentElement;
 
-		dojo.style(this.domNode, {
-			top: dim.h/2-dojo.style(this.containerIframe, "height")/2+"px",
-			left: dim.w/2-dojo.style(this.containerIframe, "width")/2+"px"
-		});
+		this.top = dim.h/2-this.dialogBox.h/2;
+		this.left = dim.w/2-this.dialogBox.w/2;
 
-		dojo.style(this.bg, {
-			width: dd.scrollWidth + "px",
-			height: dd.scrollHeight + "px"
+		dojo.style(this.domNode, {
+			top: this.top+"px",
+			left: this.left+"px"
 		});
 	},
-	
+
 	_buildTemplate: function(){
 		var t = {}, type, key;
 		for (type in this.content){
@@ -205,7 +210,7 @@ dojo.declare("CodeGlass.Dialog",
 				this[type+""+key] = t[type+""+key] = this.content[type][key];
 			}
 		}
-		
+
 		dojo.mixin(t, {
 			theme: this.theme,
 			version: this.version
@@ -214,12 +219,12 @@ dojo.declare("CodeGlass.Dialog",
 		var template = new dojox.dtl.Template(this.iframeTemplate),
 			context = new dojox.dtl.Context(t);
 			
-		this.renderedContent = template.render(context);
+		this.renderedContent = style_html(template.render(context), 4);
 	},
 
 	_setupIframe: function(){
 		// summary:
-		//      creates iframe with the actual code to be executed
+		//		creates iframe with the actual code to be executed
 
 // FIXME: I bet this doesn't work in IE :P
 		// Clear iframe
@@ -267,7 +272,8 @@ dojo.declare("CodeGlass.Dialog",
 					infoCoords = dojo.marginBox(info);
 				dojo.query("textarea", this[type]).style("height", (typeCoords.h-infoCoords.h-13)+"px");
 				dojo.query("code", this[type]).forEach(dojox.highlight.init);
-				dojo.query("pre", this[type]).style("height", (typeCoords.h-infoCoords.h-13)+"px");
+// FIXME: why do we have to manually add sime pixels? Calculations are wrong!!!
+				dojo.query("pre", this[type]).style("height", (typeCoords.h-infoCoords.h-23)+"px");
 			}
 		}
 	}

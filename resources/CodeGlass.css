@@ -21,10 +21,13 @@
 .codeGlassWrapper {
 	font-family: Helvetica;
 	background: white;
+	border: 1px solid #ccc;
 	z-index: 9999999;
 	position: absolute;
 	-moz-border-radius: 6px;
+	-moz-box-shadow: 0pt 0pt 4px #aaa;
 	-webkit-border-radius: 6px;
+	-webkit-box-shadow: 0pt 0pt 4px #aaa;
 }
 
 .codeGlassWrapper .header {
@@ -116,9 +119,11 @@
 .codeGlassWrapper .container {
 	padding: 5px 8px 8px 5px;
 	clear: both;
-	display: block;
-	border-collapse: collapse;
-	position: relative;
+	position: absolute;
+	top: 34px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
 }
 
 .codeGlassWrapper .container .info {
@@ -142,6 +147,7 @@
 	-webkit-border-radius: 6px;
 	overflow-y: auto;
 	margin: 0;
+	padding: 5px;
 }
 
 .codeGlassWrapper .container h1 {

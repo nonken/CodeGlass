@@ -1,60 +1,54 @@
 <div class="codeGlassWrapper displayNone">
-	<div class="header">
-	<!--<span class="description">{{ description }}</span>-->
-	<div class="theme"
-		><select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
-			<option value="tundra">Tundra</option>
-			<option value="nihilo">Nihilo</option>
-			<option value="soria">Soria</option>
-		</select
-	></div
-	><ul dojoAttachEvent="onclick: _toggleView"
-		><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li><li title="containerJs" class="javascript">JavaScript</li><li title="containerHtml" class="html">HTML</li><li title="containerCss" class="css">CSS</li>
-	</ul>
-	<div class="close" dojoAttachEvent="onclick: hide"></div>
-	</div>
-	<div dojoAttachPoint="containerIframe" class="iframe container">
-		<div dojoAttachPoint="loader" class="loader"><span>&nbsp;</span></div>
-	</div>
-	<div dojoAttachPoint="containerFull" class="full container displayNone">
-		<div class="info">
-			<p>To run the demo in your own environment, copy and paste the full source into an editor and open it in a browser.</p>
+	<div class="wrapper">
+		<div class="header">
+		<!--<span class="description">{{ description }}</span>-->
+		<div class="theme"
+			><select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
+				<option value="tundra">Tundra</option>
+				<option value="nihilo">Nihilo</option>
+				<option value="soria">Soria</option>
+			</select
+		></div
+		><ul dojoAttachEvent="onclick: _toggleView"
+			><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li><li title="containerJs" class="javascript">JavaScript</li><li title="containerHtml" class="html">HTML</li><li title="containerCss" class="css">CSS</li>
+		</ul>
+		<div class="close" dojoAttachEvent="onclick: hide"></div>
 		</div>
-		<textarea>
-			{{ renderedContent }}
-		</textarea>
-	</div>
-	<div dojoAttachPoint="containerJs" class="js container displayNone">
-		<div class="info">
-			<h1>{{ javascriptlabel|safe }}</h1>
-			<p>{{ javascriptcontent|safe }}</p>
+		<div dojoAttachPoint="containerIframe" class="iframe container">
+			<div dojoAttachPoint="loader" class="loader"><span>&nbsp;</span></div>
 		</div>
-		<pre>
-			<code class="javascript">
-				{{ javascriptcode }}
-			</code>
-		</pre>
-	</div>
-	<div dojoAttachPoint="containerHtml" class="html container displayNone">
-		<div class="info">
-			<h1>{{ htmllabel|safe }}</h1>
-			<p>{{ htmlcontent|safe }}</p>
+		<div dojoAttachPoint="containerFull" class="full container displayNone">
+			<div class="info">
+				<p>To run the demo in your own environment, copy and paste the full source into an editor and open it in a browser.</p>
+			</div>
+			<textarea>{{ renderedContent }}</textarea>
 		</div>
-		<pre>
-			<code class="html">
-				{{ htmlcode }}
-			</code>
-		</pre>
-	</div>
-	<div dojoAttachPoint="containerCss" class="css container displayNone">
-		<div class="info">
-			<h1>{{ csslabel|safe }}</h1>
-			<p>{{ csscontent|safe }}</p>
+		<div dojoAttachPoint="containerJs" class="js container displayNone">
+			<div class="info">
+				<h1>{{ javascriptlabel|safe }}</h1>
+				<p>{{ javascriptcontent|safe }}</p>
+			</div>
+			<pre>
+				<code class="javascript">{{ javascriptcode }}</code>
+			</pre>
 		</div>
-		<pre>
-			<code class="css">
-				{{ csscode }}
-			</code>
-		</pre>
+		<div dojoAttachPoint="containerHtml" class="html container displayNone">
+			<div class="info">
+				<h1>{{ htmllabel|safe }}</h1>
+				<p>{{ htmlcontent|safe }}</p>
+			</div>
+			<pre>
+				<code class="html">{{ htmlcode }}</code>
+			</pre>
+		</div>
+		<div dojoAttachPoint="containerCss" class="css container displayNone">
+			<div class="info">
+				<h1>{{ csslabel|safe }}</h1>
+				<p>{{ csscontent|safe }}</p>
+			</div>
+			<pre>
+				<code class="css">{{ csscode }}</code>
+			</pre>
+		</div>
 	</div>
 </div>
