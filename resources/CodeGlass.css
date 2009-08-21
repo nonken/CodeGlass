@@ -62,6 +62,8 @@
 
 .codeGlassWrapper .header ul li.active {
 	text-decoration: underline;
+	background-color: #F3F3F3;
+	padding-bottom: 1px;
 }
 
 .codeGlassWrapper .header ul li {
