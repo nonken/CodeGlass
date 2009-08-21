@@ -9,10 +9,10 @@
 				<option value="soria">Soria</option>
 			</select
 		></div
-		><ul dojoAttachEvent="onclick: _toggleView"
-			><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li><li title="containerJs" class="javascript">JavaScript</li><li title="containerHtml" class="html">HTML</li><li title="containerCss" class="css">CSS</li>
+		><ul dojoAttachEvent="onclick: _toggleView" class="displayNone" 
+			><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li>{% if javascriptcode %}<li title="containerJs" class="javascript">JavaScript</li>{% endif %}{% if htmlcode %}<li title="containerHtml" class="html">HTML</li>{% endif %}{% if csscode %}<li title="containerCss" class="css">CSS</li>{% endif %}
 		</ul>
-		<div class="close" dojoAttachEvent="onclick: hide"></div>
+		{% block header %}{% endblock %}
 		</div>
 		<div dojoAttachPoint="containerIframe" class="iframe container">
 			<div dojoAttachPoint="loader" class="loader"><span>&nbsp;</span></div>
@@ -23,6 +23,7 @@
 			</div>
 			<textarea>{{ renderedContent }}</textarea>
 		</div>
+		{% if javascriptcode %}
 		<div dojoAttachPoint="containerJs" class="js container displayNone">
 			<div class="info">
 				<h1>{{ javascriptlabel|safe }}</h1>
@@ -32,6 +33,8 @@
 				<code class="javascript">{{ javascriptcode }}</code>
 			</pre>
 		</div>
+		{% endif %}
+		{% if htmlcode %}
 		<div dojoAttachPoint="containerHtml" class="html container displayNone">
 			<div class="info">
 				<h1>{{ htmllabel|safe }}</h1>
@@ -41,6 +44,8 @@
 				<code class="html">{{ htmlcode }}</code>
 			</pre>
 		</div>
+		{% endif %}
+		{% if csscode %}
 		<div dojoAttachPoint="containerCss" class="css container displayNone">
 			<div class="info">
 				<h1>{{ csslabel|safe }}</h1>
@@ -50,5 +55,6 @@
 				<code class="css">{{ csscode }}</code>
 			</pre>
 		</div>
+		{% endif %}
 	</div>
 </div>

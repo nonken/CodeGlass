@@ -30,6 +30,11 @@
 	-webkit-box-shadow: 0pt 0pt 4px #aaa;
 }
 
+.codeGlassInline {
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
 .codeGlassWrapper .header {
 	background: url(bgHead.png) repeat-x bottom left;
 	border-bottom: 1px solid #ccc;
