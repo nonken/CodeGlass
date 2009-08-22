@@ -23,8 +23,8 @@
 			dojo.require("CodeGlass.base");
 			
 			dojo.addOnLoad(function(){
-				dojo.query("#demo").CodeGlass({type: "ViewerDialog"});
-				dojo.query("#charting").CodeGlass({type: "ViewerInline"});
+				dojo.query("#demo").CodeGlass({type: "dialog"});
+				dojo.query("#charting").CodeGlass({type: "inline"});
 			});
 		</script>
 	</head>
@@ -39,6 +39,8 @@
 		In this example we create a completely self contained Dojo layout which you can copy and past into your environment and which will work out of the box for you
 	</p>
 	<p>The new Dojo docs will convert simple reST syntax into escaped HTML, check the source to see what CodeGlass does.</p>
+	
+	<p>Instantiation is super simple: <code>dojo.query("#demo").CodeGlass({type: "dialog"});</code></p>
 	<div id="demo">
 		<p>First we declare the CSS</p>
 		<div label="The CSS" lang="css">
@@ -119,7 +121,8 @@
 		</div>
 	</div>
 	<h1>Dojo charting</h1>
-	<p>Take a look at the frickin cool Dojo charting</p>
+	<p>Take a look at the frickin cool Dojo charting. This makes use of CodeGlass in inline "mode". </p>
+	<p>Instantiation is super simple: <code>dojo.query("#charting").CodeGlass({type: "inline"});</code></p>
 	<div id="charting">
 		<p>This is how you get the cool charting to run</p>
 		<div label="JavaScript" lang="javascript"><pre>

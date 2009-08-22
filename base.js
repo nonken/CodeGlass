@@ -86,7 +86,7 @@ dojo.declare("CodeGlass.base",
 	},
 	
 	postCreate: function(){
-		var o = dojo.getObject("CodeGlass."+this.type);
+		var o = dojo.getObject("CodeGlass.Viewer"+this.type.substr(0, 1).toUpperCase() + this.type.substr(1));
 		if (!o){
 			throw Error("Unknown CodeGlass type: "+"CodeGlass."+this.type);
 		}
