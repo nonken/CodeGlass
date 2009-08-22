@@ -5,6 +5,13 @@ dojo.require("dojox.dtl._DomTemplated");
 // Why do we have to include this???
 dojo.require("dojox.dtl.tag.loader");
 dojo.require("dojox.dtl.tag.logic");
+dojo.require("dojox.dtl.tag.loop");
+dojo.require("dojox.dtl.filter.lists");
+dojo.require("dojox.dtl.tag.logic");
+dojo.require("dojox.dtl.filter.dates");
+dojo.require("dojox.dtl.utils.date");
+dojo.require("dojox.dtl.filter.strings");
+dojo.require("dojox.dtl.filter.htmlstrings");
 
 // make it fancy
 dojo.require("dojo.fx");
@@ -83,7 +90,11 @@ dojo.declare("CodeGlass.base",
 		if (!o){
 			throw Error("Unknown CodeGlass type: "+"CodeGlass."+this.type);
 		}
-		this.viewer = new o({id: this.id+"_Viewer", content: this.content, viewerBox: this.viewerBox}, this.domNode);
+		this.viewer = new o({
+			id: this.id+"_Viewer",
+			content: this.content,
+			viewerBox: this.viewerBox
+		}, this.domNode);
 	}
 });
 
@@ -236,13 +247,49 @@ dojo.declare("CodeGlass.CodeViewer",
 	//		template for the actual content of the iframe
 	iframeTemplate: dojo.moduleUrl("CodeGlass", "templates/iframe.html"),
 
+	baseUrls: [
+		{
+			baseUrl: "/",
+			label: "Trunk local",
+			xDomain: false
+		},
+		{
+			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.2/",
+			label: "(Current) CDN - 1.3.2",
+			xDomain: true
+		},
+		{
+			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.1/",
+			label: "CDN - 1.3.1",
+			xDomain: true
+		},
+		{
+			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3/",
+			label: "CDN - 1.3",
+			xDomain: true
+		}
+	],
+	
+	baseUrl: 1,
+
+	themes: [
+		{
+			theme: "tundra",
+			label: "Tundra"
+		},
+		{
+			theme: "nihilo",
+			label: "Nihilo"
+		},
+		{
+			theme: "soria",
+			label: "Soria"
+		}
+	],
+
 	// theme:
 	//		the currently shown dojo theme
-	theme: "tundra",
-
-	// version:
-	//		the CDN version to load
-	version: "1.3",
+	theme: 0,
 
 	// currentView:
 	//		default is demo tab
@@ -282,6 +329,18 @@ dojo.declare("CodeGlass.CodeViewer",
 				}).play();
 			}
 		});
+
+		// Create version and theme select options. We do this here because of a bug in DTL
+		// preventing us from using {% for in %} in a select context
+		dojo.forEach(this.baseUrls, function(url, i){
+			dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
+		}, this);
+		this.versionInput.selectedIndex = this.baseUrl;
+		
+		dojo.forEach(this.themes, function(theme, i){
+			dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
+		}, this);
+		this.themeInput.selectedIndex = this.theme;
 	},
 
 	_buildTemplate: function(){
@@ -293,8 +352,9 @@ dojo.declare("CodeGlass.CodeViewer",
 		}
 
 		dojo.mixin(t, {
-			theme: this.theme,
-			version: this.version
+			theme: this.themes[this.theme].theme,
+			baseUrl: this.baseUrls[this.baseUrl].baseUrl,
+			xDomain: this.baseUrls[this.baseUrl].xDomain
 		});
 
 		var template = new dojox.dtl.Template(this.iframeTemplate),
@@ -331,9 +391,19 @@ dojo.declare("CodeGlass.CodeViewer",
 
 		dojo.query(".header ul", this.domNode).addClass("displayNone");
 
-		// redraw iframe content
-		this._buildTemplate();
-		this._toggleView();
+		this._buildTemplate(); // redraw iframe content
+		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
+		this._setupIframe();
+	},
+	
+	_changeVersion: function(){
+		this.baseUrl = this.versionInput.value;
+
+		dojo.query(".header ul", this.domNode).addClass("displayNone");
+
+		this._buildTemplate(); // redraw iframe content
+		this.render(); // rerender widget
+		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();
 	},
 
@@ -360,6 +430,10 @@ dojo.declare("CodeGlass.CodeViewer",
 				dojo.query("pre", this[type], this.domNode).style("height", (typeCoords.h-infoCoords.h-23)+"px");
 			}
 		}
+	},
+	
+	_copyClipboard: function(){
+		alert("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nCodeGlass would think its awesome if you help out...");
 	}
 });
 

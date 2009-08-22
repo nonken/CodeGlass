@@ -18,7 +18,7 @@
 	z-index: 9999998;
 }
 
-.codeGlassWrapper {
+.codeGlassViewer {
 	font-family: Helvetica;
 	background: white;
 	border: 1px solid #ccc;
@@ -35,7 +35,7 @@
 	-webkit-box-shadow: none;
 }
 
-.codeGlassWrapper .header {
+.codeGlassViewer .header {
 	background: url(bgHead.png) repeat-x bottom left;
 	border-bottom: 1px solid #ccc;
 	height: 33px;
@@ -45,55 +45,56 @@
 	-webkit-border-top-right-radius: 6px;
 }
 
-.codeGlassWrapper .header ul {
+.codeGlassViewer .header ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 	display: inline;
 }
 
-.codeGlassWrapper .header ul li,
-.codeGlassWrapper .header .theme {
+.codeGlassViewer .header ul li,
+.codeGlassViewer .header .theme,
+.codeGlassViewer .header .version {
 	float: left;
 	padding: 8px 8px 5px 8px;
 	border-right: 1px solid #ccc;
 	height: 21px;
 }
 
-.codeGlassWrapper .header ul li.active {
+.codeGlassViewer .header ul li.active {
 	text-decoration: underline;
 	background-color: #F3F3F3;
 	padding-bottom: 1px;
 }
 
-.codeGlassWrapper .header ul li {
+.codeGlassViewer .header ul li {
 	padding: 11px 8px 2px 24px;
 	cursor: pointer;
 	background-position: 4px 8px;
 	background-repeat: no-repeat;
 }
 
-.codeGlassWrapper .header ul .javascript {
+.codeGlassViewer .header ul .javascript {
 	background-image: url(javascript.png); 
 }
 
-.codeGlassWrapper .header ul .html {
+.codeGlassViewer .header ul .html {
 	background-image: url(html.png); 
 }
 
-.codeGlassWrapper .header ul .css {
+.codeGlassViewer .header ul .css {
 	background-image: url(css.png); 
 }
 
-.codeGlassWrapper .header ul .copy {
+.codeGlassViewer .header ul .copy {
 	background-image: url(copy.png); 
 }
 
-.codeGlassWrapper .header ul .demo {
+.codeGlassViewer .header ul .demo {
 	background-image: url(demo.png); 
 }
 
-.codeGlassWrapper iframe {
+.codeGlassViewer iframe {
 	background: white;
 	border: none;
 	display:table-row;
@@ -102,7 +103,7 @@
 	height: 100%;
 }
 
-.codeGlassWrapper .iframe .loader {
+.codeGlassViewer .iframe .loader {
 	position: absolute;
 	top: 0;
 	right:0;
@@ -116,14 +117,14 @@
 	text-align: center;
 }
 
-.codeGlassWrapper .iframe .loader span {
+.codeGlassViewer .iframe .loader span {
 	display: inline-block;
 	background: url(loader.gif) no-repeat left center;
 	width: 32px;
 	height: 100%;
 }
 
-.codeGlassWrapper .container {
+.codeGlassViewer .container {
 	padding: 5px 8px 8px 5px;
 	clear: both;
 	position: absolute;
@@ -133,7 +134,7 @@
 	left: 0px;
 }
 
-.codeGlassWrapper .container .info {
+.codeGlassViewer .container .info {
 	border :1px solid #ccc; /* to fix uncalculatable margins from inner elements */
 	background: #f3f3f3;
 	-moz-border-radius: 6px;
@@ -142,12 +143,27 @@
 	padding: 5px;
 }
 
-.codeGlassWrapper .container code {
+.codeGlassViewer .container .info .clipboard {
+	padding: 3px 20px 3px 0;
+	background: url(copy.png) no-repeat top right;
+	font-size: 11px;
+	text-align: right;
+	float: right;
+	text-decoration: underline;
+	cursor: pointer;
+	color: #555;
+}
+
+.codeGlassViewer .container .info .content {
+	clear: both;
+}
+
+.codeGlassViewer .container code {
 	white-space:pre-wrap;
 	word-wrap:break-word;
 }
 
-.codeGlassWrapper .container pre {
+.codeGlassViewer .container pre {
 	background-color: #EEFFCC;
 	border: 1px solid #AACC99;
 	-moz-border-radius: 6px;
@@ -157,19 +173,19 @@
 	padding: 5px;
 }
 
-.codeGlassWrapper .container h1 {
+.codeGlassViewer .container h1 {
 	font-size: 1.2em;
 	margin: 5px 0;
 }
 
-.codeGlassWrapper textarea {
+.codeGlassViewer textarea {
 	width: 100%;
 	height: 100%;
 	font-family:arial;
 	font-size:11px;
 }
 
-.codeGlassWrapper .close {
+.codeGlassViewer .close {
 	display: inline-block;
 	background: url(close.png) no-repeat;
 	width: 15px;
@@ -180,6 +196,6 @@
 	cursor: pointer;
 }
 
-.codeGlassWrapper .description {
+.codeGlassViewer .description {
 	font-family: Tahoma;
 }
