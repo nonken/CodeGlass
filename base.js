@@ -255,17 +255,22 @@ dojo.declare("CodeGlass.CodeViewer",
 		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.2/",
-			label: "(Current) CDN - 1.3.2",
+			label: "1.3.2 (Current CDN)",
 			xDomain: true
 		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.1/",
-			label: "CDN - 1.3.1",
+			label: "1.3.1 (CDN)",
 			xDomain: true
 		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3/",
-			label: "CDN - 1.3",
+			label: "1.3 (CDN)",
+			xDomain: true
+		},
+		{
+			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.2/",
+			label: "1.2 (CDN)",
 			xDomain: true
 		}
 	],
@@ -273,18 +278,9 @@ dojo.declare("CodeGlass.CodeViewer",
 	baseUrl: 1,
 
 	themes: [
-		{
-			theme: "tundra",
-			label: "Tundra"
-		},
-		{
-			theme: "nihilo",
-			label: "Nihilo"
-		},
-		{
-			theme: "soria",
-			label: "Soria"
-		}
+		{ theme: "tundra", label: "Tundra" },
+		{ theme: "nihilo", label: "Nihilo" },
+		{ theme: "soria", label: "Soria" }
 	],
 
 	// theme:
@@ -341,6 +337,8 @@ dojo.declare("CodeGlass.CodeViewer",
 			dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
 		}, this);
 		this.themeInput.selectedIndex = this.theme;
+		
+		this._highlight();
 	},
 
 	_buildTemplate: function(){
@@ -402,9 +400,12 @@ dojo.declare("CodeGlass.CodeViewer",
 		dojo.query(".header ul", this.domNode).addClass("displayNone");
 
 		this._buildTemplate(); // redraw iframe content
-		this.render(); // rerender widget
 		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();
+		
+		dojo.query(".container.full textarea")[0].value = this.renderedContent;
+// FIXME: why doesn't this work???
+//		dojo.query(".container.full textarea").attr("value", this.renderedContent);
 	},
 
 	_toggleView: function(e){
@@ -416,22 +417,39 @@ dojo.declare("CodeGlass.CodeViewer",
 			dojo.query('[title$=\"'+type+'\"]', this.domNode).addClass("active");
 			dojo.toggleClass(this[type], "displayNone");
 			this.currentView = type;
-
-			// size inner elements properly
-			var info = dojo.query("> div", this[type])[0];
-			if (info){
-// FIXME: the size calculations are odd here!!!
-				var typeCoords = dojo.coords(this[type]),
-					infoCoords = dojo.marginBox(info);
-
-				dojo.query("textarea", this[type], this.domNode).style("height", (typeCoords.h-infoCoords.h-13)+"px");
-				dojo.query("code", this[type], this.domNode).forEach(dojox.highlight.init);
-// FIXME: why do we have to manually add sime pixels? Calculations are wrong!!!
-				dojo.query("pre", this[type], this.domNode).style("height", (typeCoords.h-infoCoords.h-23)+"px");
-			}
+			
+			// only do the sizing here once nodes are displayed
+			this._size(this[type]);
 		}
 	},
 	
+	_highlight: function(){
+		dojo.query("code", this.domNode).forEach(dojox.highlight.init);
+	},
+	
+	_size: function(node){
+		// If we wouldn't have to support IE we could go for CSS3 here =/ aaarrrrrgghhh
+		
+		if (!this._sized){
+			this._sized = {};
+		}
+		
+		if (this._sized[node.className]){
+			return;
+		}
+		// size inner elements properly
+		var info = dojo.query("> div.info", node)[0];
+		if (info){
+			var typeCoords = dojo.coords(node),
+				infoCoords = dojo.marginBox(info);
+
+			dojo.query("textarea", node).style("height", (typeCoords.h-infoCoords.h-13)+"px");
+// FIXME: why do we have to manually add sime pixels? Calculations are wrong!!!
+			dojo.query("pre", node).style("height", (typeCoords.h-infoCoords.h-23)+"px");
+		}
+		this._sized[node.className] = true;
+	},
+
 	_copyClipboard: function(){
 		alert("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nCodeGlass would think its awesome if you help out...");
 	}
