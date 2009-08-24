@@ -21,6 +21,7 @@ dojo.require("dojox.highlight");
 dojo.require("dojox.highlight.languages._www");
 dojo.require("CodeGlass.HTML-Beautify");
 
+
 dojo.declare("CodeGlass.base",
 	dijit._Widget,
 	{
@@ -28,11 +29,6 @@ dojo.declare("CodeGlass.base",
 	//		Simple widget allowing you to create complex demos for documentation projects
 	// description:
 	//		CodeClass allows...
-
-	// type:
-	//		the type of CodeGlass
-	//		ViewerDialog || ViewerInline
-	type: "dialog",
 
 	// width:
 	//		width of the viewer
@@ -52,6 +48,9 @@ dojo.declare("CodeGlass.base",
 		// summary:
 		//		parse the child nodes and put the contents into the content object which then can be used by the dialog or other content display mechanisms
 
+		this.height = this.height ? this.height : 450;
+		this.width = this.width ? this.width : 680;
+
 		// content:
 		//		the actual content for the widget
 		this.content = {};
@@ -59,57 +58,13 @@ dojo.declare("CodeGlass.base",
 		if (this.src){
 			this.content.src = this.src;
 		}else{
-			var el = this.srcNodeRef.firstChild,
-				i = 0, frg = dojo.doc.createElement('div'),
-				tarea = dojo.doc.createElement('textarea'),
-				code;
-
-			while (el){
-				// The logic is kinda reverse and the markup confusing - we are putting every node before a node with the lang attribute into an 
-				// object with the node with the actual attribute.
-				if (dojo.attr(el, "lang") != null){
-					// Unescape HTML and make it look fancy
-					code = dojo.query("pre", el).attr("innerHTML");
-					(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
-					code = style_html(tarea.value, 4);
-	
-					this.content[el.lang] = {
-						"content": frg.innerHTML,
-						"label": dojo.attr(el, "label"),
-						"lang": el.lang,
-						"code": code,
-						"index": i
-					};
-	
-					frg.innerHTML = ""; // reset fragment
-				}else{
-					frg.appendChild(dojo.clone(el));
-				}
-				el = el.nextSibling;
-				i++;
-			}
-			// destroy some nodes we don't need
-			dojo.destroy(tarea);
-			dojo.destroy(frg);
+			this.content = CodeGlass.parseNodes(this.srcNodeRef)
 		}
-	},
-
-	postCreate: function(){
-		var o = dojo.getObject("CodeGlass.Viewer"+this.type.substr(0, 1).toUpperCase() + this.type.substr(1));
-		if (!o){
-			throw Error("Unknown CodeGlass type: "+"CodeGlass.Viewer"+this.type.substr(0, 1).toUpperCase() + this.type.substr(1));
-		}
-		this.viewer = new o({
-			id: this.id+"_Viewer",
-			content: this.content,
-			viewerBox: { w: this.width ? (this.width > 680 ? this.width : 680) : 680, h: this.height ? this.height : 450 },
-			djConfig: this.djConfig
-		}, this.domNode);
 	}
 });
 
-dojo.declare("CodeGlass.ViewerInline",
-	[dijit._Widget, dojox.dtl._DomTemplated],
+dojo.declare("CodeGlass.Inline",
+	[CodeGlass.base, dojox.dtl._DomTemplated],
 	{
 
 	// templatePath:
@@ -121,15 +76,10 @@ dojo.declare("CodeGlass.ViewerInline",
 	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewInline.html"),
 
 	postCreate: function(){
-		this.viewerBox = dojo.mixin({
-			w: 500,
-			h :400
-		}, this.viewerBox);
-
 		this.viewer = new CodeGlass.CodeViewer({
 			id: this.id+"_Content",
 			content: this.content,
-			viewerBox: this.viewerBox,
+			viewerBox: { w: this.width, h: this.height },
 			templatePath: this.viewTemplate,
 			djConfig: this.djConfig
 		}, this.domNode);
@@ -142,20 +92,15 @@ dojo.declare("CodeGlass.ViewerInline",
 });
 
 dojo.declare("CodeGlass._DialogMixin",
-	null,
+	CodeGlass.base,
 	{
 
 	postCreate: function(){
-		this.viewerBox = dojo.mixin({
-			w: 500,
-			h :400
-		}, this.viewerBox);
-
 		var node = dojo.create("div", {}, dojo.body(), "last");
 		this.cv = new CodeGlass.CodeViewer({
 			id: this.id+"_Content",
 			content: this.content,
-			viewerBox: this.viewerBox,
+			viewerBox: { w: this.width, h: this.height },
 			templatePath: this.viewTemplate,
 			djConfig: this.djConfig
 		}, node);
@@ -177,6 +122,8 @@ dojo.declare("CodeGlass._DialogMixin",
 		// summary:
 		//		show the dialog and position it correctly on screen
 
+		e.preventDefault(e);
+
 		this._position();
 		this.cv._toggleView();
 
@@ -191,8 +138,8 @@ dojo.declare("CodeGlass._DialogMixin",
 				dojo.removeClass(this.cv.domNode, "displayNone");
 			}),
 			properties: {
-				width: { start: this.ce.w, end: this.viewerBox.w},
-				height: { start: this.ce.h, end: this.viewerBox.h},
+				width: { start: this.ce.w, end: this.width},
+				height: { start: this.ce.h, end: this.height},
 				top: { start: this.ce.y, end: this.top },
 				left: { start: this.ce.x, end: this.left }
 			},
@@ -231,8 +178,8 @@ dojo.declare("CodeGlass._DialogMixin",
 
 		var dim = dijit.getViewport();
 
-		this.top = dim.t+dim.h/2-this.viewerBox.h/2;
-		this.left = dim.l+dim.w/2-this.viewerBox.w/2;
+		this.top = dim.t+dim.h/2-this.height/2;
+		this.left = dim.l+dim.w/2-this.width/2;
 
 		dojo.style(this.cv.domNode, {
 			top: this.top+"px",
@@ -241,8 +188,8 @@ dojo.declare("CodeGlass._DialogMixin",
 	}
 });
 
-dojo.declare("CodeGlass.ViewerDialog",
-	[dijit._Widget, dojox.dtl._DomTemplated, CodeGlass._DialogMixin],
+dojo.declare("CodeGlass.Dialog",
+	[CodeGlass._DialogMixin, dojox.dtl._DomTemplated],
 	{
 
 	// templatePath:
@@ -254,22 +201,16 @@ dojo.declare("CodeGlass.ViewerDialog",
 	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html")
 });
 
-dojo.declare("CodeGlass.ViewerBasic",
-	[dijit._Widget, CodeGlass._DialogMixin],
+dojo.declare("CodeGlass.Basic",
+	[CodeGlass._DialogMixin],
 	{
 
 	// viewTemplate:
 	//		the template of the actual view, extending the base view
 	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html"),
-	
-	constructor: function(){
-		//console.log(this.srcNodeRef.innerHTML);
-	},
-	
+
 	postCreate: function(){
-		console.log(this.domNode);
 		dojo.connect(this.domNode, "onclick", this, "show");
-		
 		this.inherited(arguments);
 	}
 });
@@ -367,6 +308,7 @@ dojo.declare("CodeGlass.CodeViewer",
 			height: this.viewerBox.h + "px"
 		});
 
+		dojo.query(".header ul", this.domNode).addClass("displayNone");
 		dojo.subscribe("codeglass/loaded", this, function(){
 			if (this == arguments[0]){
 				dojo.fadeOut({
@@ -414,7 +356,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		var template = new dojox.dtl.Template(this.iframeTemplate),
 			context = new dojox.dtl.Context(t);
 
-		this.renderedContent = style_html(template.render(context), 4);
+		this.renderedContent = CodeGlass.style_html(template.render(context), 4);
 	},
 
 	_setupIframe: function(){
@@ -518,11 +460,56 @@ dojo.declare("CodeGlass.CodeViewer",
 	}
 });
 
+// Helper functions
+dojo.mixin(CodeGlass, {
+	parseNodes: function(node){
+		var el = node.firstChild,
+				i = 0, frg = dojo.doc.createElement('div'),
+				tarea = dojo.doc.createElement('textarea'),
+				code, content = [];
+
+		while (el){
+			// The logic is kinda reverse and the markup confusing - we are putting every node before a node with the lang attribute into an 
+			// object with the node with the actual attribute.
+			if (dojo.attr(el, "lang") != null){
+				// Unescape HTML and make it look fancy
+				code = dojo.query("pre", el).attr("innerHTML");
+				(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
+				code = CodeGlass.style_html(tarea.value, 4);
+
+				content[el.lang] = {
+					"content": frg.innerHTML,
+					"label": dojo.attr(el, "label"),
+					"lang": el.lang,
+					"code": code,
+					"index": i
+				};
+
+				frg.innerHTML = ""; // reset fragment
+			}else{
+				frg.appendChild(dojo.clone(el));
+			}
+			el = el.nextSibling;
+			i++;
+		}
+		// destroy some nodes we don't need
+		dojo.destroy(tarea);
+		dojo.destroy(frg);
+		
+		return content;
+	}
+});
+
 // Extend nodelist
 dojo.extend(dojo.NodeList, {
 	CodeGlass: function(/* Object? */params){
 		this.forEach(function(elm){
-			new CodeGlass.base(params, elm);
+			var type = params.type ? params.type : "dialog",
+				o = dojo.getObject("CodeGlass."+type.substr(0, 1).toUpperCase() + type.substr(1));
+			if (!o){
+			throw Error("Unknown CodeGlass type: "+"CodeGlass."+type.substr(0, 1).toUpperCase() + type.substr(1));
+			}
+			new o(params, elm);
 		});
 		return this;
 	}

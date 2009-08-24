@@ -24,7 +24,6 @@
 			
 			dojo.addOnLoad(function(){
 				dojo.query("#demo").CodeGlass({type: "dialog", djConfig:"parseOnLoad: false"});
-				//dojo.query("#charting").CodeGlass({type: "inline"});
 				dojo.query("#allInOne").CodeGlass({type: "dialog"});
 			});
 		</script>
@@ -124,7 +123,7 @@
 	<h1>Dojo charting</h1>
 	<p>Take a look at the frickin cool Dojo charting. This makes use of CodeGlass in inline "mode". </p>
 	<p>Instantiation is super simple: <code>dojo.query("#charting").CodeGlass({type: "inline"});</code></p>
-	<div id="charting" dojoType="CodeGlass.base" type="inline" width="300" height="500">
+	<div id="charting" dojoType="CodeGlass.Inline" width="650" height="450">
 		<p>This is how you get the cool charting to run</p>
 		<div label="JavaScript" lang="javascript"><pre>
 		&lt;script type=&quot;text/javascript&quot;&gt;
@@ -166,12 +165,12 @@ dojo.addOnLoad(function(){
 	</div>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis cursus libero. Pellentesque sodales justo at felis molestie vestibulum. Vivamus feugiat augue sem, eget interdum odio. Sed sagittis sapien ac leo cursus ultrices in mattis massa. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas et tortor purus, at varius eros. Aliquam fermentum est non ipsum posuere eget pellentesque nunc adipiscing. Pellentesque volutpat porttitor dui quis molestie. Aenean a turpis tortor. Aliquam massa velit, dictum a dignissim eu, tristique ut neque. Quisque urna lectus, egestas sit amet sagittis et, fermentum nec neque. Integer sodales, nisl sed euismod porttitor, ante orci volutpat orci, vel faucibus nisi lectus tincidunt dui. Ut varius fringilla massa id vulputate. Proin gravida risus nec quam pellentesque semper.
 </p><p>
-Aenean id risus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a dojoType="CodeGlass.base" style="text-decoration: underline; cursor: pointer;" type="basic" src="http://www.google.com
+Aenean id risus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a dojoType="CodeGlass.Basic" style="text-decoration: underline; cursor: pointer;" src="http://www.google.com
 ">Pellentesque</a> nec euismod sem. Aliquam rutrum ligula nec erat mollis ac luctus diam iaculis. Donec in elit metus. Maecenas enim felis, volutpat eu elementum nec, semper id enim. Suspendisse ultrices luctus elementum. Mauris venenatis dolor ac velit pulvinar mattis. Nam commodo, lacus a imperdiet viverra, nisi felis ultricies diam, vitae faucibus mi elit eget lectus. Nunc vitae nisi sit amet erat volutpat iaculis.
 </p><p>
 Donec volutpat enim hendrerit risus porttitor ultrices. Donec ante enim, vulputate id egestas in, commodo accumsan massa. Nulla ac eros eros, eget ornare sapien. Nulla vehicula nibh id dui volutpat et imperdiet neque convallis. In imperdiet urna in libero condimentum gravida. Phasellus a dolor dolor. Donec tincidunt nunc velit. Vestibulum elit massa, consectetur elementum porta at, feugiat vitae sapien. Nam enim velit, consectetur eget aliquet sit amet, malesuada eu nibh. Morbi egestas pharetra dignissim. Donec non dolor arcu. Cras vulputate, orci et posuere lacinia, turpis urna semper erat, vel vestibulum urna lacus vitae mi. Maecenas eget orci eu ante euismod placerat. Sed pellentesque ante quis metus molestie vel eleifend dolor lobortis. Nullam non nunc risus. Nullam sollicitudin dignissim nibh, condimentum posuere erat ornare sit amet. Sed sed lacinia tortor. Curabitur ornare, elit id aliquam tincidunt, lorem tellus tincidunt turpis, id lacinia nisi enim ut turpis. Morbi accumsan, lorem at lacinia elementum, augue mauris luctus diam, nec luctus massa elit ac est. 
 	</p>
 	<h1>A code glass with external link</h1>
-	<div id="external" dojoType="CodeGlass.base" src="http://www.google.com" width="300" height="500"></div>
+	<div id="external" dojoType="CodeGlass.Dialog" src="http://www.google.com" height="600" width="800"></div>
 </body>
 </html>
