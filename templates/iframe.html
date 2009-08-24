@@ -14,7 +14,7 @@
 	<body class="{{ theme|safe }}">
 		{% if htmlcode %}{{ htmlcode|safe }}{% endif %}
 	</body>
-	<script type="text/javascript" src="{{ baseUrl|safe }}dojo/dojo{% if xDomain %}.xd{% endif %}.js"></script>
+	<script type="text/javascript" src="{{ baseUrl|safe }}dojo/dojo{% if xDomain %}.xd{% endif %}.js" djConfig="{{ djConfig }}"></script>
 	{% if javascriptcode %}{{ javascriptcode|safe }}{% endif %}
 	<!--
 		NOTE: the following script tag is not intended for usage in real world!!

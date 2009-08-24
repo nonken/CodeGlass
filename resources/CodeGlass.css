@@ -33,6 +33,7 @@
 .codeGlassInline {
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
+	position: relative;
 }
 
 .codeGlassViewer .header {
@@ -92,6 +93,10 @@
 
 .codeGlassViewer .header ul .demo {
 	background-image: url(demo.png); 
+}
+
+.codeGlassViewer .wrapper {
+	height: 100%;
 }
 
 .codeGlassViewer iframe {
@@ -198,4 +203,18 @@
 
 .codeGlassViewer .description {
 	font-family: Tahoma;
+}
+
+/**
+ * Following rules are there to reset MOINMOIN CSS styles. This can be taken out at some point, or better should be
+ */
+
+.codeGlassViewer .container .info {
+	float: none;
+	color: black;
+	font-size: 1em;
+}
+
+.codeGlassViewer .container .info * {
+	color: black;
 }

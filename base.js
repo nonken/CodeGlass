@@ -22,7 +22,7 @@ dojo.require("dojox.highlight.languages._www");
 dojo.require("CodeGlass.HTML-Beautify");
 
 dojo.declare("CodeGlass.base",
-	[dijit._Widget, dojox.dtl._DomTemplated],
+	dijit._Widget,
 	{
 	// summary:
 	//		Simple widget allowing you to create complex demos for documentation projects
@@ -32,68 +32,78 @@ dojo.declare("CodeGlass.base",
 	// type:
 	//		the type of CodeGlass
 	//		ViewerDialog || ViewerInline
-	type: "ViewerDialog",
+	type: "dialog",
 
-	// viewerBox:
-	//		dimensions of the dialog to be opened
-	viewerBox: {w: "805", h: "415"},
+	// width:
+	//		width of the viewer
+	width: "",
 
-	// templateString:
-	//		placeholder DOM node
-	templateString: "<div></div>",
+	// height:
+	//		width of the viewer
+	height: "",
+
+	// src:
+	//		optional src parameter to display external URL
+	src: "",
+
+	djConfig: "parseOnLoad: false",
 
 	postMixInProperties: function(){
 		// summary:
 		//		parse the child nodes and put the contents into the content object which then can be used by the dialog or other content display mechanisms
 
-		var el = this.srcNodeRef.firstChild,
-			i = 0, frg = dojo.doc.createElement('div'),
-			tarea = dojo.doc.createElement('textarea'),
-			code;
-
 		// content:
 		//		the actual content for the widget
 		this.content = {};
 
-		while (el){
-			// The logic is kinda reverse and the markup confusing - we are putting every node before a node with the lang attribute into an 
-			// object with the node with the actual attribute.
-			if (dojo.attr(el, "lang") != null){
-				// Unescape HTML and make it look fancy
-				code = dojo.query("pre", el).attr("innerHTML");
-				(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
-				code = style_html(tarea.value, 4);
+		if (this.src){
+			this.content.src = this.src;
+		}else{
+			var el = this.srcNodeRef.firstChild,
+				i = 0, frg = dojo.doc.createElement('div'),
+				tarea = dojo.doc.createElement('textarea'),
+				code;
 
-				this.content[el.lang] = {
-					"content": frg.innerHTML,
-					"label": dojo.attr(el, "label"),
-					"lang": el.lang,
-					"code": code,
-					"index": i
-				};
-
-				frg.innerHTML = ""; // reset fragment
-			}else{
-				frg.appendChild(dojo.clone(el));
-			}
-			el = el.nextSibling;
-			i++;
-		}
-
-		// destroy some nodes we don't need
-		dojo.destroy(tarea);
-		dojo.destroy(frg);
-	},
+			while (el){
+				// The logic is kinda reverse and the markup confusing - we are putting every node before a node with the lang attribute into an 
+				// object with the node with the actual attribute.
+				if (dojo.attr(el, "lang") != null){
+					// Unescape HTML and make it look fancy
+					code = dojo.query("pre", el).attr("innerHTML");
+					(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
+					code = style_html(tarea.value, 4);
 	
+					this.content[el.lang] = {
+						"content": frg.innerHTML,
+						"label": dojo.attr(el, "label"),
+						"lang": el.lang,
+						"code": code,
+						"index": i
+					};
+	
+					frg.innerHTML = ""; // reset fragment
+				}else{
+					frg.appendChild(dojo.clone(el));
+				}
+				el = el.nextSibling;
+				i++;
+			}
+			// destroy some nodes we don't need
+			dojo.destroy(tarea);
+			dojo.destroy(frg);
+		}
+	},
+
 	postCreate: function(){
 		var o = dojo.getObject("CodeGlass.Viewer"+this.type.substr(0, 1).toUpperCase() + this.type.substr(1));
 		if (!o){
-			throw Error("Unknown CodeGlass type: "+"CodeGlass."+this.type);
+			throw Error("Unknown CodeGlass type: "+"CodeGlass.Viewer"+this.type.substr(0, 1).toUpperCase() + this.type.substr(1));
 		}
 		this.viewer = new o({
 			id: this.id+"_Viewer",
 			content: this.content,
-			viewerBox: this.viewerBox
+			viewerBox: { w: this.width ? (this.width > 680 ? this.width : 680) : 680, h: this.height ? this.height : 450 },
+			djConfig: this.djConfig
 		}, this.domNode);
 	}
 });
@@ -120,7 +130,8 @@ dojo.declare("CodeGlass.ViewerInline",
 			id: this.id+"_Content",
 			content: this.content,
 			viewerBox: this.viewerBox,
-			templatePath: this.viewTemplate
+			templatePath: this.viewTemplate,
+			djConfig: this.djConfig
 		}, this.domNode);
 
 		dojo.addClass(this.viewer.domNode, "codeGlassInline");
@@ -130,17 +141,9 @@ dojo.declare("CodeGlass.ViewerInline",
 	}
 });
 
-dojo.declare("CodeGlass.ViewerDialog",
-	[dijit._Widget, dojox.dtl._DomTemplated],
+dojo.declare("CodeGlass._DialogMixin",
+	null,
 	{
-
-	// templatePath:
-	//		main template to be used
-	templatePath: dojo.moduleUrl("CodeGlass", "templates/codeglassDialog.html"),
-
-	// viewTemplate:
-	//		the template of the actual view, extending the base view
-	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html"),
 
 	postCreate: function(){
 		this.viewerBox = dojo.mixin({
@@ -149,17 +152,25 @@ dojo.declare("CodeGlass.ViewerDialog",
 		}, this.viewerBox);
 
 		var node = dojo.create("div", {}, dojo.body(), "last");
-		this.dialog = new CodeGlass.CodeViewer({
+		this.cv = new CodeGlass.CodeViewer({
 			id: this.id+"_Content",
 			content: this.content,
 			viewerBox: this.viewerBox,
-			templatePath: this.viewTemplate
+			templatePath: this.viewTemplate,
+			djConfig: this.djConfig
 		}, node);
 
 		dojo.connect(window, "onresize", this, "_position");
-		dojo.query(".header .close", this.dialog.domNode).onclick(dojo.hitch(this, function(e){
+// FIXME: this doesn't get cleaned up correctly
+		dojo.query(".header .close", this.cv.domNode).onclick(dojo.hitch(this, function(e){
 			this.hide();
 		}));
+
+		dojo.subscribe("codeglass/open", this, function(){
+			if (this.isOpen){
+				this.hide();
+			}
+		});
 	},
 
 	show: function(e){
@@ -167,26 +178,29 @@ dojo.declare("CodeGlass.ViewerDialog",
 		//		show the dialog and position it correctly on screen
 
 		this._position();
-		this.dialog._toggleView();
+		this.cv._toggleView();
 
-		this.ce = dojo.coords(e.target)
+		this.ce = dojo.coords(e.target, true);
 
-		dojo.query(".wrapper", this.dialog.domNode).addClass("displayNone");
+		dojo.publish("codeglass/open", [this]);
+
+		dojo.query(".wrapper", this.cv.domNode).addClass("displayNone");
 		dojo.animateProperty({
-			node: this.dialog.domNode,
+			node: this.cv.domNode,
 			beforeBegin: dojo.hitch(this, function(){
-				dojo.removeClass(this.dialog.domNode, "displayNone");
+				dojo.removeClass(this.cv.domNode, "displayNone");
 			}),
 			properties: {
 				width: { start: this.ce.w, end: this.viewerBox.w},
 				height: { start: this.ce.h, end: this.viewerBox.h},
-				top: { start: this.ce.t, end: this.top },
-				left: { start: this.ce.l, end: this.left }
+				top: { start: this.ce.y, end: this.top },
+				left: { start: this.ce.x, end: this.left }
 			},
 			duration: 300,
 			onEnd: dojo.hitch(this, function(){
-				dojo.query(".wrapper", this.dialog.domNode).removeClass("displayNone");
-				this.dialog._setupIframe();
+				dojo.query(".wrapper", this.cv.domNode).removeClass("displayNone");
+				this.cv._setupIframe();
+				this.isOpen = true;
 			})
 		}).play();
 	},
@@ -195,17 +209,18 @@ dojo.declare("CodeGlass.ViewerDialog",
 		// summary:
 		//		hide dialog
 
-		dojo.query(".wrapper", this.dialog.domNode).addClass("displayNone");
+		dojo.query(".wrapper", this.cv.domNode).addClass("displayNone");
 		dojo.animateProperty({
-			node: this.dialog.domNode,
+			node: this.cv.domNode,
 			properties: {
 				width: this.ce.w,
 				height: this.ce.h,
-				top: this.ce.t,
-				left: this.ce.l
+				top: this.ce.y,
+				left: this.ce.x
 			},
 			onEnd: dojo.hitch(this, function(){
-				dojo.addClass(this.dialog.domNode, "displayNone");
+				dojo.addClass(this.cv.domNode, "displayNone");
+				this.isOpen = false;
 			})
 		}).play();
 	},
@@ -214,20 +229,52 @@ dojo.declare("CodeGlass.ViewerDialog",
 		// summary:
 		//		positions dialog and background layer and additionally sizes background layer correctly
 
-		var dim = dijit.getViewport(),
-			dd = dojo.doc.documentElement;
+		var dim = dijit.getViewport();
 
-		this.top = dim.h/2-this.viewerBox.h/2;
-		this.left = dim.w/2-this.viewerBox.w/2;
+		this.top = dim.t+dim.h/2-this.viewerBox.h/2;
+		this.left = dim.l+dim.w/2-this.viewerBox.w/2;
 
-		dojo.style(this.domNode, {
+		dojo.style(this.cv.domNode, {
 			top: this.top+"px",
 			left: this.left+"px"
 		});
 	}
 });
 
-// Simple iframe driven dialog
+dojo.declare("CodeGlass.ViewerDialog",
+	[dijit._Widget, dojox.dtl._DomTemplated, CodeGlass._DialogMixin],
+	{
+
+	// templatePath:
+	//		main template to be used
+	templatePath: dojo.moduleUrl("CodeGlass", "templates/codeglassDialog.html"),
+
+	// viewTemplate:
+	//		the template of the actual view, extending the base view
+	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html")
+});
+
+dojo.declare("CodeGlass.ViewerBasic",
+	[dijit._Widget, CodeGlass._DialogMixin],
+	{
+
+	// viewTemplate:
+	//		the template of the actual view, extending the base view
+	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html"),
+	
+	constructor: function(){
+		//console.log(this.srcNodeRef.innerHTML);
+	},
+	
+	postCreate: function(){
+		console.log(this.domNode);
+		dojo.connect(this.domNode, "onclick", this, "show");
+		
+		this.inherited(arguments);
+	}
+});
+
+// Simple iframe driven codeviewer
 dojo.declare("CodeGlass.CodeViewer", 
 	[dijit._Widget, dojox.dtl._DomTemplated],
 	{
@@ -249,7 +296,7 @@ dojo.declare("CodeGlass.CodeViewer",
 
 	baseUrls: [
 		{
-			baseUrl: "/",
+			baseUrl: "/moin_static163/js/dojo/trunk/",
 			label: "Trunk local",
 			xDomain: false
 		},
@@ -290,6 +337,8 @@ dojo.declare("CodeGlass.CodeViewer",
 	// currentView:
 	//		default is demo tab
 	currentView: "containerIframe",
+	
+	showToolbar: true,
 
 	postMixInProperties: function(){
 		// summary:
@@ -300,7 +349,11 @@ dojo.declare("CodeGlass.CodeViewer",
 			h :400
 		}, this.viewerBox);
 
-		this._buildTemplate();
+		if (this.content.src){
+			this.showToolbar = false;
+		}else{
+			this._buildTemplate();
+		}
 	},
 
 	postCreate: function(){
@@ -328,16 +381,18 @@ dojo.declare("CodeGlass.CodeViewer",
 
 		// Create version and theme select options. We do this here because of a bug in DTL
 		// preventing us from using {% for in %} in a select context
-		dojo.forEach(this.baseUrls, function(url, i){
-			dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
-		}, this);
-		this.versionInput.selectedIndex = this.baseUrl;
-		
-		dojo.forEach(this.themes, function(theme, i){
-			dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
-		}, this);
-		this.themeInput.selectedIndex = this.theme;
-		
+// FIXME: externalize into template once DTL bug is fixed
+		if (this.showToolbar){
+			dojo.forEach(this.baseUrls, function(url, i){
+				dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
+			}, this);
+			this.versionInput.selectedIndex = this.baseUrl;
+			
+			dojo.forEach(this.themes, function(theme, i){
+				dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
+			}, this);
+			this.themeInput.selectedIndex = this.theme;
+		}
 		this._highlight();
 	},
 
@@ -350,6 +405,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		}
 
 		dojo.mixin(t, {
+			djConfig: this.djConfig,
 			theme: this.themes[this.theme].theme,
 			baseUrl: this.baseUrls[this.baseUrl].baseUrl,
 			xDomain: this.baseUrls[this.baseUrl].xDomain
@@ -372,16 +428,23 @@ dojo.declare("CodeGlass.CodeViewer",
 		}
 
 		this.iframe = dojo.create("iframe", {}, this.containerIframe);
-		this.iframe.contentDocument.open();
-		this.iframe.contentDocument.write(this.renderedContent);
-		this.iframe.contentDocument.close();
+		if (!this.content.src){
+			this.iframe.contentDocument.open();
+			this.iframe.contentDocument.write(this.renderedContent);
+			this.iframe.contentDocument.close();
+			this.iframe.contentWindow.pub = dojo.hitch(this, function(){
+				dojo.publish("codeglass/loaded", [this]);
+			});
+		}else{
+			var conn = dojo.connect(this.iframe, "onload", this, function(){
+				dojo.disconnect(conn);
+				dojo.publish("codeglass/loaded", [this]);
+			});
+			dojo.attr(this.iframe, "src", this.content.src);
+		}
 
 		// setup pub hook for notification when everything is ready
 		dojo.query(this.loader).removeClass("displayNone").style("opacity", 1);
-
-		this.iframe.contentWindow.pub = dojo.hitch(this, function(){
-			dojo.publish("codeglass/loaded", [this]);
-		})
 	},
 
 	_changeTheme: function(){
@@ -417,23 +480,23 @@ dojo.declare("CodeGlass.CodeViewer",
 			dojo.query('[title$=\"'+type+'\"]', this.domNode).addClass("active");
 			dojo.toggleClass(this[type], "displayNone");
 			this.currentView = type;
-			
+
 			// only do the sizing here once nodes are displayed
 			this._size(this[type]);
 		}
 	},
-	
+
 	_highlight: function(){
 		dojo.query("code", this.domNode).forEach(dojox.highlight.init);
 	},
-	
+
 	_size: function(node){
 		// If we wouldn't have to support IE we could go for CSS3 here =/ aaarrrrrgghhh
-		
+
 		if (!this._sized){
 			this._sized = {};
 		}
-		
+
 		if (this._sized[node.className]){
 			return;
 		}
@@ -451,7 +514,7 @@ dojo.declare("CodeGlass.CodeViewer",
 	},
 
 	_copyClipboard: function(){
-		alert("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nCodeGlass would think its awesome if you help out...");
+		alert("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nThat would be awesome!!");
 	}
 });
 

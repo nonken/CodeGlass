@@ -1,7 +1,7 @@
 <div class="codeGlassViewer displayNone">
 	<div class="wrapper">
 		<div class="header">
-		<!--<span class="description">{{ description }}</span>-->
+		{% if showToolbar %}
 		<div class="theme"
 			><select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
 			</select
@@ -13,6 +13,7 @@
 		><ul dojoAttachEvent="onclick: _toggleView" class="displayNone" 
 			><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li>{% if javascriptcode %}<li title="containerJs" class="javascript">JavaScript</li>{% endif %}{% if htmlcode %}<li title="containerHtml" class="html">HTML</li>{% endif %}{% if csscode %}<li title="containerCss" class="css">CSS</li>{% endif %}
 		</ul>
+		{% endif %}
 		{% block header %}{% endblock %}
 		</div>
 		<div dojoAttachPoint="containerIframe" class="iframe container">
