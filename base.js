@@ -398,7 +398,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();
 	},
-	
+
 	_changeVersion: function(){
 		this.baseUrl = this.versionInput.value;
 
