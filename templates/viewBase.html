@@ -30,36 +30,33 @@
 		<div dojoAttachPoint="containerJs" class="js container displayNone">
 			<div class="info">
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
+				<div class="execute" dojoAttachEvent="onclick: _execute">Execute code</div>
 				{% if javascriptlabel %}<h1>{{ javascriptlabel|safe }}</h1>{% endif %}
 				{% if javascriptcontent %}<div class="content">{{ javascriptcontent|safe }}</div>{% endif %}
 			</div>
-			<pre>
-				<code class="javascript">{{ javascriptcode }}</code>
-			</pre>
+			<pre lang="javascript"></pre>
 		</div>
 		{% endif %}
 		{% if htmlcode %}
 		<div dojoAttachPoint="containerHtml" class="html container displayNone">
 			<div class="info">
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
+				<div class="execute" dojoAttachEvent="onclick: _execute">Execute code</div>
 				{% if htmllabel %}<h1>{{ htmllabel|safe }}</h1>{% endif %}
 				{% if htmlcontent %}<div class="content">{{ htmlcontent|safe }}</div>{% endif %}
 			</div>
-			<pre>
-				<code class="html">{{ htmlcode }}</code>
-			</pre>
+			<pre lang="html"></pre>
 		</div>
 		{% endif %}
 		{% if csscode %}
 		<div dojoAttachPoint="containerCss" class="css container displayNone">
 			<div class="info">
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
+				<div class="execute" dojoAttachEvent="onclick: _execute">Execute code</div>
 				{% if csslabel %}<h1>{{ csslabel|safe }}</h1>{% endif %}
 				{% if csscontent %}<div class="content">{{ csscontent|safe }}</div>{% endif %}
 			</div>
-			<pre>
-				<code class="css">{{ csscode }}</code>
-			</pre>
+			<pre lang="css"></pre>
 		</div>
 		{% endif %}
 	</div>

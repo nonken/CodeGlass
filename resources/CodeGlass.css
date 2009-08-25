@@ -148,15 +148,23 @@
 	padding: 5px;
 }
 
-.codeGlassViewer .container .info .clipboard {
+.codeGlassViewer .container .info .clipboard,
+.codeGlassViewer .container .info .execute {
 	padding: 3px 20px 3px 0;
-	background: url(copy.png) no-repeat top right;
 	font-size: 11px;
 	text-align: right;
 	float: right;
 	text-decoration: underline;
 	cursor: pointer;
 	color: #555;
+}
+
+.codeGlassViewer .container .info .clipboard {
+	background: url(copy.png) no-repeat top right;
+}
+
+.codeGlassViewer .container .info .execute {
+	background: url(media-playback-start.png) no-repeat top right;
 }
 
 .codeGlassViewer .container .info .content {
@@ -169,13 +177,8 @@
 }
 
 .codeGlassViewer .container pre {
-	background-color: #EEFFCC;
 	border: 1px solid #AACC99;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	overflow-y: auto;
 	margin: 0;
-	padding: 5px;
 }
 
 .codeGlassViewer .container h1 {

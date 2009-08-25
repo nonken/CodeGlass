@@ -280,6 +280,8 @@ dojo.declare("CodeGlass.CodeViewer",
 	currentView: "containerIframe",
 	
 	showToolbar: true,
+	
+	editors: {},
 
 	postMixInProperties: function(){
 		// summary:
@@ -335,7 +337,9 @@ dojo.declare("CodeGlass.CodeViewer",
 			}, this);
 			this.themeInput.selectedIndex = this.theme;
 		}
-		this._highlight();
+		
+		// Bespin setup
+		this._initEditors();
 	},
 
 	_buildTemplate: function(){
@@ -428,8 +432,17 @@ dojo.declare("CodeGlass.CodeViewer",
 		}
 	},
 
-	_highlight: function(){
-		dojo.query("code", this.domNode).forEach(dojox.highlight.init);
+	_initEditors: function(){
+		var lang;
+		dojo.query("pre", this.domNode).forEach(function(node){
+			lang = dojo.attr(node, "lang");
+			console.log(node);
+			this.editors[lang] = new bespin.editor.Component(node, {
+				syntax: "js",
+				loadfromdiv: true
+			});
+			this.editors[lang].setContent(this.content[lang].code ? this.content[lang].code : "");
+		}, this);
 	},
 
 	_size: function(node){
@@ -457,6 +470,17 @@ dojo.declare("CodeGlass.CodeViewer",
 
 	_copyClipboard: function(){
 		alert("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nThat would be awesome!!");
+	},
+	
+	_execute: function(){
+		for (var editor in this.editors){
+			this.content[editor].code = this.editors[editor].getContent();
+		}
+		this._buildTemplate();
+		this._toggleView();
+		this._setupIframe();
+
+		dojo.query(".container.full textarea")[0].value = this.renderedContent;
 	}
 });
 
