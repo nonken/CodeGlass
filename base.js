@@ -111,8 +111,8 @@ dojo.declare("CodeGlass._DialogMixin",
 			this.hide();
 		}));
 
-		dojo.subscribe("codeglass/open", this, function(){
-			if (this.isOpen){
+		dojo.subscribe("codeglass/open", this, function(t){
+			if (this.isOpen && t != this){
 				this.hide();
 			}
 		});
@@ -123,6 +123,10 @@ dojo.declare("CodeGlass._DialogMixin",
 		//		show the dialog and position it correctly on screen
 
 		e.preventDefault(e);
+		
+		if (this.isOpen){
+			return;
+		}
 
 		this._position();
 		this.cv._toggleView();
