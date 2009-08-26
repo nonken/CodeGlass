@@ -58,7 +58,7 @@
 				<li>Programmatic code generation</li><li>Dom manipulation</li>
 			</ul>
 		</blockquote>
-		<div label="This is the HTML of the example" lang="html">
+		<div lang="html">
 			<pre>&lt;div style=&quot;position: relative; width: 100%; height: 100%;&quot;&gt;
 			&lt;div dojoType=&quot;dijit.layout.BorderContainer&quot; gutters=&quot;true&quot; id=&quot;borderContainerTwo&quot; &gt;
 
@@ -171,5 +171,24 @@ Donec volutpat enim hendrerit risus porttitor ultrices. Donec ante enim, vulputa
 	</p>
 	<h1>A code glass with external link</h1>
 	<div id="external" dojoType="CodeGlass.Dialog" src="http://www.google.com" height="600" width="800"></div>
+	
+	<div dojoType="CodeGlass.Dialog"><div label="" lang="javascript"><pre>&lt;script&gt;
+  dojo.require(&quot;dojox.data.CsvStore&quot;);
+  dojo.require(&quot;dijit.form.ComboBox&quot;);
+
+  var storeData =   &quot;firstname,lastname,age\n&quot; +
+                    &quot;John, Doe, 21\n&quot; +
+                    &quot;Jane, Doe, 22\n&quot; +
+                    &quot;Richard, Smith, 43\n&quot; +
+                    &quot;Sally, Smith, 49\n&quot; +
+                    &quot;Lian, Zu, 23\n&quot; +
+                    &quot;Ichiro, Kagetsume, 23\n&quot;+
+                    &quot;Umeko, Tsuguri, 18\n&quot; +
+                    &quot;Alptraum, Reisender, 25\n&quot; +
+                    &quot;Thomas, Winthrope, 14\n&quot;;
+
+  var personStore = new dojox.data.CsvStore({data: storeData});
+
+&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div dojoType=&quot;dijit.form.ComboBox&quot; store=&quot;personStore&quot; searchAttr=&quot;firstname&quot;&gt;&lt;/div&gt;</pre></div></div>
 </body>
 </html>

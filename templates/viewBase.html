@@ -24,14 +24,14 @@
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
 				<p>To run the demo in your own environment, copy and paste the full source into an editor and open it in a browser.</p>
 			</div>
-			<textarea>{{ renderedContent }}</textarea>
+			<textarea dojoAttachPoint="textareaCode">{{ renderedContent }}</textarea>
 		</div>
 		{% if javascriptcode %}
 		<div dojoAttachPoint="containerJs" class="js container displayNone">
 			<div class="info">
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
 				{% if javascriptlabel %}<h1>{{ javascriptlabel|safe }}</h1>{% endif %}
-				{% if javascriptcontent %}<div class="content">{{ javascriptcontent|safe }}</div>{% endif %}
+				<div class="content">{% if javascriptcontent %}{{ javascriptcontent|safe }}{% endif %}</div>
 			</div>
 			<pre>
 				<code class="javascript">{{ javascriptcode }}</code>
@@ -43,7 +43,7 @@
 			<div class="info">
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
 				{% if htmllabel %}<h1>{{ htmllabel|safe }}</h1>{% endif %}
-				{% if htmlcontent %}<div class="content">{{ htmlcontent|safe }}</div>{% endif %}
+				<div class="content">{% if htmlcontent %}{{ htmlcontent|safe }}{% endif %}</div>
 			</div>
 			<pre>
 				<code class="html">{{ htmlcode }}</code>
@@ -55,7 +55,7 @@
 			<div class="info">
 				<div class="clipboard" dojoAttachEvent="onclick: _copyClipboard">Copy to clipboard</div>
 				{% if csslabel %}<h1>{{ csslabel|safe }}</h1>{% endif %}
-				{% if csscontent %}<div class="content">{{ csscontent|safe }}</div>{% endif %}
+				<div class="content">{% if csscontent %}{{ csscontent|safe }}{% endif %}</div>
 			</div>
 			<pre>
 				<code class="css">{{ csscode }}</code>

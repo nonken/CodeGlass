@@ -42,7 +42,7 @@ dojo.declare("CodeGlass.base",
 	//		optional src parameter to display external URL
 	src: "",
 
-	djConfig: "parseOnLoad: false",
+	djConfig: "parseOnLoad: true",
 
 	postMixInProperties: function(){
 		// summary:
@@ -263,7 +263,9 @@ dojo.declare("CodeGlass.CodeViewer",
 		}
 	],
 	
-	baseUrl: 1,
+	baseUrl: "",
+
+	baseUrlIndex: 1,
 
 	themes: [
 		{ theme: "tundra", label: "Tundra" },
@@ -293,6 +295,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		if (this.content.src){
 			this.showToolbar = false;
 		}else{
+			this.baseUrl = this.baseUrls[this.baseUrlIndex].baseUrl;
 			this._buildTemplate();
 		}
 	},
@@ -328,7 +331,7 @@ dojo.declare("CodeGlass.CodeViewer",
 			dojo.forEach(this.baseUrls, function(url, i){
 				dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
 			}, this);
-			this.versionInput.selectedIndex = this.baseUrl;
+			this.versionInput.selectedIndex = this.baseUrlIndex;
 			
 			dojo.forEach(this.themes, function(theme, i){
 				dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
@@ -339,18 +342,24 @@ dojo.declare("CodeGlass.CodeViewer",
 	},
 
 	_buildTemplate: function(){
-		var t = {}, type, key;
+		var t = {}, type, key, frgContext = new dojox.dtl.Context(this), frgTmpl;
 		for (type in this.content){
 			for (key in this.content[type]){
-				this[type+""+key] = t[type+""+key] = this.content[type][key];
+				// render code fragments
+				if (key == "code"){
+					frgTmpl = new dojox.dtl.Template(this.content[type][key]);
+					this[type+""+key] = t[type+""+key] = CodeGlass.style_html(frgTmpl.render(frgContext), 4);
+				}else{
+					this[type+""+key] = t[type+""+key] = this.content[type][key];
+				}
 			}
 		}
 
 		dojo.mixin(t, {
 			djConfig: this.djConfig,
 			theme: this.themes[this.theme].theme,
-			baseUrl: this.baseUrls[this.baseUrl].baseUrl,
-			xDomain: this.baseUrls[this.baseUrl].xDomain
+			baseUrl: this.baseUrls[this.baseUrlIndex].baseUrl,
+			xDomain: this.baseUrls[this.baseUrlIndex].xDomain
 		});
 
 		var template = new dojox.dtl.Template(this.iframeTemplate),
@@ -397,10 +406,13 @@ dojo.declare("CodeGlass.CodeViewer",
 		this._buildTemplate(); // redraw iframe content
 		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();
+
+		this.textareaCode.value = this.renderedContent;
 	},
 
 	_changeVersion: function(){
-		this.baseUrl = this.versionInput.value;
+		this.baseUrlIndex = this.versionInput.value;
+		this.baseUrl = this.baseUrls[this.baseUrlIndex].baseUrl;
 
 		dojo.query(".header ul", this.domNode).addClass("displayNone");
 
@@ -408,7 +420,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();
 		
-		dojo.query(".container.full textarea")[0].value = this.renderedContent;
+		this.textareaCode.value = this.renderedContent;
 // FIXME: why doesn't this work???
 //		dojo.query(".container.full textarea").attr("value", this.renderedContent);
 	},
@@ -475,7 +487,7 @@ dojo.mixin(CodeGlass, {
 				// Unescape HTML and make it look fancy
 				code = dojo.query("pre", el).attr("innerHTML");
 				(dojo.isIE ? tarea.innerText = code : tarea.innerHTML = code);
-				code = CodeGlass.style_html(tarea.value, 4);
+				code = tarea.value;
 
 				content[el.lang] = {
 					"content": frg.innerHTML,
