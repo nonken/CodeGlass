@@ -309,6 +309,21 @@ dojo.declare("CodeGlass.CodeViewer",
 		if (this.content.src){
 			this.showToolbar = false;
 		}else{
+			if (this.version.length){
+				var v = this.version.split("-"),
+					start = v[0] > "0" ? v[0] : "0",
+					end = v[1] ? v[1] : null;
+			}
+			
+			var cnt = -1;
+			this.suppVersions = []
+			dojo.forEach(this.baseUrls, function(url, i){
+				if ((!start || url.version >= start) && (!end || end <= url.version) || !url.version){
+					this.suppVersions.push(++cnt);
+				}
+			}, this);
+			this.baseUrlIndex = cnt > 0 ? 1 : 0; // Always try to use latest CDN unless feature is only supported by trunk
+			
 			this.baseUrl = this.baseUrls[this.baseUrlIndex].baseUrl;
 			this._buildTemplate();
 		}
@@ -342,20 +357,11 @@ dojo.declare("CodeGlass.CodeViewer",
 		// preventing us from using {% for in %} in a select context
 // FIXME: externalize into template once DTL bug is fixed
 		if (this.showToolbar){
-			if (this.version.length){
-				var v = this.version.split("-"),
-					start = v[0] > "0" ? v[0] : "0",
-					end = v[1] ? v[1] : null;
-			}
-			
 			var cnt = 0;
-			dojo.forEach(this.baseUrls, function(url, i){
-				if ((!start || url.version >= start) && (!end || end <= url.version) || !url.version){
-					dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
-					cnt++;
-				}
+			dojo.forEach(this.suppVersions, function(version, i){
+				dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
 			}, this);
-			this.versionInput.selectedIndex = cnt > 1 ? this.baseUrlIndex : 0; // if we only have one option this is trunk which we usually don't select because of performance
+			this.versionInput.selectedIndex = this.baseUrlIndex;
 			
 			dojo.forEach(this.themes, function(theme, i){
 				dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
