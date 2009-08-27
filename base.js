@@ -43,6 +43,8 @@ dojo.declare("CodeGlass.base",
 	src: "",
 
 	djConfig: "parseOnLoad: true",
+	
+	version: "",
 
 	postMixInProperties: function(){
 		// summary:
@@ -81,7 +83,8 @@ dojo.declare("CodeGlass.Inline",
 			content: this.content,
 			viewerBox: { w: this.width, h: this.height },
 			templatePath: this.viewTemplate,
-			djConfig: this.djConfig
+			djConfig: this.djConfig,
+			version: this.version
 		}, this.domNode);
 
 		dojo.addClass(this.viewer.domNode, "codeGlassInline");
@@ -102,7 +105,8 @@ dojo.declare("CodeGlass._DialogMixin",
 			content: this.content,
 			viewerBox: { w: this.width, h: this.height },
 			templatePath: this.viewTemplate,
-			djConfig: this.djConfig
+			djConfig: this.djConfig,
+			version: this.version
 		}, node);
 
 		dojo.connect(window, "onresize", this, "_position");
@@ -248,28 +252,34 @@ dojo.declare("CodeGlass.CodeViewer",
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.2/",
 			label: "1.3.2 (Current CDN)",
-			xDomain: true
+			xDomain: true,
+			version: "1.3.2"
 		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.1/",
 			label: "1.3.1 (CDN)",
-			xDomain: true
+			xDomain: true,
+			version: "1.3.1"
 		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3/",
 			label: "1.3 (CDN)",
-			xDomain: true
+			xDomain: true,
+			version: "1.3"
 		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.2/",
 			label: "1.2 (CDN)",
-			xDomain: true
+			xDomain: true,
+			version: "1.2"
 		}
 	],
 	
 	baseUrl: "",
 
 	baseUrlIndex: 1,
+
+	version: "",
 
 	themes: [
 		{ theme: "tundra", label: "Tundra" },
@@ -332,10 +342,20 @@ dojo.declare("CodeGlass.CodeViewer",
 		// preventing us from using {% for in %} in a select context
 // FIXME: externalize into template once DTL bug is fixed
 		if (this.showToolbar){
+			if (this.version.length){
+				var v = this.version.split("-"),
+					start = v[0] > "0" ? v[0] : "0",
+					end = v[1] ? v[1] : null;
+			}
+			
+			var cnt = 0;
 			dojo.forEach(this.baseUrls, function(url, i){
-				dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
+				if ((!start || url.version >= start) && (!end || end <= url.version) || !url.version){
+					dojo.create("option", { innerHTML: url.label, value: i }, this.versionInput);
+					cnt++;
+				}
 			}, this);
-			this.versionInput.selectedIndex = this.baseUrlIndex;
+			this.versionInput.selectedIndex = cnt > 1 ? this.baseUrlIndex : 0; // if we only have one option this is trunk which we usually don't select because of performance
 			
 			dojo.forEach(this.themes, function(theme, i){
 				dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
