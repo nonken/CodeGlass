@@ -43,9 +43,11 @@ dojo.declare("CodeGlass.base",
 	src: "",
 
 	djConfig: "parseOnLoad: true",
-	
+
 	version: "",
 	
+	i18n: "",
+
 	showVersions: true,
 	showThemes: true,
 	showRtl: true,
@@ -91,6 +93,7 @@ dojo.declare("CodeGlass.Inline",
 			templatePath: this.viewTemplate,
 			djConfig: this.djConfig,
 			version: this.version,
+			i18n: this.i18n,
 			showVersions: this.showVersions,
 			showThemes: this.showThemes,
 			showRtl: this.showRtl,
@@ -118,6 +121,7 @@ dojo.declare("CodeGlass._DialogMixin",
 			templatePath: this.viewTemplate,
 			djConfig: this.djConfig,
 			version: this.version,
+			i18n: this.i18n,
 			showVersions: this.showVersions,
 			showThemes: this.showThemes,
 			showRtl: this.showRtl,
@@ -262,7 +266,7 @@ dojo.declare("CodeGlass.CodeViewer",
 	baseUrls: [
 		{
 			baseUrl: "/moin_static163/js/dojo/trunk/",
-			label: "Trunk local",
+			label: "Trunk local (Slow!)",
 			xDomain: false
 		},
 		{
@@ -349,7 +353,10 @@ dojo.declare("CodeGlass.CodeViewer",
 			}, this);
 			this.baseUrlIndex = cnt > 0 ? 1 : 0; // Always try to use latest CDN unless feature is only supported by trunk
 
-			this.baseUrl = this.baseUrls[this.baseUrlIndex].baseUrl;
+			if (this.i18n.length){
+				this.djConfig += (this.djConfig.length ? ", " : "") + "locale: '" + this.i18n + "'";
+			}
+
 			this._buildTemplate();
 		}
 	},
@@ -365,14 +372,14 @@ dojo.declare("CodeGlass.CodeViewer",
 			height: this.viewerBox.h + "px"
 		});
 
-		dojo.query(".header ul", this.domNode).addClass("displayNone");
+		dojo.query(".header ul, .footer > div", this.domNode).addClass("displayNone");
 		dojo.subscribe("codeglass/loaded", this, function(){
 			if (this == arguments[0]){
 				dojo.fadeOut({
 					node: this.loader,
 					onEnd: dojo.hitch(this, function(){
 						dojo.addClass(this.loader, "displayNone");
-						dojo.query(".header ul", this.domNode).removeClass("displayNone");
+						dojo.query(".header ul, .footer > div", this.domNode).removeClass("displayNone");
 					})
 				}).play();
 			}
@@ -382,20 +389,20 @@ dojo.declare("CodeGlass.CodeViewer",
 		// preventing us from using {% for in %} in a select context
 // FIXME: externalize into template once DTL bug is fixed
 		if (this.showToolbar){
-			if (this.showVersion){
+			if (this.showVersions){
 				dojo.forEach(this.suppVersions, function(version, i){
 					dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
 				}, this);
 				this.versionInput.selectedIndex = this.baseUrlIndex;
 			}
-			
+
 			if (this.showThemes){
 				dojo.forEach(this.themes, function(theme, i){
 					dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
 				}, this);
 				this.themeInput.selectedIndex = this.theme;
 			}
-			
+
 			if (this.showI18n){
 				dojo.xhrGet({
 					url: this.languages,
@@ -412,7 +419,12 @@ dojo.declare("CodeGlass.CodeViewer",
 	},
 
 	_buildTemplate: function(){
-		var t = {}, type, key, frgContext = new dojox.dtl.Context(this), frgTmpl;
+		var t = {}, type, key,
+			frgContext = new dojox.dtl.Context({
+				theme: this.themes[this.theme].theme,
+				baseUrl: this.baseUrls[this.baseUrlIndex].baseUrl
+			}),
+			frgTmpl;
 		for (type in this.content){
 			for (key in this.content[type]){
 				// render code fragments
@@ -431,7 +443,6 @@ dojo.declare("CodeGlass.CodeViewer",
 			baseUrl: this.baseUrls[this.baseUrlIndex].baseUrl,
 			xDomain: this.baseUrls[this.baseUrlIndex].xDomain,
 			dir: this.dir,
-			i18n: this.i18n,
 			a11y: this.a11y
 		});
 
@@ -509,9 +520,7 @@ dojo.declare("CodeGlass.CodeViewer",
 	_changeI18n: function(){
 		this.i18n = this.i18nInput.value;
 		if (this.i18n.length){
-			this.i18n = ", locale: ['" + this.lang + "']";
-		}else{
-			this.i18n = "";
+			this.djConfig += (this.djConfig.length ? ", " : "") + "locale: '" + this.i18n + "'";
 		}
 
 		this._setup();

@@ -1,0 +1,18 @@
+[
+	{
+		"iso": "de", 
+		"name": "German"
+	},
+	{
+		"iso": "en", 
+		"name": "English"
+	},
+	{
+		"iso": "nl", 
+		"name": "Dutch"
+	},
+	{
+		"iso": "he", 
+		"name": "Hebrew"
+	}
+]

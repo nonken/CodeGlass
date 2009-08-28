@@ -234,3 +234,10 @@
 .codeGlassViewer .container .info * {
 	color: black;
 }
+
+.codeGlassViewer .footer {
+	padding: 0;
+	color: black;
+	font-size: 100%;
+	text-align: left;
+}
