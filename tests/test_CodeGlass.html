@@ -23,7 +23,7 @@
 			dojo.require("CodeGlass.base");
 			
 			dojo.addOnLoad(function(){
-				dojo.query("#demo").CodeGlass({type: "dialog", djConfig:"parseOnLoad: false", version: "1.4"});
+				dojo.query("#demo").CodeGlass({type: "dialog", djConfig:"parseOnLoad: false", version: "1.3-2.0"});
 			});
 		</script>
 	</head>
@@ -44,6 +44,11 @@
 		<p>First we declare the CSS</p>
 		<div label="The CSS" lang="css">
 			<pre>&lt;style type=&quot;text/css&quot;&gt;
+			html, body {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+			}
 			#borderContainerTwo {
 				width: 100%;
 				height: 100%;

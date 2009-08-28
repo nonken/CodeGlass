@@ -1,20 +1,19 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html dir="{{ dir }}">
 	<head>
 		<link rel="stylesheet" type="text/css" href="{{ baseUrl|safe }}dijit/themes/{{ theme|safe }}/{{ theme|safe }}.css">
 		<style type="text/css">
 			body, html {
-				margin: 0;
-				height: 100%;
-				width: 100%;
+				font-family:helvetica,arial,sans-serif;
+				font-size:90%;
 			}
 		</style>
 		{% if csscode %}{{ csscode|safe }}{% endif %}
 	</head>
-	<body class="{{ theme|safe }}">
+	<body class="{{ theme|safe }} {{ a11y }}">
 		{% if htmlcode %}{{ htmlcode|safe }}{% endif %}
 	</body>
-	<script type="text/javascript" src="{{ baseUrl|safe }}dojo/dojo{% if xDomain %}.xd{% endif %}.js" djConfig="{{ djConfig }}"></script>
+	<script type="text/javascript" src="{{ baseUrl|safe }}dojo/dojo{% if xDomain %}.xd{% endif %}.js" djConfig="{{ djConfig }}{{ i18n }}"></script>
 	{% if javascriptcode %}{{ javascriptcode|safe }}{% endif %}
 	<!--
 		NOTE: the following script tag is not intended for usage in real world!!

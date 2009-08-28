@@ -46,6 +46,19 @@
 	-webkit-border-top-right-radius: 6px;
 }
 
+.codeGlassViewer .footer {
+	background: url(bgHead.png) repeat-x bottom left;
+	border-top: 1px solid #ccc;
+	height: 33px;
+	-moz-border-radius-bottomleft: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
 .codeGlassViewer .header ul {
 	margin: 0;
 	padding: 0;
@@ -54,8 +67,11 @@
 }
 
 .codeGlassViewer .header ul li,
-.codeGlassViewer .header .theme,
-.codeGlassViewer .header .version {
+.codeGlassViewer .footer .theme,
+.codeGlassViewer .footer .version,
+.codeGlassViewer .footer .a11y,
+.codeGlassViewer .footer .i18n,
+.codeGlassViewer .footer .dir {
 	float: left;
 	padding: 8px 8px 5px 8px;
 	border-right: 1px solid #ccc;
@@ -135,7 +151,7 @@
 	position: absolute;
 	top: 34px;
 	right: 0px;
-	bottom: 0px;
+	bottom: 34px;
 	left: 0px;
 }
 

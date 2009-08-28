@@ -45,6 +45,12 @@ dojo.declare("CodeGlass.base",
 	djConfig: "parseOnLoad: true",
 	
 	version: "",
+	
+	showVersions: true,
+	showThemes: true,
+	showRtl: true,
+	showI18n: true,
+	showA11y: true,
 
 	postMixInProperties: function(){
 		// summary:
@@ -84,7 +90,12 @@ dojo.declare("CodeGlass.Inline",
 			viewerBox: { w: this.width, h: this.height },
 			templatePath: this.viewTemplate,
 			djConfig: this.djConfig,
-			version: this.version
+			version: this.version,
+			showVersions: this.showVersions,
+			showThemes: this.showThemes,
+			showRtl: this.showRtl,
+			showI18n: this.showI18n,
+			showA11y: this.showA11y,
 		}, this.domNode);
 
 		dojo.addClass(this.viewer.domNode, "codeGlassInline");
@@ -106,7 +117,12 @@ dojo.declare("CodeGlass._DialogMixin",
 			viewerBox: { w: this.width, h: this.height },
 			templatePath: this.viewTemplate,
 			djConfig: this.djConfig,
-			version: this.version
+			version: this.version,
+			showVersions: this.showVersions,
+			showThemes: this.showThemes,
+			showRtl: this.showRtl,
+			showI18n: this.showI18n,
+			showA11y: this.showA11y,
 		}, node);
 
 		dojo.connect(window, "onresize", this, "_position");
@@ -290,6 +306,14 @@ dojo.declare("CodeGlass.CodeViewer",
 	// theme:
 	//		the currently shown dojo theme
 	theme: 0,
+	
+	languages: dojo.moduleUrl("CodeGlass", "resources/languages.json"),
+	
+	i18n: "",
+	
+	dir: "ltr",
+	
+	a11y: "",
 
 	// currentView:
 	//		default is demo tab
@@ -318,12 +342,13 @@ dojo.declare("CodeGlass.CodeViewer",
 			var cnt = -1;
 			this.suppVersions = []
 			dojo.forEach(this.baseUrls, function(url, i){
-				if ((!start || url.version >= start) && (!end || end <= url.version) || !url.version){
-					this.suppVersions.push(++cnt);
+				if ((!start || url.version >= start) && (!end || url.version <= end) || !url.version){
+					this.suppVersions.push(i);
+					++cnt;
 				}
 			}, this);
 			this.baseUrlIndex = cnt > 0 ? 1 : 0; // Always try to use latest CDN unless feature is only supported by trunk
-			
+
 			this.baseUrl = this.baseUrls[this.baseUrlIndex].baseUrl;
 			this._buildTemplate();
 		}
@@ -357,16 +382,31 @@ dojo.declare("CodeGlass.CodeViewer",
 		// preventing us from using {% for in %} in a select context
 // FIXME: externalize into template once DTL bug is fixed
 		if (this.showToolbar){
-			var cnt = 0;
-			dojo.forEach(this.suppVersions, function(version, i){
-				dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
-			}, this);
-			this.versionInput.selectedIndex = this.baseUrlIndex;
+			if (this.showVersion){
+				dojo.forEach(this.suppVersions, function(version, i){
+					dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
+				}, this);
+				this.versionInput.selectedIndex = this.baseUrlIndex;
+			}
 			
-			dojo.forEach(this.themes, function(theme, i){
-				dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
-			}, this);
-			this.themeInput.selectedIndex = this.theme;
+			if (this.showThemes){
+				dojo.forEach(this.themes, function(theme, i){
+					dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
+				}, this);
+				this.themeInput.selectedIndex = this.theme;
+			}
+			
+			if (this.showI18n){
+				dojo.xhrGet({
+					url: this.languages,
+					handleAs: "json",
+					load: dojo.hitch(this, function(data){
+						dojo.forEach(data, function(lang, i){
+							dojo.create("option", { innerHTML: lang.name, value: lang.iso }, this.i18nInput);
+						}, this);
+					})
+				});
+			}
 		}
 		this._highlight();
 	},
@@ -389,7 +429,10 @@ dojo.declare("CodeGlass.CodeViewer",
 			djConfig: this.djConfig,
 			theme: this.themes[this.theme].theme,
 			baseUrl: this.baseUrls[this.baseUrlIndex].baseUrl,
-			xDomain: this.baseUrls[this.baseUrlIndex].xDomain
+			xDomain: this.baseUrls[this.baseUrlIndex].xDomain,
+			dir: this.dir,
+			i18n: this.i18n,
+			a11y: this.a11y
 		});
 
 		var template = new dojox.dtl.Template(this.iframeTemplate),
@@ -428,11 +471,9 @@ dojo.declare("CodeGlass.CodeViewer",
 		dojo.query(this.loader).removeClass("displayNone").style("opacity", 1);
 	},
 
-	_changeTheme: function(){
-		this.theme = this.themeInput.value;
-
+	_setup: function(){
 		dojo.query(".header ul", this.domNode).addClass("displayNone");
-
+		
 		this._buildTemplate(); // redraw iframe content
 		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();
@@ -440,19 +481,40 @@ dojo.declare("CodeGlass.CodeViewer",
 		this.textareaCode.value = this.renderedContent;
 	},
 
+	_changeTheme: function(){
+		this.theme = this.themeInput.value;
+
+		this._setup();
+	},
+
 	_changeVersion: function(){
 		this.baseUrlIndex = this.versionInput.value;
 		this.baseUrl = this.baseUrls[this.baseUrlIndex].baseUrl;
 
-		dojo.query(".header ul", this.domNode).addClass("displayNone");
+		this._setup();
+	},
 
-		this._buildTemplate(); // redraw iframe content
-		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
-		this._setupIframe();
-		
-		this.textareaCode.value = this.renderedContent;
-// FIXME: why doesn't this work???
-//		dojo.query(".container.full textarea").attr("value", this.renderedContent);
+	_changeDir: function(){
+		this.dir = this.dirInput.checked ? this.dirInput.value : "ltr";
+
+		this._setup();
+	},
+
+	_changeA11y: function(){
+		this.a11y = this.a11yInput.checked ? "dijit_a11y" : "";
+
+		this._setup();
+	},
+
+	_changeI18n: function(){
+		this.i18n = this.i18nInput.value;
+		if (this.i18n.length){
+			this.i18n = ", locale: ['" + this.lang + "']";
+		}else{
+			this.i18n = "";
+		}
+
+		this._setup();
 	},
 
 	_toggleView: function(e){

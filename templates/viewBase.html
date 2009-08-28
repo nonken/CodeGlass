@@ -2,15 +2,7 @@
 	<div class="wrapper">
 		<div class="header">
 		{% if showToolbar %}
-		<div class="theme"
-			><select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
-			</select
-		></div
-		><div class="version"
-			><select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput">
-			</select
-		></div
-		><ul dojoAttachEvent="onclick: _toggleView" class="displayNone" 
+		<ul dojoAttachEvent="onclick: _toggleView" class="displayNone" 
 			><li title="containerIframe" class="demo active">Demo</li><li title="containerFull" class="copy">Copy&Paste</li>{% if javascriptcode %}<li title="containerJs" class="javascript">JavaScript</li>{% endif %}{% if htmlcode %}<li title="containerHtml" class="html">HTML</li>{% endif %}{% if csscode %}<li title="containerCss" class="css">CSS</li>{% endif %}
 		</ul>
 		{% endif %}
@@ -62,5 +54,28 @@
 			</pre>
 		</div>
 		{% endif %}
+		<div class="footer">
+			{% if showToolbar %}
+			{% if showThemes %}<div class="theme"
+			>Theme: <select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput">
+			</select
+			></div
+			>{% endif %}{% if showVersions %}<div class="version"
+				>Version: <select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput">
+				</select
+			></div
+			>{% endif %}{% if showI18n %}<div class="i18n"
+				>Language: <select dojoAttachEvent="onchange: _changeI18n" dojoAttachPoint="i18nInput">
+					<option value=""></option>
+				</select
+			></div
+			>{% endif %}{% if showRtl %}<div class="dir"
+				>Rtl: <input type="checkbox" dojoAttachEvent="onchange: _changeDir" dojoAttachPoint="dirInput" value="rtl" /
+			></div
+			>{% endif %}{% if showA11y %}<div class="a11y"
+				>A11y: <input type="checkbox" dojoAttachEvent="onchange: _changeA11y" dojoAttachPoint="a11yInput" value="rtl" /
+			></div>{% endif %}
+			{% endif %}
+		</div>
 	</div>
 </div>
