@@ -45,14 +45,14 @@ dojo.declare("CodeGlass.base",
 	djConfig: "parseOnLoad: true",
 
 	version: "",
-	
+
 	i18n: "",
 
-	showVersions: true,
-	showThemes: true,
-	showRtl: true,
-	showI18n: true,
-	showA11y: true,
+	toolbar: ["a11y", "i18n", "dir", "themes", "versions"],
+
+	constructor: function(){
+		this._toolbarTmp = dojo.clone(this.toolbar);
+	},
 
 	postMixInProperties: function(){
 		// summary:
@@ -69,6 +69,10 @@ dojo.declare("CodeGlass.base",
 			this.content.src = this.src;
 		}else{
 			this.content = CodeGlass.parseNodes(this.srcNodeRef)
+		}
+
+		if (!this.toolbar.length){
+			this.toolbar = this._toolbarTmp;
 		}
 	}
 });
@@ -94,11 +98,7 @@ dojo.declare("CodeGlass.Inline",
 			djConfig: this.djConfig,
 			version: this.version,
 			i18n: this.i18n,
-			showVersions: this.showVersions,
-			showThemes: this.showThemes,
-			showRtl: this.showRtl,
-			showI18n: this.showI18n,
-			showA11y: this.showA11y,
+			toolbar: this.toolbar
 		}, this.domNode);
 
 		dojo.addClass(this.viewer.domNode, "codeGlassInline");
@@ -122,11 +122,7 @@ dojo.declare("CodeGlass._DialogMixin",
 			djConfig: this.djConfig,
 			version: this.version,
 			i18n: this.i18n,
-			showVersions: this.showVersions,
-			showThemes: this.showThemes,
-			showRtl: this.showRtl,
-			showI18n: this.showI18n,
-			showA11y: this.showA11y,
+			toolbar: this.toolbar
 		}, node);
 
 		dojo.connect(window, "onresize", this, "_position");
@@ -324,6 +320,8 @@ dojo.declare("CodeGlass.CodeViewer",
 	currentView: "containerIframe",
 	
 	showToolbar: true,
+	
+	toolbar: [],
 
 	postMixInProperties: function(){
 		// summary:
@@ -356,6 +354,10 @@ dojo.declare("CodeGlass.CodeViewer",
 			if (this.i18n.length){
 				this.djConfig += (this.djConfig.length ? ", " : "") + "locale: '" + this.i18n + "'";
 			}
+			
+			dojo.forEach(this.toolbar, function(item){
+				this.toolbar[item] = true;
+			}, this)
 
 			this._buildTemplate();
 		}
@@ -389,21 +391,21 @@ dojo.declare("CodeGlass.CodeViewer",
 		// preventing us from using {% for in %} in a select context
 // FIXME: externalize into template once DTL bug is fixed
 		if (this.showToolbar){
-			if (this.showVersions){
+			if (this.toolbar.versions){
 				dojo.forEach(this.suppVersions, function(version, i){
 					dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
 				}, this);
 				this.versionInput.selectedIndex = this.baseUrlIndex;
 			}
 
-			if (this.showThemes){
+			if (this.toolbar.themes){
 				dojo.forEach(this.themes, function(theme, i){
 					dojo.create("option", { innerHTML: theme.label, value: i }, this.themeInput);
 				}, this);
 				this.themeInput.selectedIndex = this.theme;
 			}
 
-			if (this.showI18n){
+			if (this.toolbar.i18n){
 				dojo.xhrGet({
 					url: this.languages,
 					handleAs: "json",
