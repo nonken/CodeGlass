@@ -266,18 +266,6 @@ dojo.declare("CodeGlass.CodeViewer",
 			xDomain: false
 		},
 		{
-			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.2/",
-			label: "1.3.2 (Current CDN)",
-			xDomain: true,
-			version: "1.3.2"
-		},
-		{
-			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3.1/",
-			label: "1.3.1 (CDN)",
-			xDomain: true,
-			version: "1.3.1"
-		},
-		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.3/",
 			label: "1.3 (CDN)",
 			xDomain: true,
