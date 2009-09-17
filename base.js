@@ -50,6 +50,8 @@ dojo.declare("CodeGlass.base",
 
 	toolbar: ["a11y", "i18n", "dir", "themes", "versions"],
 
+	chrome: "default",
+
 	constructor: function(){
 		this._toolbarTmp = dojo.clone(this.toolbar);
 	},
@@ -74,7 +76,7 @@ dojo.declare("CodeGlass.base",
 		if (!this.toolbar.length){
 			this.toolbar = this._toolbarTmp;
 		}
-	}
+	},
 });
 
 dojo.declare("CodeGlass.Inline",
@@ -98,7 +100,8 @@ dojo.declare("CodeGlass.Inline",
 			djConfig: this.djConfig,
 			version: this.version,
 			i18n: this.i18n,
-			toolbar: this.toolbar
+			toolbar: this.toolbar,
+			chrome: this.chrome
 		}, this.domNode);
 
 		dojo.addClass(this.viewer.domNode, "codeGlassInline");
@@ -122,7 +125,8 @@ dojo.declare("CodeGlass._DialogMixin",
 			djConfig: this.djConfig,
 			version: this.version,
 			i18n: this.i18n,
-			toolbar: this.toolbar
+			toolbar: this.toolbar,
+			chrome: this.chrome
 		}, node);
 
 		dojo.connect(window, "onresize", this, "_position");
@@ -307,13 +311,25 @@ dojo.declare("CodeGlass.CodeViewer",
 	//		default is demo tab
 	currentView: "containerIframe",
 	
-	showToolbar: true,
+	showToolbar: false,
 	
 	toolbar: [],
 
 	postMixInProperties: function(){
 		// summary:
 		//		Sets up the data to be rendered
+
+		// include theme css
+		if (this.chrome && !dojo.byId("CodeGlassTheme"+this.chrome)){
+			var sheet = dojo.doc.createElement("link");
+			dojo.attr(sheet, {
+				rel: "stylesheet",
+				type: "text/css",
+				href: dojo.moduleUrl("CodeGlass.chromes", this.chrome+"/"+this.chrome+".css"),
+				id: "CodeGlassTheme"+this.chrome
+			});
+			document.getElementsByTagName("head")[0].appendChild(sheet);
+		}
 
 		this.viewerBox = dojo.mixin({
 			w: 500,
@@ -361,6 +377,8 @@ dojo.declare("CodeGlass.CodeViewer",
 			width: this.viewerBox.w + "px",
 			height: this.viewerBox.h + "px"
 		});
+
+		dojo.addClass(this.domNode, "codeGlassViewer"+this.chrome.substr(0, 1).toUpperCase() + this.chrome.substr(1));
 
 		dojo.query(".header ul, .footer > div", this.domNode).addClass("displayNone");
 		dojo.subscribe("codeglass/loaded", this, function(){

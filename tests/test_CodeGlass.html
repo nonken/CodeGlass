@@ -37,8 +37,9 @@
 		All the user has to do is to define the to be executed HTML, CSS and JavaScript, CodeGlass will assemble the code and execute it properly.<br />
 		In this example we create a completely self contained Dojo layout which you can copy and past into your environment and which will work out of the box for you
 	</p>
+	<div dojoType="CodeGlass.Inline" chrome="iphone" src="http://static.uxebu.com/~nonken/sandbox/ninja/src/"></div>
 	<p>The new Dojo docs will convert simple reST syntax into escaped HTML, check the source to see what CodeGlass does.</p>
-	<div dojoType="CodeGlass.Inline" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
+	<div dojoType="CodeGlass.Inline" chrome="palmpre" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
   dojo.require(&quot;dijit._Calendar&quot;);
 &lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div dojoType=&quot;dijit._Calendar&quot; onChange=&quot;dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})&quot;&gt;&lt;/div&gt;
 
@@ -47,7 +48,7 @@
   dojo.require(&quot;dijit._Calendar&quot;);
 &lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div id=&quot;mycal&quot; dojoType=&quot;dijit._Calendar&quot; value=&quot;2009-08-07&quot; isDisabledDate=&quot;dojo.date.locale.isWeekend&quot;&gt;&lt;/div&gt;</pre></div></div><p>Programmatic, with a restriction of +/- one week from the current date</p>
 
-<div dojoType="CodeGlass.Dialog" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
+<div dojoType="CodeGlass.Dialog" chrome="iphone" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
   dojo.require(&quot;dijit._Calendar&quot;);
 
     dojo.addOnLoad(function(){
