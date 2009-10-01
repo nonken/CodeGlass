@@ -40,7 +40,7 @@
 	<p>The new Dojo docs will convert simple reST syntax into escaped HTML, check the source to see what CodeGlass does.</p>
 	<div dojoType="CodeGlass.Inline" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
   dojo.require(&quot;dijit._Calendar&quot;);
-&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div dojoType=&quot;dijit._Calendar&quot; onChange=&quot;dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})&quot;&gt;&lt;/div&gt;
+&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;a href='#'&gt;foo&lt;/a&gt;&lt;div dojoType=&quot;dijit._Calendar&quot; onChange=&quot;dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})&quot;&gt;&lt;/div&gt;
 
 &lt;div id=&quot;formatted&quot;&gt;&lt;/div&gt;</pre></div></div><p>With an initial selection and weekends disabled</p>
 <div dojoType="CodeGlass.Dialog" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;

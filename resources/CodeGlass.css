@@ -217,6 +217,10 @@
 	cursor: pointer;
 }
 
+.codeGlassViewer .close a {
+	text-decoration:none;
+}
+
 .codeGlassViewer .description {
 	font-family: Tahoma;
 }

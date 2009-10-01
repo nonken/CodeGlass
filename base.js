@@ -122,7 +122,8 @@ dojo.declare("CodeGlass._DialogMixin",
 			djConfig: this.djConfig,
 			version: this.version,
 			i18n: this.i18n,
-			toolbar: this.toolbar
+			toolbar: this.toolbar,
+			isDialog:true
 		}, node);
 
 		dojo.connect(window, "onresize", this, "_position");
@@ -222,7 +223,10 @@ dojo.declare("CodeGlass.Dialog",
 
 	// viewTemplate:
 	//		the template of the actual view, extending the base view
-	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html")
+	viewTemplate: dojo.moduleUrl("CodeGlass", "templates/viewDialog.html"),
+	
+	isDialog:true
+	
 });
 
 dojo.declare("CodeGlass.Basic",
@@ -370,6 +374,12 @@ dojo.declare("CodeGlass.CodeViewer",
 					onEnd: dojo.hitch(this, function(){
 						dojo.addClass(this.loader, "displayNone");
 						dojo.query(".header ul, .footer > div", this.domNode).removeClass("displayNone");
+						// only if we AREN't an inline example:
+						setTimeout(dojo.hitch(this, function(){
+							console.log(this.isDialog, this.firstLink);
+							this.isDialog && console.log("wanting to focus!", this.firstLink);
+							this.isDialog && this.firstLink && this.firstLink.focus()
+						}), 25);
 					})
 				}).play();
 			}
@@ -418,11 +428,12 @@ dojo.declare("CodeGlass.CodeViewer",
 		for (type in this.content){
 			for (key in this.content[type]){
 				// render code fragments
+				var tk = type + "" + key;
 				if (key == "code"){
 					frgTmpl = new dojox.dtl.Template(this.content[type][key]);
-					this[type+""+key] = t[type+""+key] = CodeGlass.style_html(frgTmpl.render(frgContext), 4);
+					this[tk] = t[tk] = CodeGlass.style_html(frgTmpl.render(frgContext), 4);
 				}else{
-					this[type+""+key] = t[type+""+key] = this.content[type][key];
+					this[tk] = t[tk] = this.content[type][key];
 				}
 			}
 		}
@@ -517,7 +528,8 @@ dojo.declare("CodeGlass.CodeViewer",
 	},
 
 	_toggleView: function(e){
-		var attr = e ? dojo.attr(e.target, "title") : null,
+		e && e.preventDefault();
+		var attr = e ? (dojo.attr(e.target, "title") || dojo.attr(e.target.parentNode, "title")) : null,
 			type = attr ? attr : "containerIframe";
 		if (this[type]){
 			dojo.query('[title$=\"'+this.currentView+'\"]', this.domNode).removeClass("active");
@@ -567,8 +579,8 @@ dojo.declare("CodeGlass.CodeViewer",
 dojo.mixin(CodeGlass, {
 	parseNodes: function(node){
 		var el = node.firstChild,
-				i = 0, frg = dojo.doc.createElement('div'),
-				tarea = dojo.doc.createElement('textarea'),
+				i = 0, frg = dojo.create('div'),
+				tarea = dojo.create('textarea'),
 				code, content = [];
 
 		while (el){
