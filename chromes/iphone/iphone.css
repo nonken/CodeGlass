@@ -1,0 +1,33 @@
+.CodeGlassdefault {
+
+}
+
+.CodeGlassVieweriphone {
+	background: url(bgH.png) no-repeat;
+	width: 389px;
+	height: 719px;
+	font-family: Helvetica;
+	z-index: 9999999;
+	position: absolute;
+}
+
+.CodeGlassInlineiphone {
+	position: relative;
+}
+
+.CodeGlassVieweriphone .wrapper {
+	position: absolute;
+	width: 320px;
+	height: 480px;
+	left: 35px;
+	top: 120px;
+}
+
+.CodeGlassVieweriphone .contentWrapper {
+	padding: 0;
+	margin: 3em 0;
+}
+
+.CodeGlassVieweriphone .contentWrapper iframe {
+	border: none;
+}

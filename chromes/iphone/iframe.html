@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html {% if html %}{{ html|safe }}{% endif %}>
+	<head>
+		{% if customHead %}{{ customHead|safe }}{% endif %}
+		<style type="text/css">
+			body, html {
+				font-family:helvetica,arial,sans-serif;
+				font-size:90%;
+			}
+		</style>
+		{% if csscode %}{{ csscode|safe }}{% endif %}
+	</head>
+	<body {% if classBody %}class="{{ classBody }}"{% endif %}>
+		{% if htmlcode %}{{ htmlcode|safe }}{% endif %}
+	</body>
+
+	{% if customJavaScript %}{{ customJavaScript|safe }}{% endif %}
+	{% if javascriptcode %}{{ javascriptcode|safe }}{% endif %}
+	<!--
+		NOTE: the following script tag is not intended for usage in real world!!
+		it is part of the CodeGlass and you should just remove it when you use the code
+	-->
+	<script type="text/javascript">
+		dojo.addOnLoad(function(){
+			if (document.pub){
+				document.pub();
+			}
+		});
+	</script>
+</html>

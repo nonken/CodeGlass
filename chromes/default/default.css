@@ -1,0 +1,21 @@
+.CodeGlassdefault {
+
+}
+
+.CodeGlassViewerdefault {
+	font-family: Helvetica;
+	background: white;
+	border: 1px solid #ccc;
+	z-index: 9999999;
+	position: absolute;
+	-moz-border-radius: 6px;
+	-moz-box-shadow: 0pt 0pt 4px #aaa;
+	-webkit-border-radius: 6px;
+	-webkit-box-shadow: 0pt 0pt 4px #aaa;
+}
+
+.CodeGlassInlinedefault {
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	position: relative;
+}
