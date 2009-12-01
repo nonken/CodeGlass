@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html dir="{{ dir }}">
+<html {% if html %}{{ html|safe }}{% endif %}>
 	<head>
-		<link rel="stylesheet" type="text/css" href="{{ baseUrl|safe }}dijit/themes/{{ theme|safe }}/{{ theme|safe }}.css">
+		{% if customHead %}{{ customHead|safe }}{% endif %}
 		<style type="text/css">
 			body, html {
 				font-family:helvetica,arial,sans-serif;
@@ -10,10 +10,11 @@
 		</style>
 		{% if csscode %}{{ csscode|safe }}{% endif %}
 	</head>
-	<body class="{{ theme|safe }} {{ a11y }}">
+	<body {% if classBody %}class="{{ classBody }}"{% endif %}>
 		{% if htmlcode %}{{ htmlcode|safe }}{% endif %}
 	</body>
-	<script type="text/javascript" src="{{ baseUrl|safe }}dojo/dojo{% if xDomain %}.xd{% endif %}.js" djConfig="{{ djConfig }}"></script>
+
+	{% if customJavaScript %}{{ customJavaScript|safe }}{% endif %}
 	{% if javascriptcode %}{{ javascriptcode|safe }}{% endif %}
 	<!--
 		NOTE: the following script tag is not intended for usage in real world!!
@@ -21,8 +22,8 @@
 	-->
 	<script type="text/javascript">
 		dojo.addOnLoad(function(){
-			if (window.pub){
-				window.pub();
+			if (document.pub){
+				document.pub();
 			}
 		});
 	</script>

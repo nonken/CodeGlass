@@ -7,6 +7,7 @@
 	width: 129px;
 	height: 42px;
 	cursor: pointer;
+	display: inline-block;
 }
 
 .codeGlassBg {
@@ -18,46 +19,39 @@
 	z-index: 9999998;
 }
 
-.codeGlassViewer {
-	font-family: Helvetica;
-	z-index: 9999999;
+.codeGlassViewer .header,
+.codeGlassViewer .footer {
+	height: 3em;
 	position: absolute;
-}
-
-.codeGlassInline {
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
-	position: relative;
+	width: 100%;
+	overflow:hidden;
 }
 
 .codeGlassViewer .header {
-	height: 33px;
+	background: url(bgHead.png) repeat-x bottom left;
+	-moz-border-radius-topleft: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	-webkit-border-top-right-radius: 6px;
+	border-bottom: 1px solid #ccc;
+	top: 0;
 }
 
 .codeGlassViewer .footer {
-	height: 33px;
-	position: absolute;
+	border-top: 1px solid #ccc;
+	-moz-border-radius-bottomleft: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-webkit-border-bottom-right-radius: 6px;
 	bottom: 0;
-	width: 100%;
 }
 
-.codeGlassViewer .header ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	display: inline;
-}
-
-.codeGlassViewer .header ul li,
-.codeGlassViewer .footer .theme,
-.codeGlassViewer .footer .version,
-.codeGlassViewer .footer .a11y,
-.codeGlassViewer .footer .i18n,
-.codeGlassViewer .footer .dir {
-	float: left;
-	padding: 8px 8px 5px 8px;
+.codeGlassViewer .header > div,
+.codeGlassViewer .footer > div {
 	border-right: 1px solid #ccc;
-	height: 21px;
+	float: left;
+	padding: 8px 8px 10px 5px;
+	height: 1.5em;
 }
 
 .codeGlassViewer .header ul li.active {
@@ -66,39 +60,35 @@
 	padding-bottom: 1px;
 }
 
-.codeGlassViewer .header ul li {
-	padding: 11px 8px 2px 24px;
+.codeGlassViewer .header > div {
+	padding: 11px 8px 8px 24px;
 	cursor: pointer;
 	background-position: 4px 8px;
 	background-repeat: no-repeat;
 }
 
-.codeGlassViewer .header ul .javascript {
-	background-image: url(javascript.png); 
+.codeGlassViewer .header div.javascript {
+	background-image: url(javascript.png);
 }
 
-.codeGlassViewer .header ul .html {
-	background-image: url(html.png); 
+.codeGlassViewer .header div.html {
+	background-image: url(html.png);
 }
 
-.codeGlassViewer .header ul .css {
-	background-image: url(css.png); 
+.codeGlassViewer .header div.css {
+	background-image: url(css.png);
 }
 
-.codeGlassViewer .header ul .copy {
-	background-image: url(copy.png); 
+.codeGlassViewer .header div.copy {
+	background-image: url(copy.png);
 }
 
-.codeGlassViewer .header ul .demo {
-	background-image: url(demo.png); 
-}
-
-.codeGlassViewer .wrapper {
-	height: 100%;
+.codeGlassViewer .header div.demo {
+	background-image: url(demo.png);
 }
 
 .codeGlassViewer iframe {
-	border: none;
+	border: 1px dotted #ccc;
 	background: white;
 	display:table-row;
 	width: 100%;
@@ -126,14 +116,25 @@
 	height: 100%;
 }
 
-.codeGlassViewer .container {
+.codeGlassViewer .wrapper {
+	height: 100%;
+	width: 100%;
+}
+
+.codeGlassViewer .contentWrapper {
 	padding: 5px 8px 8px 5px;
-	clear: both;
 	position: absolute;
-	top: 34px;
-	right: 0px;
-	bottom: 34px;
-	left: 0px;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: 3em 0;
+}
+
+.codeGlassViewer .container {
+	clear: both;
+	width: 100%;
+	height: 100%;
 }
 
 .codeGlassViewer .container .info {
@@ -187,15 +188,16 @@
 	font-size:11px;
 }
 
-.codeGlassViewer .close {
+.codeGlassViewer div.close {
 	display: inline-block;
-	background: url(close.png) no-repeat;
+	background: url(close.png) no-repeat top right;
 	width: 15px;
 	height: 18px;
 	position: absolute;
 	right: 9px;
 	top: 8px;
 	cursor: pointer;
+	border-right: none;
 }
 
 .codeGlassViewer .close a {

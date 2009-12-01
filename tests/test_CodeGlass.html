@@ -3,16 +3,18 @@
 	<head>
 		<title>CodeGlass test</title>
 		<link type="text/css" rel="stylesheet" href="../resources/CodeGlass.css" />
+		<link type="text/css" rel="stylesheet" href="../chromes/default/default.css" />
+		<link type="text/css" rel="stylesheet" href="../chromes/iphone/iphone.css" />
 		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.3.2/dojox/highlight/resources/highlight.css" />
 		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.3.2/dojox/highlight/resources/pygments/colorful.css" />
-		
+
 		<style type="text/css">
 			html, body {
 				height: 100%;
 				font-family: Arial;
 				font-size: 12px;
 			}
-			
+
 			h1 {
 				font-size: 1.2em;
 			}
@@ -21,7 +23,7 @@
 		<script type="text/javascript">
 			dojo.registerModulePath("CodeGlass", "");
 			dojo.require("CodeGlass.base");
-			
+
 			dojo.addOnLoad(function(){
 				dojo.query("#demo").CodeGlass({type: "dialog", djConfig:"parseOnLoad: false", version: "1.3-2.0"});
 			});
@@ -37,186 +39,191 @@
 		All the user has to do is to define the to be executed HTML, CSS and JavaScript, CodeGlass will assemble the code and execute it properly.<br />
 		In this example we create a completely self contained Dojo layout which you can copy and past into your environment and which will work out of the box for you
 	</p>
-	<div dojoType="CodeGlass.Inline" chrome="iphone" src="http://static.uxebu.com/~nonken/sandbox/ninja/src/"></div>
+	<div dojoType="CodeGlass.base" type="dialog" chrome="iphone" width="389" height="719" src="http://static.uxebu.com/~nonken/sandbox/ninja/src/"></div>
 	<p>The new Dojo docs will convert simple reST syntax into escaped HTML, check the source to see what CodeGlass does.</p>
-	<div dojoType="CodeGlass.Inline" chrome="palmpre" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
+	<div dojoType="CodeGlass.base" djConfig="parseOnLoad: true" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
   dojo.require(&quot;dijit._Calendar&quot;);
 &lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;a href='#'&gt;foo&lt;/a&gt;&lt;div dojoType=&quot;dijit._Calendar&quot; onChange=&quot;dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})&quot;&gt;&lt;/div&gt;
 
-&lt;div id=&quot;formatted&quot;&gt;&lt;/div&gt;</pre></div></div><p>With an initial selection and weekends disabled</p>
-<div dojoType="CodeGlass.Dialog" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;div id=&quot;formatted&quot;&gt;&lt;/div&gt;</pre></div></div>
+
+
+	<p>With an initial selection and weekends disabled</p>
+<div dojoType="CodeGlass.base" pluginArgs="{djConfig: 'parseOnLoad: true', version: '1.2'}" type="dialog" width="600" height="340"><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
   dojo.require(&quot;dijit._Calendar&quot;);
 &lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div id=&quot;mycal&quot; dojoType=&quot;dijit._Calendar&quot; value=&quot;2009-08-07&quot; isDisabledDate=&quot;dojo.date.locale.isWeekend&quot;&gt;&lt;/div&gt;</pre></div></div><p>Programmatic, with a restriction of +/- one week from the current date</p>
-
-<div dojoType="CodeGlass.Dialog" chrome="iphone" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
-  dojo.require(&quot;dijit._Calendar&quot;);
-
-    dojo.addOnLoad(function(){
-            new dijit._Calendar({
-                    value: new Date(2009, 7, 7),
-                    isDisabledDate: function(d){
-                            var d = new Date(d); d.setHours(0,0,0,0);
-                            var today = new Date(); today.setHours(0,0,0,0);
-                            return Math.abs(dojo.date.difference(d, today, &quot;week&quot;)) &gt; 0;
-                    }
-            }, &quot;mycal&quot;);
-    });
-&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div id=&quot;mycal&quot;&gt;&lt;/div&gt;</pre></div></div>
-	<p>Instantiation is super simple: <code>dojo.query("#demo").CodeGlass({type: "dialog"});</code></p>
-	<div id="demo">
-		<p>First we declare the CSS</p>
-		<div label="The CSS" lang="css">
-			<pre>&lt;style type=&quot;text/css&quot;&gt;
-			html, body {
-				height: 100%;
-				width: 100%;
-				margin: 0;
-			}
-			#borderContainerTwo {
-				width: 100%;
-				height: 100%;
-				font-family: Arial;
-				font-size: 12px;
-			}
-		&lt;/style&gt;</pre>
-		</div>
-		<p>The html snippet simply defines the markup of your code. Dojo will then parse the dom nodes and create the widgets programatically. Usually the lifecycle goes as follows</p>
-		<blockquote>
-			<ul class="simple">
-				<li>Programmatic code generation</li><li>Dom manipulation</li>
-			</ul>
-		</blockquote>
-		<div lang="html">
-			<pre>&lt;div style=&quot;position: relative; width: 100%; height: 100%;&quot;&gt;
-			&lt;div dojoType=&quot;dijit.layout.BorderContainer&quot; gutters=&quot;true&quot; id=&quot;borderContainerTwo&quot; &gt;
-
-			  &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; region=&quot;top&quot; splitter=&quot;false&quot;&gt;
-			    Hi, usually here you would have important information, maybe your company logo, or functions you need to access all the time..
-			  &lt;/div&gt;
-			  &lt;div dojoType=&quot;dijit.layout.BorderContainer&quot; liveSplitters=&quot;false&quot; design=&quot;sidebar&quot; region=&quot;center&quot; id=&quot;mainSplit&quot;&gt;
-
-			    &lt;div dojoType=&quot;dijit.layout.AccordionContainer&quot; minSize=&quot;20&quot; style=&quot;width: 300px;&quot; id=&quot;leftAccordion&quot; region=&quot;leading&quot; splitter=&quot;true&quot;&gt;
-
-			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;One fancy Pane&quot;&gt;
-			      &lt;/div&gt;
-			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;Another one&quot;&gt;
-
-			      &lt;/div&gt;
-			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;Even more fancy&quot; selected=&quot;true&quot;&gt;
-			      &lt;/div&gt;
-			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;Last, but not least&quot;&gt;
-
-			      &lt;/div&gt;
-			    &lt;/div&gt;&lt;!-- end AccordionContainer --&gt;
-			    &lt;div dojoType=&quot;dijit.layout.TabContainer&quot; region=&quot;center&quot; tabStrip=&quot;true&quot;&gt;
-
-			      &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; title=&quot;My first tab&quot; selected=&quot;true&quot;&gt;
-			        Lorem ipsum and all around...
-			      &lt;/div&gt;
-			      &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; title=&quot;My second tab&quot;&gt;
-
-			        Lorem ipsum and all around - second...
-			      &lt;/div&gt;
-			      &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; title=&quot;My last tab&quot; closable=&quot;true&quot;&gt;
-			        Lorem ipsum and all around - last...
-			      &lt;/div&gt;
-
-			    &lt;/div&gt;
-			  &lt;/div&gt;
-			&lt;/div&gt;
-			&lt;/div&gt;
-			</pre>
-		</div>
-		<p>This is the jscript code of your example. Simple past both HMTL and Jscript into the browser.</p>
-		<div label="And the jscript code" lang="javascript">
-			<pre>
-				&lt;script type=&quot;text/javascript&quot;&gt;
-
-			  dojo.require(&quot;dojo.parser&quot;);
-			  dojo.require(&quot;dijit.layout.ContentPane&quot;);
-			  dojo.require(&quot;dijit.layout.BorderContainer&quot;);
-			  dojo.require(&quot;dijit.layout.TabContainer&quot;);
-			  dojo.require(&quot;dijit.layout.AccordionContainer&quot;);
-
-		&lt;/script&gt;
-			&lt;script type=&quot;text/javascript&quot;&gt;
-				dojo.addOnLoad(function(){
-					dojo.parser.parse();
-				});
-			&lt;/script&gt;
-			</pre>
-		</div>
-	</div>
-	<h1>Dojo charting</h1>
-	<p>Take a look at the frickin cool Dojo charting. This makes use of CodeGlass in inline "mode". </p>
-	<p>Instantiation is super simple: <code>dojo.query("#charting").CodeGlass({type: "inline"});</code></p>
-	<div id="charting" dojoType="CodeGlass.Inline" toolbar="" width="650" height="450" version="1.3-1.3.2">
-		<p>This is how you get the cool charting to run</p>
-		<div label="JavaScript" lang="javascript"><pre>
-		&lt;script type=&quot;text/javascript&quot;&gt;
-dojo.require(&quot;dojox.charting.Chart2D&quot;);
-dojo.require(&quot;dojox.charting.themes.Wetland&quot;);
-
-dojo.addOnLoad(function(){
-  var c = new dojox.charting.Chart2D(&quot;chartOne&quot;);
-  c.addPlot(&quot;default&quot;, {type: &quot;StackedAreas&quot;, tension:3})
-      .addAxis(&quot;x&quot;, {fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;})
-      .addAxis(&quot;y&quot;, {vertical: true, fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;, min: 0})
-      .setTheme(dojox.charting.themes.Wetland)
-      .addSeries(&quot;Series A&quot;, [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
-      .addSeries(&quot;Series B&quot;, [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
-      .addSeries(&quot;Series C&quot;, [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
-      .render();
-});
-&lt;/script&gt;</pre>
-		</div>
-		<div label="HTML" lang="html">
-			<p>Very simple</p>
-			<pre>&lt;div id=&quot;chartOne&quot; style=&quot;&quot;&gt;&lt;/div&gt;</pre>
-		</div>
-		<div lang="css">
-			<p>Some simple CSS</p>
-			<pre>
-				&lt;style type=&quot;text/css&quot;&gt;
-			.{{ theme }} #chartOne {
-				padding-top:60px;
-				font-family: Arial;
-				font-size: 12px;
-				margin: 0 50px;
-				width: 400px;
-				height: 240px;
-			}
-		&lt;/style&gt;
-			</pre>
-		</div>
-	</div>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis cursus libero. Pellentesque sodales justo at felis molestie vestibulum. Vivamus feugiat augue sem, eget interdum odio. Sed sagittis sapien ac leo cursus ultrices in mattis massa. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas et tortor purus, at varius eros. Aliquam fermentum est non ipsum posuere eget pellentesque nunc adipiscing. Pellentesque volutpat porttitor dui quis molestie. Aenean a turpis tortor. Aliquam massa velit, dictum a dignissim eu, tristique ut neque. Quisque urna lectus, egestas sit amet sagittis et, fermentum nec neque. Integer sodales, nisl sed euismod porttitor, ante orci volutpat orci, vel faucibus nisi lectus tincidunt dui. Ut varius fringilla massa id vulputate. Proin gravida risus nec quam pellentesque semper.
-</p><p>
-Aenean id risus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a dojoType="CodeGlass.Basic" style="text-decoration: underline; cursor: pointer;" src="http://www.google.com
-">Pellentesque</a> nec euismod sem. Aliquam rutrum ligula nec erat mollis ac luctus diam iaculis. Donec in elit metus. Maecenas enim felis, volutpat eu elementum nec, semper id enim. Suspendisse ultrices luctus elementum. Mauris venenatis dolor ac velit pulvinar mattis. Nam commodo, lacus a imperdiet viverra, nisi felis ultricies diam, vitae faucibus mi elit eget lectus. Nunc vitae nisi sit amet erat volutpat iaculis.
-</p><p>
-Donec volutpat enim hendrerit risus porttitor ultrices. Donec ante enim, vulputate id egestas in, commodo accumsan massa. Nulla ac eros eros, eget ornare sapien. Nulla vehicula nibh id dui volutpat et imperdiet neque convallis. In imperdiet urna in libero condimentum gravida. Phasellus a dolor dolor. Donec tincidunt nunc velit. Vestibulum elit massa, consectetur elementum porta at, feugiat vitae sapien. Nam enim velit, consectetur eget aliquet sit amet, malesuada eu nibh. Morbi egestas pharetra dignissim. Donec non dolor arcu. Cras vulputate, orci et posuere lacinia, turpis urna semper erat, vel vestibulum urna lacus vitae mi. Maecenas eget orci eu ante euismod placerat. Sed pellentesque ante quis metus molestie vel eleifend dolor lobortis. Nullam non nunc risus. Nullam sollicitudin dignissim nibh, condimentum posuere erat ornare sit amet. Sed sed lacinia tortor. Curabitur ornare, elit id aliquam tincidunt, lorem tellus tincidunt turpis, id lacinia nisi enim ut turpis. Morbi accumsan, lorem at lacinia elementum, augue mauris luctus diam, nec luctus massa elit ac est. 
-	</p>
-	<h1>A code glass with external link</h1>
-	<div id="external" dojoType="CodeGlass.Dialog" src="http://www.google.com" height="600" width="800"></div>
-	
-	<div dojoType="CodeGlass.Dialog"><div label="" lang="javascript"><pre>&lt;script&gt;
-  dojo.require(&quot;dojox.data.CsvStore&quot;);
-  dojo.require(&quot;dijit.form.ComboBox&quot;);
-
-  var storeData =   &quot;firstname,lastname,age\n&quot; +
-                    &quot;John, Doe, 21\n&quot; +
-                    &quot;Jane, Doe, 22\n&quot; +
-                    &quot;Richard, Smith, 43\n&quot; +
-                    &quot;Sally, Smith, 49\n&quot; +
-                    &quot;Lian, Zu, 23\n&quot; +
-                    &quot;Ichiro, Kagetsume, 23\n&quot;+
-                    &quot;Umeko, Tsuguri, 18\n&quot; +
-                    &quot;Alptraum, Reisender, 25\n&quot; +
-                    &quot;Thomas, Winthrope, 14\n&quot;;
-
-  var personStore = new dojox.data.CsvStore({data: storeData});
-
-&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div dojoType=&quot;dijit.form.ComboBox&quot; store=&quot;personStore&quot; searchAttr=&quot;firstname&quot;&gt;&lt;/div&gt;</pre></div></div>
+Hi
+<!---->
+<!--<div dojoType="CodeGlass.Dialog" chrome="iphone" djConfig="parseOnLoad: true" width="" height="300" version=""><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;-->
+<!--  dojo.require(&quot;dijit._Calendar&quot;);-->
+<!---->
+<!--    dojo.addOnLoad(function(){-->
+<!--            new dijit._Calendar({-->
+<!--                    value: new Date(2009, 7, 7),-->
+<!--                    isDisabledDate: function(d){-->
+<!--                            var d = new Date(d); d.setHours(0,0,0,0);-->
+<!--                            var today = new Date(); today.setHours(0,0,0,0);-->
+<!--                            return Math.abs(dojo.date.difference(d, today, &quot;week&quot;)) &gt; 0;-->
+<!--                    }-->
+<!--            }, &quot;mycal&quot;);-->
+<!--    });-->
+<!--&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div id=&quot;mycal&quot;&gt;&lt;/div&gt;</pre></div></div>-->
+<!--	<p>Instantiation is super simple: <code>dojo.query("#demo").CodeGlass({type: "dialog"});</code></p>-->
+<!--	<div id="demo">-->
+<!--		<p>First we declare the CSS</p>-->
+<!--		<div label="The CSS" lang="css">-->
+<!--			<pre>&lt;style type=&quot;text/css&quot;&gt;-->
+<!--			html, body {-->
+<!--				height: 100%;-->
+<!--				width: 100%;-->
+<!--				margin: 0;-->
+<!--			}-->
+<!--			#borderContainerTwo {-->
+<!--				width: 100%;-->
+<!--				height: 100%;-->
+<!--				font-family: Arial;-->
+<!--				font-size: 12px;-->
+<!--			}-->
+<!--		&lt;/style&gt;</pre>-->
+<!--		</div>-->
+<!--		<p>The html snippet simply defines the markup of your code. Dojo will then parse the dom nodes and create the widgets programatically. Usually the lifecycle goes as follows</p>-->
+<!--		<blockquote>-->
+<!--			<ul class="simple">-->
+<!--				<li>Programmatic code generation</li><li>Dom manipulation</li>-->
+<!--			</ul>-->
+<!--		</blockquote>-->
+<!--		<div lang="html">-->
+<!--			<pre>&lt;div style=&quot;position: relative; width: 100%; height: 100%;&quot;&gt;-->
+<!--			&lt;div dojoType=&quot;dijit.layout.BorderContainer&quot; gutters=&quot;true&quot; id=&quot;borderContainerTwo&quot; &gt;-->
+<!---->
+<!--			  &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; region=&quot;top&quot; splitter=&quot;false&quot;&gt;-->
+<!--			    Hi, usually here you would have important information, maybe your company logo, or functions you need to access all the time..-->
+<!--			  &lt;/div&gt;-->
+<!--			  &lt;div dojoType=&quot;dijit.layout.BorderContainer&quot; liveSplitters=&quot;false&quot; design=&quot;sidebar&quot; region=&quot;center&quot; id=&quot;mainSplit&quot;&gt;-->
+<!---->
+<!--			    &lt;div dojoType=&quot;dijit.layout.AccordionContainer&quot; minSize=&quot;20&quot; style=&quot;width: 300px;&quot; id=&quot;leftAccordion&quot; region=&quot;leading&quot; splitter=&quot;true&quot;&gt;-->
+<!---->
+<!--			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;One fancy Pane&quot;&gt;-->
+<!--			      &lt;/div&gt;-->
+<!--			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;Another one&quot;&gt;-->
+<!---->
+<!--			      &lt;/div&gt;-->
+<!--			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;Even more fancy&quot; selected=&quot;true&quot;&gt;-->
+<!--			      &lt;/div&gt;-->
+<!--			      &lt;div dojoType=&quot;dijit.layout.AccordionPane&quot; title=&quot;Last, but not least&quot;&gt;-->
+<!---->
+<!--			      &lt;/div&gt;-->
+<!--			    &lt;/div&gt;&lt;!-- end AccordionContainer --&gt;-->
+<!--			    &lt;div dojoType=&quot;dijit.layout.TabContainer&quot; region=&quot;center&quot; tabStrip=&quot;true&quot;&gt;-->
+<!---->
+<!--			      &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; title=&quot;My first tab&quot; selected=&quot;true&quot;&gt;-->
+<!--			        Lorem ipsum and all around...-->
+<!--			      &lt;/div&gt;-->
+<!--			      &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; title=&quot;My second tab&quot;&gt;-->
+<!---->
+<!--			        Lorem ipsum and all around - second...-->
+<!--			      &lt;/div&gt;-->
+<!--			      &lt;div dojoType=&quot;dijit.layout.ContentPane&quot; title=&quot;My last tab&quot; closable=&quot;true&quot;&gt;-->
+<!--			        Lorem ipsum and all around - last...-->
+<!--			      &lt;/div&gt;-->
+<!---->
+<!--			    &lt;/div&gt;-->
+<!--			  &lt;/div&gt;-->
+<!--			&lt;/div&gt;-->
+<!--			&lt;/div&gt;-->
+<!--			</pre>-->
+<!--		</div>-->
+<!--		<p>This is the jscript code of your example. Simple past both HMTL and Jscript into the browser.</p>-->
+<!--		<div label="And the jscript code" lang="javascript">-->
+<!--			<pre>-->
+<!--				&lt;script type=&quot;text/javascript&quot;&gt;-->
+<!---->
+<!--			  dojo.require(&quot;dojo.parser&quot;);-->
+<!--			  dojo.require(&quot;dijit.layout.ContentPane&quot;);-->
+<!--			  dojo.require(&quot;dijit.layout.BorderContainer&quot;);-->
+<!--			  dojo.require(&quot;dijit.layout.TabContainer&quot;);-->
+<!--			  dojo.require(&quot;dijit.layout.AccordionContainer&quot;);-->
+<!---->
+<!--		&lt;/script&gt;-->
+<!--			&lt;script type=&quot;text/javascript&quot;&gt;-->
+<!--				dojo.addOnLoad(function(){-->
+<!--					dojo.parser.parse();-->
+<!--				});-->
+<!--			&lt;/script&gt;-->
+<!--			</pre>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--	<h1>Dojo charting</h1>-->
+<!--	<p>Take a look at the frickin cool Dojo charting. This makes use of CodeGlass in inline "mode". </p>-->
+<!--	<p>Instantiation is super simple: <code>dojo.query("#charting").CodeGlass({type: "inline"});</code></p>-->
+<!--	<div id="charting" dojoType="CodeGlass.Inline" toolbar="" width="650" height="450" version="1.3-1.3.2">-->
+<!--		<p>This is how you get the cool charting to run</p>-->
+<!--		<div label="JavaScript" lang="javascript"><pre>-->
+<!--		&lt;script type=&quot;text/javascript&quot;&gt;-->
+<!--dojo.require(&quot;dojox.charting.Chart2D&quot;);-->
+<!--dojo.require(&quot;dojox.charting.themes.Wetland&quot;);-->
+<!---->
+<!--dojo.addOnLoad(function(){-->
+<!--  var c = new dojox.charting.Chart2D(&quot;chartOne&quot;);-->
+<!--  c.addPlot(&quot;default&quot;, {type: &quot;StackedAreas&quot;, tension:3})-->
+<!--      .addAxis(&quot;x&quot;, {fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;})-->
+<!--      .addAxis(&quot;y&quot;, {vertical: true, fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;, min: 0})-->
+<!--      .setTheme(dojox.charting.themes.Wetland)-->
+<!--      .addSeries(&quot;Series A&quot;, [1, 2, 0.5, 1.5, 1, 2.8, 0.4])-->
+<!--      .addSeries(&quot;Series B&quot;, [2.6, 1.8, 2, 1, 1.4, 0.7, 2])-->
+<!--      .addSeries(&quot;Series C&quot;, [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])-->
+<!--      .render();-->
+<!--});-->
+<!--&lt;/script&gt;</pre>-->
+<!--		</div>-->
+<!--		<div label="HTML" lang="html">-->
+<!--			<p>Very simple</p>-->
+<!--			<pre>&lt;div id=&quot;chartOne&quot; style=&quot;&quot;&gt;&lt;/div&gt;</pre>-->
+<!--		</div>-->
+<!--		<div lang="css">-->
+<!--			<p>Some simple CSS</p>-->
+<!--			<pre>-->
+<!--				&lt;style type=&quot;text/css&quot;&gt;-->
+<!--			.{{ theme }} #chartOne {-->
+<!--				padding-top:60px;-->
+<!--				font-family: Arial;-->
+<!--				font-size: 12px;-->
+<!--				margin: 0 50px;-->
+<!--				width: 400px;-->
+<!--				height: 240px;-->
+<!--			}-->
+<!--		&lt;/style&gt;-->
+<!--			</pre>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis cursus libero. Pellentesque sodales justo at felis molestie vestibulum. Vivamus feugiat augue sem, eget interdum odio. Sed sagittis sapien ac leo cursus ultrices in mattis massa. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas et tortor purus, at varius eros. Aliquam fermentum est non ipsum posuere eget pellentesque nunc adipiscing. Pellentesque volutpat porttitor dui quis molestie. Aenean a turpis tortor. Aliquam massa velit, dictum a dignissim eu, tristique ut neque. Quisque urna lectus, egestas sit amet sagittis et, fermentum nec neque. Integer sodales, nisl sed euismod porttitor, ante orci volutpat orci, vel faucibus nisi lectus tincidunt dui. Ut varius fringilla massa id vulputate. Proin gravida risus nec quam pellentesque semper.-->
+<!--</p>-->
+<p>
+Aenean id risus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a dojoType="CodeGlass.base" type="basic" src="http://www.google.com">Pellentesque</a> nec euismod sem. Aliquam rutrum ligula nec erat mollis ac luctus diam iaculis. Donec in elit metus. Maecenas enim felis, volutpat eu elementum nec, semper id enim. Suspendisse ultrices luctus elementum. Mauris venenatis dolor ac velit pulvinar mattis. Nam commodo, lacus a imperdiet viverra, nisi felis ultricies diam, vitae faucibus mi elit eget lectus. Nunc vitae nisi sit amet erat volutpat iaculis.
+</p>
+<!--<p>-->
+<!--Donec volutpat enim hendrerit risus porttitor ultrices. Donec ante enim, vulputate id egestas in, commodo accumsan massa. Nulla ac eros eros, eget ornare sapien. Nulla vehicula nibh id dui volutpat et imperdiet neque convallis. In imperdiet urna in libero condimentum gravida. Phasellus a dolor dolor. Donec tincidunt nunc velit. Vestibulum elit massa, consectetur elementum porta at, feugiat vitae sapien. Nam enim velit, consectetur eget aliquet sit amet, malesuada eu nibh. Morbi egestas pharetra dignissim. Donec non dolor arcu. Cras vulputate, orci et posuere lacinia, turpis urna semper erat, vel vestibulum urna lacus vitae mi. Maecenas eget orci eu ante euismod placerat. Sed pellentesque ante quis metus molestie vel eleifend dolor lobortis. Nullam non nunc risus. Nullam sollicitudin dignissim nibh, condimentum posuere erat ornare sit amet. Sed sed lacinia tortor. Curabitur ornare, elit id aliquam tincidunt, lorem tellus tincidunt turpis, id lacinia nisi enim ut turpis. Morbi accumsan, lorem at lacinia elementum, augue mauris luctus diam, nec luctus massa elit ac est. -->
+<!--	</p>-->
+<!--	<h1>A code glass with external link</h1>-->
+<!--	<div id="external" dojoType="CodeGlass.Dialog" src="http://www.google.com" height="600" width="800"></div>-->
+<!--	-->
+<!--	<div dojoType="CodeGlass.Dialog"><div label="" lang="javascript"><pre>&lt;script&gt;-->
+<!--  dojo.require(&quot;dojox.data.CsvStore&quot;);-->
+<!--  dojo.require(&quot;dijit.form.ComboBox&quot;);-->
+<!---->
+<!--  var storeData =   &quot;firstname,lastname,age\n&quot; +-->
+<!--                    &quot;John, Doe, 21\n&quot; +-->
+<!--                    &quot;Jane, Doe, 22\n&quot; +-->
+<!--                    &quot;Richard, Smith, 43\n&quot; +-->
+<!--                    &quot;Sally, Smith, 49\n&quot; +-->
+<!--                    &quot;Lian, Zu, 23\n&quot; +-->
+<!--                    &quot;Ichiro, Kagetsume, 23\n&quot;+-->
+<!--                    &quot;Umeko, Tsuguri, 18\n&quot; +-->
+<!--                    &quot;Alptraum, Reisender, 25\n&quot; +-->
+<!--                    &quot;Thomas, Winthrope, 14\n&quot;;-->
+<!---->
+<!--  var personStore = new dojox.data.CsvStore({data: storeData});-->
+<!---->
+<!--&lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div dojoType=&quot;dijit.form.ComboBox&quot; store=&quot;personStore&quot; searchAttr=&quot;firstname&quot;&gt;&lt;/div&gt;</pre></div></div>-->
 </body>
 </html>

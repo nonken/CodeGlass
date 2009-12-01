@@ -1,18 +1,26 @@
 dojo.provide("CodeGlass.plugins.dojo.a11y");
 
+dojo.require("CodeGlass.plugins._base");
+
 dojo.declare("CodeGlass.plugins.dojo.a11y",
 	CodeGlass.plugins._base,
 	{
+	templateString: '<div class="a11y">A11y: <input type="checkbox" dojoAttachEvent="onchange: _changeA11y" dojoAttachPoint="a11yInput" value="rtl" /></div>',
 
-	injectNode: '',
+	injectToolbar: "toolbarBottom",
 
-	templateString: '<div class="a11y">A11y: <input type="checkbox" dojoAttachEvent="onchange: _update" dojoAttachPoint="a11yInput" value="rtl" /></div>',
-
-	constructor: function(args){
-
+	getVars: function(){
+		return {
+			injectToolbar: this.injectToolbar,
+			iframeProps: {
+				"classBody": this.a11yInput.checked ? ' dijit_a11y ' : ''
+			}
+		}
 	},
 
-	_update: function(){
-		var v = this.a11yInput.attr("value");
+	_changeA11y: function(){
+		this.a11y = this.a11yInput.checked ? "dijit_a11y" : "";
+
+		dojo.publish("CodeGlass/plugin/change", ["dojo.a11y"]);
 	}
 });
