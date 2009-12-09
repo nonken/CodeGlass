@@ -1,0 +1,189 @@
+=======================
+CodeGlass Documentation
+=======================
+
+Description
+===========
+
+CodeGlass is a simple tool for creating documentation examples in an closed
+iframe enironment. Through a simple plugin architecture you can easily
+change CodeGlasses behaviour to fir your needs.
+
+Creating a CodeGlass example
+============================
+
+CodeGlass allows you to display JavaScript, HTML and CSS in seperate
+copy & pasteable tabs. Your code example does not have to contain all
+three types, CodeGlass handles the detection for you.
+
+A simple example of CodeGlass in "action"
+
+.. code:
+
+  <div dojoType="CodeGlass.base">
+      <div label="" lang="javascript">
+          <pre>&lt;script type=&quot;text/javascript&quot;&gt;
+              dojo.require(&quot;dijit._Calendar&quot;);
+              &lt;/script&gt;
+          </pre>
+      </div>
+      <div label="" lang="html">
+          <pre>&lt;div id=&quot;mycal&quot; dojoType=&quot;dijit._Calendar&quot; value=&quot;2009-08-07&quot; isDisabledDate=&quot;dojo.date.locale.isWeekend&quot;&gt;&lt;/div&gt;
+          </pre>
+      </div>
+  </div>
+
+The important thing to see here is the fact that we have to types - JavaScript
+and HTML code. This is defined by setting the lang attribute of a div node
+within the CodeGlass node.
+
+It is important that each block of code contains a div and a pre tag within - if
+these are not present, CodeGlass can't parse the code.
+
+You also see that the container nodes habe a label attribute. Setting this will
+allow you to have simple descriptive text for each code block. This text will get
+displayed in the viewer.
+
+The actual to be executed code needs to be escaped so it does not get executed
+when you startup the page.
+
+External URLs
+=============
+
+CodeGlass allows you to define external urls instead of code. Simply add a src
+attribute to the CodeGlass node:
+
+.. code:
+
+  <div dojoType="CodeGlass.base" src="http://www.uxebu.com"></div>
+
+CodeGlass types
+===============
+
+CodeGlass comes in three different types:
+
+1. Dialog
+---------
+
+Dialog inserts a button at the place where you define the CodeGlass dojoType
+and allows a dialog when you click that button. To use the dialog mode just
+add the type attribute to the CodeGlass node:
+
+.. code:
+
+  <div dojoType="CodeGlass.base" type="dialog"></div>
+
+2. Inline
+---------
+
+Inline displays the CodeGlass viewer right where you defined it. The code
+gets executed on page load and you see the example right away. To use the
+inline mode just add the type attribute to the CodeGlass node:
+
+.. code:
+
+  <div dojoType="CodeGlass.base" type="inline"></div>
+
+3. Basic
+--------
+
+Basic is a sort of special type since it only really works when you define
+CodeGlass to open an external URL.
+Using the basic type will result in the text wrapped by the CodeGlass node
+to be clickable and a dialog will open. An example of the basic type:
+
+.. code:
+
+  <div dojoType="CodeGlass.base" type="basic" src="http://www.uxebu.com">Visit uxebu</div>
+
+Plugins
+=======
+
+Plugins allow you to add custom behaviour to CodeGlass such as adding i18n to
+your demos. It is very simple to create a plugin, you just need to take care of
+a few things.
+
+Plugin declaration
+------------------
+
+Plugins need to inherit from 'CodeGlass.plugins._base' which takes care of
+mixin in the variables shared between all plugins. The most basic plugin
+has to contain following code:
+
+.. code:
+
+  dojo.provide("CodeGlass.plugins.dojo.a11y");
+
+  dojo.require("CodeGlass.plugins._base");
+
+  dojo.declare("CodeGlass.plugins.dojo.a11y",
+      CodeGlass.plugins._base,
+      {
+      templateString: '<div class="myPlugin">Hi</div>',
+
+      injectToolbar: "toolbarBottom",
+
+      getVars: function(){
+          return {
+              injectToolbar: this.injectToolbar
+          }
+      }
+  });
+
+All this will do is display the div node with the class 'myPlugin' in the bottom
+toolbar.
+
+Now lets look at some of the more interesting features of plugin development
+with CodeGlass.
+
+Inter-plugin communication and code updates
+-------------------------------------------
+
+Usually you want to develop CodeGlass plugins to change behaviour in
+the executed Code. For instance you could write a simple plugin which changes
+the class on the body depending on the selection of a select input of
+your plugin.
+
+To allow inter-plugin communication and rerendering of the content executed in
+CodeGlass, you can use a simple pub/sub mechanism.
+
+.. code:
+
+  _changeBodyClass: function(){
+      dojo.publish("CodeGlass/plugin/change", ["your.pluginNameSpace"]);
+  }
+
+This is just a sample function you could call when the change event of a select
+input of your plugin would fire. The call to the dojo.publish function triggers
+that all getVars funktions (which all plugins must have defined) get called
+and new updated values get received. The code of CodeGlass gets re-executed
+with these new values.
+
+injectToolbar
+-------------
+
+At this point you can only inject plugins into the bottom toolbar. This might be
+extended in the future.
+
+Chromes
+=======
+
+CodeGlass allows you to create so called chromes for the CodeGlass view.
+If you for instance want to show how executed code could look like on a phone,
+you can simply create a chrome with the look and feel of that phone. Of course
+phones usually have different browser features (for example no big scrollbars),
+but you still can give the user a glimpse of the experience.
+
+Defining a new chrome
+---------------------
+
+Chromes have to be placed in a folder within the chromes directory.
+The name of the folder at the same time defined how you include the chrome in
+CodeGlass. Each chrome needs at least two files:
+
+- iframe.html
+- template.html
+
+The iframe.html usually can be copied from an existing one and just gives you
+more options on injecting variables into the code through the plugins.
+The template.html defined the look and feel of the button how you open CodeGlass

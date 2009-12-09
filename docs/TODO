@@ -1,0 +1,6 @@
+==============
+CodeGlass TODO
+==============
+
+- Chromes require definition of iframe.html and template.html. Both should not
+  really be there, a better architecture should be defined.
