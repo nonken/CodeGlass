@@ -9,6 +9,8 @@ dojo.declare("CodeGlass.plugins._base",
 
 	sharedVars: [],
 
+	injectToolbar: "toolbarBottom",
+
 	constructor: function(args){
 		if (args.sharedVars){
 			this.sharedVars = args.sharedVars;
