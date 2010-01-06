@@ -532,7 +532,7 @@ dojo.declare("CodeGlass.CodeViewer",
 			dojo.destroy(this.iframe);
 		}
 
-		this.iframe = dojo.create("iframe", {attr: {frameBorder: 0}}, this.containerIframe);
+		this.iframe = dojo.create("iframe", "", this.containerIframe);
 		if (!this.content.src){
 
 			//var doc = this.iframe.contentWindow ? this.iframe.contentWindow : (this.iframe.contentDocument.document ? this.iframe.contentDocument.document : this.iframe.contentDocument);
