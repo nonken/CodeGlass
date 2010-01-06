@@ -536,7 +536,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		if (!this.content.src){
 
 			//var doc = this.iframe.contentWindow ? this.iframe.contentWindow : (this.iframe.contentDocument.document ? this.iframe.contentDocument.document : this.iframe.contentDocument);
-			doc = this.iframe.contentWindow.document,
+			var doc = this.iframe.contentWindow.document,
 				content = this.renderedContent;
 
 			var code = [], i=0;
