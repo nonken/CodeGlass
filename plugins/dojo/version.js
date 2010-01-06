@@ -68,7 +68,6 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 	},
 
 	getVars: function(){
-		console.dir(this.sharedVars.djConfig);
 		// setup djConfig string
 		var djConfig = [];
 		for (var plugin in this.sharedVars.djConfig){

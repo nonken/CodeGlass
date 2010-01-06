@@ -90,7 +90,6 @@
 .codeGlassViewer iframe {
 	border: 1px dotted #ccc;
 	background: white;
-	display:table-row;
 	width: 100%;
 	height: 100%;
 }
@@ -107,6 +106,7 @@
 	-moz-border-radius-bottomright: 6px;
 	-webkit-border-bottom-right-radius: 6px;
 	text-align: center;
+	display: none;
 }
 
 .codeGlassViewer .iframe .loader span {
