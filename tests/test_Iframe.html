@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>document.write() to iframe</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js"></script>
+</head>
+<body>
+	<a id="click" href="javascript://">Click</a>
+	<div id="container">
+	</div>
+	<script type="text/javascript">
+	var html = [
+		'<!DOCTYPE HTML>',
+		'<html lang="en">',
+		'<head>',
+		'	<meta charset="utf-8">',
+		'	<title>Test Document</title>',
+		'	<style type="text/css">',
+		'		p { color: yellow }',
+		'	</style>',
+		'	\x3Cscript type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js">',
+		'	\x3C/script>',
+		'	\x3Cscript type="text/javascript">',
+		'		alert(typeof dojo);',
+		'		setTimeout(function(){alert(dojo);}, 1000)',
+		'	\x3C/script>',
+		'</head>',
+		'<body>',
+		'	<p>Hello World!</p>',
+		'	<p>Foo Bar</p>',
+		'	\x3Cscript type="text/javascript">',
+		'		document.getElementsByTagName("p")[0].style.color = "green";',
+		'	\x3C/script>',
+		'	\x3Cscript type="text/javascript">',
+		'		alert("written into the iframe");',
+		'	\x3C/script>',
+		'</body>',
+		'</html>'
+	].join("\n");
+
+	dojo.connect(document.getElementById("click"), "click", function(){
+		var b = document.body,
+				f = dojo.create("iframe", {}, document.getElementById("container"));
+
+		var doc = f.contentWindow.document;
+		doc.open();
+		doc.write(html);
+		doc.close();
+	});
+
+	</script>
+</body>
+</html>
