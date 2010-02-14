@@ -221,12 +221,11 @@ dojo.declare("CodeGlass.base",
 		//	The actual CodeGlass.CodeViewer will get instantiated
 		//	here. Toolbars and iframeVars get injected into the
 		//	object here as well.
-
 		var v = this.viewer = new CodeGlass.CodeViewer({
 			id: this.id+"_Content",
 			content: this.content,
 			viewerBox: { w: this.width, h: this.height },
-			iframeTemplate: dojo.moduleUrl(
+			iframeTemplate: dojo.cache(
 				"CodeGlass.chromes."+this.chrome, "iframe.html"
 			),
 			toolbars: this.injectToolbars,
@@ -400,11 +399,11 @@ dojo.declare("CodeGlass.CodeViewer",
 
 	// templatePath:
 	//		Path to the dialog template
-	templatePath: dojo.moduleUrl("CodeGlass", "templates/codeViewer.html"),
+	templateString: dojo.cache("CodeGlass", "templates/codeViewer.html"),
 
 	// iframeTemplate:
 	//		Template for the actual content of the iframe
-	iframeTemplate: dojo.moduleUrl("CodeGlass", "templates/iframe.html"),
+	iframeTemplate: dojo.cache("CodeGlass", "templates/iframe.html"),
 
 	// currentView:
 	//		Default is demo tab
