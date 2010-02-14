@@ -25,6 +25,6 @@ dojo.declare("CodeGlass.plugins.dojo.dir",
 
 	_changeDir: function(){
 		this.dir = this.dirInput.checked ? "rtl" : "ltr";
-		dojo.publish("CodeGlass/plugin/change", ["dojo.dir"]);
+		dojo.publish("CodeGlass/plugin/change/" + this.codeGlassBaseId, ["dojo.dir"]);
 	}
 });

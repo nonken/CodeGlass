@@ -101,6 +101,6 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 
 		this._setSharedVars();
 
-		dojo.publish("CodeGlass/plugin/change", ["dojo.version"]);
+		dojo.publish("CodeGlass/plugin/change/" + this.codeGlassBaseId, ["dojo.version"]);
 	}
 });
