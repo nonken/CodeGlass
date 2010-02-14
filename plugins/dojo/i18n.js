@@ -10,20 +10,15 @@ dojo.declare("CodeGlass.plugins.dojo.i18n",
 
 	templateString: '<div class="menuItem i18n">Language: <select dojoAttachEvent="onchange: _changeI18n" dojoAttachPoint="i18nInput"><option value=""></option></select></div>',
 
-	languages: dojo.moduleUrl("CodeGlass", "resources/languages.json"),
+	languages: dojo.cache("CodeGlass", "resources/languages.json"),
 
 	injectToolbar: "toolbarBottom",
 
 	postCreate: function(){
-		dojo.xhrGet({
-			url: this.languages,
-			handleAs: "json",
-			load: dojo.hitch(this, function(data){
-				dojo.forEach(data, function(lang, i){
-					dojo.create("option", { innerHTML: lang.name, value: lang.iso }, this.i18nInput);
-				}, this);
-			})
-		});
+		data = dojo.fromJson(this.languages);
+		dojo.forEach(data, function(lang, i){
+			dojo.create("option", { innerHTML: lang.name, value: lang.iso }, this.i18nInput);
+		}, this);
 	},
 
 	getVars: function(){
