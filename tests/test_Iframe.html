@@ -19,34 +19,64 @@
 		'	<style type="text/css">',
 		'		p { color: yellow }',
 		'	</style>',
-		'	\x3Cscript type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js">',
-		'	\x3C/script>',
-		'	\x3Cscript type="text/javascript">',
-		'		alert(typeof dojo);',
-		'		setTimeout(function(){alert(dojo);}, 1000)',
-		'	\x3C/script>',
+		'	<script src="http://o.aolcdn.com/dojo/1.4/dojo/dojo.xd.js"></' + 'script>',
+		'	<script type="text/javascript">',
+		'		alert("typeof dojo: " + typeof dojo);',
+		'	<' + '/script>',
 		'</head>',
 		'<body>',
 		'	<p>Hello World!</p>',
 		'	<p>Foo Bar</p>',
-		'	\x3Cscript type="text/javascript">',
+		'	<script type="text/javascript">',
 		'		document.getElementsByTagName("p")[0].style.color = "green";',
-		'	\x3C/script>',
-		'	\x3Cscript type="text/javascript">',
+		'	<' + '/script>',
+		'	<script type="text/javascript">',
 		'		alert("written into the iframe");',
-		'	\x3C/script>',
+		'	<' + '/script>',
 		'</body>',
 		'</html>'
 	].join("\n");
 
 	dojo.connect(document.getElementById("click"), "click", function(){
 		var b = document.body,
-				f = dojo.create("iframe", {}, document.getElementById("container"));
+			f = dojo.create("iframe", {}, document.getElementById("container"));
 
 		var doc = f.contentWindow.document;
 		doc.open();
-		doc.write(html);
-		doc.close();
+
+		if (!dojo.isIE){
+			doc.write(html);
+			doc.close();
+		}else{
+			var bits = html.split("<" + "/script>"),
+				lastBit = bits.pop(),
+				currentScript; // the last script tag written into the iframe
+
+				var readyStateCheck = function(){ // event handler for script blocks
+					if(currentScript.readyState == "complete" || currentScript.readyState == "loaded"){
+						// inline scripts: "complete", external scripts: "loaded"
+						currentScript.detachEvent("onreadystatechange", readyStateCheck);
+						writeNextBitIE();
+					}
+				};
+
+				var writeNextBitIE = function(){
+					var bit = bits.shift();
+
+					if(dojo.isString(bit)){
+						doc.write(bit + "<" + "/script>");
+						currentScript = dojo.query("script", doc).pop();
+						currentScript.attachEvent("onreadystatechange", readyStateCheck);
+						readyStateCheck();
+					}else{
+						doc.write(lastBit);
+						doc.close();
+					}
+				};
+
+				writeNextBitIE();
+		}
+
 	});
 
 	</script>

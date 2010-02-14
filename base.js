@@ -305,7 +305,7 @@ dojo.declare("CodeGlass.base",
 	hide: function(e){
 		// summary:
 		//		hide dialog
-console.log(this.viewer);
+
 		var v = this.viewer;
 		dojo.query(".wrapper", v.domNode)
 			.style("visibility", "hidden");
@@ -360,9 +360,11 @@ console.log(this.viewer);
 			if (dojo.attr(el, "lang") != null){
 				// Unescape HTML and make it look fancy
 				code = dojo.query("pre", el).attr("innerHTML");
-				tarea[(
-				       dojo.isIE < 8 ? "innerText" : "innerHTML"
-				)] = code;
+				//tarea[(
+				//       dojo.isIE < 8 ? "innerText" : "innerHTML"
+				//)] = code;
+				// .innerText is not required for IE
+				tarea.innerHTML = code;
 
 				code = tarea.value;
 				content[el.lang] = {
@@ -526,71 +528,59 @@ dojo.declare("CodeGlass.CodeViewer",
 		// summary:
 		//		creates iframe with the actual code to be executed
 
-// FIXME: I bet this doesn't work in IE :P
 		// Clear iframe
 		if (this.iframe){
 			dojo.destroy(this.iframe);
 		}
 
-		this.iframe = dojo.create("iframe", "", this.containerIframe);
+		this.iframe = dojo.create("iframe", {}, this.containerIframe);
 		if (!this.content.src){
-
-			//var doc = this.iframe.contentWindow ? this.iframe.contentWindow : (this.iframe.contentDocument.document ? this.iframe.contentDocument.document : this.iframe.contentDocument);
-			var doc = this.iframe.contentWindow.document,
-				content = this.renderedContent;
-
-			var code = [], i=0;
-			content = content.replace(/<(script)[\s\S]*?>[\s\S]*?<\/script>|<(link)[\s\S]*?\/?>/gi,
-				function(contents, script, link, pos){
-					if (script && script.length){
-						code.push({code: contents, type: 'script'});
-						return "__script__";
-					}else if (link && link.length){
-						code.push({code: contents, type: 'link'});
-						return "__link__";
-					}
-					i++;
-					return "";
-				}
-			);
-
-			//var node = doc.importNode(dojo._toDom(this.renderedContent), true);
-			//doc.documentElement.appendChild(dojo._toDom(this.renderedContent, doc.documentElement));
+ 			var doc = this.iframe.contentWindow.document,
+ 				content = this.renderedContent;
 
 			doc.open();
+			if (!dojo.isIE){
+				doc.write(content);
+				doc.close();
+			}else{
+				var bits = content.split("<" + "/script>"),
+					lastBit = bits.pop(),
+					currentScript; // the last script tag written into the iframe
 
-			// Now split content at script or link insertions and
-			// document.write
-			var content = content.split(/__link__|__script__/ig),
-				pos;
+					var readyStateCheck = function(){ // event handler for script blocks
+						if(currentScript.readyState == "complete" || currentScript.readyState == "loaded"){
+							// inline scripts: "complete", external scripts: "loaded"
+							currentScript.detachEvent("onreadystatechange", readyStateCheck);
+							writeNextBitIE();
+						}
+					};
 
-			dojo.forEach(content, function(str, idx){
-				doc.write(str);
-				if (idx < content.length - 2){
-					if (code[idx].type == 'script'){
-						pos = code[idx].code.indexOf("</");
-						doc.write(code[idx].code.substr(0,pos+1)+""+code[idx].code.substr(pos+1));
-					}else if (code[idx].type == 'link'){
-						doc.write(code[idx].code.substr(0,1)+""+code[idx].code.substr(1));
-					}
-				}
-			});
+					var writeNextBitIE = function(){
+						var bit = bits.shift();
 
-			doc.close();
+						if(dojo.isString(bit)){
+							doc.write(bit + "<" + "/script>");
+							currentScript = dojo.query("script", doc).pop();
+							currentScript.attachEvent("onreadystatechange", readyStateCheck);
+							readyStateCheck();
+						}else{
+							doc.write(lastBit);
+							if(dojo.isIE > 7){ // otherwise IE8 freezes
+								setTimeout(function(){
+									doc.close();
+								}, 100);
+							}
+							else {
+								doc.close();
+							}
 
-			doc.pub = dojo.hitch(this, function(){
-				dojo.publish("codeglass/loaded", [this]);
-			});
-
-			// This didn't work in IE!!!
-			//var doc = this.iframe.contentDocument || this.iframe.contentWindow;
-			//console.log(doc);
-			//doc.open();
-			//doc.write(this.renderedContent);
-			//doc.close();
-			//doc.pub = dojo.hitch(this, function(){
-			//	dojo.publish("codeglass/loaded", [this]);
-			//});
+						}
+					};
+					writeNextBitIE();
+			}
+ 			doc.pub = dojo.hitch(this, function(){
+ 				dojo.publish("codeglass/loaded", [this]);
+ 			});
 		}else{
 			// dojo.connect doesn't work on iframes in IE, see #9609
 			if (this.iframe.addEventListener) {
