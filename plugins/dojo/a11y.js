@@ -5,7 +5,7 @@ dojo.require("CodeGlass.plugins._base");
 dojo.declare("CodeGlass.plugins.dojo.a11y",
 	CodeGlass.plugins._base,
 	{
-	templateString: '<div class="a11y">A11y: <input type="checkbox" dojoAttachEvent="onchange: _changeA11y" dojoAttachPoint="a11yInput" value="rtl" /></div>',
+	templateString: '<div class="menuItem a11y">A11y: <input type="checkbox" dojoAttachEvent="onchange: _changeA11y" dojoAttachPoint="a11yInput" value="rtl" /></div>',
 
 	injectToolbar: "toolbarBottom",
 

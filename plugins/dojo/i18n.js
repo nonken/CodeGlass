@@ -8,7 +8,7 @@ dojo.declare("CodeGlass.plugins.dojo.i18n",
 
 	injectNode: null,
 
-	templateString: '<div class="i18n">Language: <select dojoAttachEvent="onchange: _changeI18n" dojoAttachPoint="i18nInput"><option value=""></option></select></div>',
+	templateString: '<div class="menuItem i18n">Language: <select dojoAttachEvent="onchange: _changeI18n" dojoAttachPoint="i18nInput"><option value=""></option></select></div>',
 
 	languages: dojo.moduleUrl("CodeGlass", "resources/languages.json"),
 

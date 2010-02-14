@@ -1,11 +1,11 @@
 <div class="codeGlassViewer displayNone">
 	<div class="wrapper">
 		<div class="header {% if not showHeader %}displayNone{% endif %}" dojoAttachEvent="onclick: _toggleView"
-			>{% if showTabs %}<div title="containerIframe" class="demo active"><a href='#' dojoAttachPoint="firstLink">Demo</a></div
-			><div title="containerFull" class="copy"><a href="#">Copy &amp; Paste</a></div
-				>{% if javascriptcode %}<div title="containerJs" class="javascript"><a href='#'>JavaScript</a></div
-				>{% endif %}{% if htmlcode %}<div title="containerHtml" class="html"><a href='#'>HTML</a></div
-				>{% endif %}{% if csscode %}<div title="containerCss" class="css"><a href='#'>CSS</a></div>{% endif %}{% endif %}
+			>{% if showTabs %}<div title="containerIframe" class="menuItem demo active"><a href='#' dojoAttachPoint="firstLink">Demo</a></div
+			><div title="containerFull" class="menuItem copy"><a href="#">Copy &amp; Paste</a></div
+				>{% if javascriptcode %}<div title="containerJs" class="menuItem javascript"><a href='#'>JavaScript</a></div
+				>{% endif %}{% if htmlcode %}<div title="containerHtml" class="menuItem html"><a href='#'>HTML</a></div
+				>{% endif %}{% if csscode %}<div title="containerCss" class="menuItem css"><a href='#'>CSS</a></div>{% endif %}{% endif %}
 			<div class="close displayNone"><a href="#"><span style="visibility:hidden">X</span></a></div>
 		</div>
 		<div dojoAttachPoint="contentWrapper" class="contentWrapper">

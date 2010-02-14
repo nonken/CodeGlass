@@ -8,7 +8,7 @@ dojo.declare("CodeGlass.plugins.dojo.dir",
 
 	injectNode: null,
 
-	templateString: '<div class="dir">Rtl: <input type="checkbox" dojoAttachEvent="onchange: _changeDir" dojoAttachPoint="dirInput" value="rtl" /></div>',
+	templateString: '<div class="menuItem dir">Rtl: <input type="checkbox" dojoAttachEvent="onchange: _changeDir" dojoAttachPoint="dirInput" value="rtl" /></div>',
 
 	dir: "ltr",
 

@@ -46,8 +46,8 @@
 	bottom: 0;
 }
 
-.codeGlassViewer .header > div,
-.codeGlassViewer .footer > div {
+.codeGlassViewer .header .menuItem,
+.codeGlassViewer .footer .menuItem {
 	border-right: 1px solid #ccc;
 	float: left;
 	padding: 8px 8px 10px 5px;
@@ -60,7 +60,7 @@
 	padding-bottom: 1px;
 }
 
-.codeGlassViewer .header > div {
+.codeGlassViewer .header .menuItem {
 	padding: 11px 8px 8px 24px;
 	cursor: pointer;
 	background-position: 4px 8px;
@@ -124,6 +124,7 @@
 .codeGlassViewer .contentWrapper {
 	padding: 5px 8px 8px 5px;
 	position: absolute;
+	_position: relative;/*ie6 needs to be aligned different*/
 	top: 0;
 	bottom: 0;
 	right: 0;
