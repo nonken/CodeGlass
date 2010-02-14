@@ -155,7 +155,8 @@ dojo.declare("CodeGlass.base",
 			var 	o = dojo.getObject("CodeGlass.plugins."+plg),
 				instance = new o({
 					sharedVars: this.pluginSharedVars,
-					vars: this.pluginArgs
+					vars: this.pluginArgs,
+					codeGlassBaseId: this.id
 				})
 			;
 
@@ -163,7 +164,7 @@ dojo.declare("CodeGlass.base",
 			this._preparePlugin(instance);
 		}, this);
 
-		dojo.subscribe("CodeGlass/plugin/change", this, function(p){
+		dojo.subscribe("CodeGlass/plugin/change/" + this.id, this, function(p, base){
 			this._refreshViewer();
 		});
 	},
@@ -260,7 +261,6 @@ dojo.declare("CodeGlass.base",
 		// summary:
 		//		show the dialog and position it correctly
 		//		on screen
-
 		e.preventDefault(e);
 
 		if (this.isOpen){
@@ -445,7 +445,6 @@ dojo.declare("CodeGlass.CodeViewer",
 	postCreate: function(){
 		// summary:
 		//		do all necessary setup and create background overlay. FIXME: should we add this to the template maybe?
-
 		// build toolbars
 		for (var toolbar in this.toolbars){
 			dojo.forEach(this.toolbars[toolbar], function(n){
@@ -606,7 +605,6 @@ dojo.declare("CodeGlass.CodeViewer",
 		//		of the template generation gets executed correctly
 
 		dojo.query(".header ul", this.domNode).addClass("displayNone");
-
 		this._buildTemplate(); // redraw iframe content
 		this._toggleView(); // reset view to iframe to prevent errors initializing the demo on nodes with display: none
 		this._setupIframe();

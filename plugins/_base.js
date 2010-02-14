@@ -10,6 +10,8 @@ dojo.declare("CodeGlass.plugins._base",
 	sharedVars: [],
 
 	injectToolbar: "toolbarBottom",
+	
+	codeGlassBaseId: null,
 
 	constructor: function(args){
 		if (args.sharedVars){

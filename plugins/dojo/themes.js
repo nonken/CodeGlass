@@ -46,6 +46,6 @@ dojo.declare("CodeGlass.plugins.dojo.themes",
 
 	_changeTheme: function(){
 		this.theme = this.themeInput.value;
-		dojo.publish("CodeGlass/plugin/change", ["dojo.themes"]);
+		dojo.publish("CodeGlass/plugin/change/" + this.codeGlassBaseId, ["dojo.themes"]);
 	}
 });

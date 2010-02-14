@@ -36,6 +36,6 @@ dojo.declare("CodeGlass.plugins.dojo.i18n",
 			this.sharedVars.djConfig["i18n"] = (this.sharedVars.djConfig.length ? ", " : "") + "locale: '" + this.i18n + "'";
 		}
 
-		dojo.publish("CodeGlass/plugin/change", ["dojo.i18n"]);
+		dojo.publish("CodeGlass/plugin/change/" + this.codeGlassBaseId, ["dojo.i18n"]);
 	}
 });

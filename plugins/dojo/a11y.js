@@ -21,6 +21,6 @@ dojo.declare("CodeGlass.plugins.dojo.a11y",
 	_changeA11y: function(){
 		this.a11y = this.a11yInput.checked ? "dijit_a11y" : "";
 
-		dojo.publish("CodeGlass/plugin/change", ["dojo.a11y"]);
+		dojo.publish("CodeGlass/plugin/change/" + this.codeGlassBaseId, ["dojo.a11y"]);
 	}
 });
