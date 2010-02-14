@@ -8,7 +8,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 
 	injectNode: null,
 
-	templateString: '<div class="version">Version: <select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput"></select></div>',
+	templateString: '<div class="menuItem version">Version: <select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput"></select></div>',
 
 	baseUrls: [
 		{
