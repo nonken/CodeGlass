@@ -589,7 +589,7 @@ dojo.declare("CodeGlass.CodeViewer",
 			} else if (this.iframe.attachEvent) {
 				var e = this.iframe.attachEvent("onload", dojo.hitch(this, function(){
 					dojo.publish("codeglass/loaded", [this]);
-					this.iframe.removeEvent(e);
+					this.iframe.detachEvent(e);
 				}));
 			}
 			dojo.attr(this.iframe, "src", this.content.src);
