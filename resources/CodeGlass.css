@@ -7,8 +7,8 @@
 	width: 129px;
 	height: 42px;
 	cursor: pointer;
-	display:inline-block;
 	display:-moz-inline-box;
+	display:inline-block;
 }
 
 .codeGlassBg {
