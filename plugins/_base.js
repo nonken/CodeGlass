@@ -3,13 +3,9 @@ dojo.provide("CodeGlass.plugins._base");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Widget");
 
-dojo.declare("CodeGlass.plugins._base",
-	[dijit._Widget, dijit._Templated],
-	{
+dojo.declare("CodeGlass.plugins._base", dijit._Widget, {
 
 	sharedVars: [],
-
-	injectToolbar: "toolbarBottom",
 	
 	codeGlassBaseId: null,
 
@@ -25,4 +21,9 @@ dojo.declare("CodeGlass.plugins._base",
 	getVars: function(){
 		return {};
 	}
+});
+
+dojo.provide("CodeGlass.plugins._baseTemplated");
+dojo.declare("CodeGlass.plugins._baseTemplated", [CodeGlass.plugins._base, dijit._Templated],{
+	injectToolbar: "toolbarBottom",
 });
