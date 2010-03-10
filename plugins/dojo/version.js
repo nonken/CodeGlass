@@ -33,7 +33,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 
 	baseUrl: "",
 
-	baseUrlIndex: 1,
+	baseUrlIndex: 0,
 
 	version: "",
 
@@ -60,7 +60,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 				++cnt;
 			}
 		}, this);
-		this.baseUrlIndex = cnt > 0 ? 1 : 0; // Always try to use latest CDN unless feature is only supported by trunk
+		//this.baseUrlIndex = cnt > 0 ? 1 : 0; // Always try to use latest CDN unless feature is only supported by trunk
 
 		dojo.forEach(this.suppVersions, function(version, i){
 			dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
