@@ -25,7 +25,18 @@
 	height: 3em;
 	position: absolute;
 	width: 100%;
-	overflow:hidden;
+	overflow: hidden;
+	font-size: 0.95em;
+}
+
+.codeGlassViewer .header a{
+	color: #555555;
+	text-decoration: none;
+}
+
+.codeGlassViewer .header .active{
+	background-color: #F3F3F3;
+	text-decoration: underline;
 }
 
 .codeGlassViewer .header {
@@ -227,6 +238,5 @@
 .codeGlassViewer .footer {
 	padding: 0;
 	color: black;
-	font-size: 100%;
 	text-align: left;
 }
