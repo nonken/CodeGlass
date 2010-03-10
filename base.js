@@ -98,7 +98,7 @@ dojo.declare("CodeGlass.base",
 
 		// Setting template path. This will define the basic l&f of
 		// CodeGlass
-		this.templatePath = dojo.moduleUrl(
+		this["templatePath"] = dojo.moduleUrl(
 			"CodeGlass.chromes."+this.chrome, "template.html"
 		);
 	},
@@ -226,7 +226,7 @@ dojo.declare("CodeGlass.base",
 			id: this.id+"_Content",
 			content: this.content,
 			viewerBox: { w: this.width, h: this.height },
-			iframeTemplate: dojo.cache(
+			iframeTemplate: dojo["cache"](
 				"CodeGlass.chromes."+this.chrome, "iframe.html"
 			),
 			toolbars: this.injectToolbars,
