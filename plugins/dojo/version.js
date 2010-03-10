@@ -3,7 +3,7 @@ dojo.provide("CodeGlass.plugins.dojo.version");
 dojo.require("CodeGlass.plugins._base");
 
 dojo.declare("CodeGlass.plugins.dojo.version",
-	CodeGlass.plugins._base,
+	CodeGlass.plugins._baseTemplated,
 	{
 
 	injectNode: null,
@@ -11,11 +11,6 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 	templateString: '<div class="menuItem version">Version: <select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput"></select></div>',
 
 	baseUrls: [
-		{
-			baseUrl: "/moin_static163/js/dojo/trunk/",
-			label: "Trunk local (Slow!)",
-			xDomain: false
-		},
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.4/",
 			label: "1.4 (CDN)",
@@ -43,11 +38,10 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 	version: "",
 
 	djConfig: "parseOnLoad: true",
-
+	
 	injectToolbar: "toolbarBottom",
 
 	postCreate: function(){
-		console.log(this.version);
 		if (this.version.length){
 			var v = this.version.split("-"),
 				start = v[0] > "0" ? v[0] : "0",
@@ -55,7 +49,11 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 		}
 
 		var cnt = -1;
-		this.suppVersions = []
+		this.suppVersions = [];
+		// it is possible to inject baseUrls externally
+		if(typeof(CodeGlassConfig) != "undefined" && typeof(CodeGlassConfig.baseUrls) != "undefined"){
+			dojo.mixin(this.baseUrls, CodeGlassConfig.baseUrls);
+		}
 		dojo.forEach(this.baseUrls, function(url, i){
 			if ((!start || url.version >= start) && (!end || url.version <= end) || !url.version){
 				this.suppVersions.push(i);
@@ -68,7 +66,6 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 			dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
 		}, this);
 		this.versionInput.selectedIndex = this.baseUrlIndex;
-
 		this.sharedVars.djConfig = [];
 		this._setSharedVars();
 	},

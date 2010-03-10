@@ -51,7 +51,7 @@ dojo.declare("CodeGlass.base",
 	// plugins:
 	//		Plugins which get hooked into CodeGlass
 	plugins: [
-		  "dojo.version", "dojo.i18n",
+		  "dojo.version", "dojo.i18n", "dojo.extra",
 		  "dojo.themes", "dojo.a11y", "dojo.dir"
 	],
 
@@ -152,14 +152,13 @@ dojo.declare("CodeGlass.base",
 		this.pluginSharedVars = []; // Resetting plugin shared vars
 
 		dojo.forEach(this.plugins, function(plg){
-			var 	o = dojo.getObject("CodeGlass.plugins."+plg),
+			var o = dojo.getObject("CodeGlass.plugins."+plg);
 				instance = new o({
 					sharedVars: this.pluginSharedVars,
 					vars: this.pluginArgs,
 					codeGlassBaseId: this.id
 				})
 			;
-
 			this.pluginInstances.push(instance);
 			this._preparePlugin(instance);
 		}, this);
@@ -173,7 +172,6 @@ dojo.declare("CodeGlass.base",
 		// summary:
 		//		retrieves the plugin info object so CodeGlass
 		//		knows what to inject into its view.
-
 		var props = instance.getVars();
 		if (props.injectToolbar){
 			// Init injectToolbars object
@@ -183,7 +181,6 @@ dojo.declare("CodeGlass.base",
 			this.injectToolbars[props.injectToolbar]
 				.push(instance.domNode);
 		}
-
 		// If the plugin has iframeProps we add those to the injectVars
 		// object so CodeGlass can use them in the to be parsed
 		// template
@@ -477,8 +474,8 @@ dojo.declare("CodeGlass.CodeViewer",
 						dojo.query(".header > div, .footer > div", this.domNode).removeClass("displayNone");
 						// only if we AREN't an inline example:
 						setTimeout(dojo.hitch(this, function(){
-							console.log(this.isDialog, this.firstLink);
-							this.isDialog && console.log("wanting to focus!", this.firstLink);
+							//console.log(this.isDialog, this.firstLink);
+							//this.isDialog && console.log("wanting to focus!", this.firstLink);
 							this.isDialog && this.firstLink && this.firstLink.focus();
 						}), 25);
 					})
@@ -495,30 +492,27 @@ dojo.declare("CodeGlass.CodeViewer",
 		// summary:
 		//		Builds the template and renders all available
 		//		variables
-		var t = {}, key,
-			frgContext = new dojox.dtl.Context({}),
-			frgTmpl;
+		var t = {}, key, frgTmpl, context;
 
+		for (var dtlVar in this.iframeVars){
+			t[dtlVar] = this.iframeVars[dtlVar];
+		}
 		for (var type in this.content){
 			for (key in this.content[type]){
 				// render code fragments
 				var tk = type + "" + key;
 				if (key == "code"){
 					frgTmpl = new dojox.dtl.Template(this.content[type][key]);
-					this[tk] = t[tk] = CodeGlass.style_html(frgTmpl.render(frgContext), 4);
+					// we use the context for all rendered templates (user shouldn't see the replacements!)
+					context = new dojox.dtl.Context(t);
+					this[tk] = t[tk] = CodeGlass.style_html(frgTmpl.render(context), 4);
 				}else{
 					this[tk] = t[tk] = this.content[type][key];
 				}
 			}
 		}
-
-		for (var dtlVar in this.iframeVars){
-			t[dtlVar] = this.iframeVars[dtlVar];
-		}
-
 		var template = new dojox.dtl.Template(this.iframeTemplate),
 			context = new dojox.dtl.Context(t);
-
 		this.renderedContent = CodeGlass.style_html(template.render(context), 4);
 	},
 

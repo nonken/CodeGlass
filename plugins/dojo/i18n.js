@@ -3,7 +3,7 @@ dojo.provide("CodeGlass.plugins.dojo.i18n");
 dojo.require("CodeGlass.plugins._base");
 
 dojo.declare("CodeGlass.plugins.dojo.i18n",
-	CodeGlass.plugins._base,
+	CodeGlass.plugins._baseTemplated,
 	{
 
 	injectNode: null,
