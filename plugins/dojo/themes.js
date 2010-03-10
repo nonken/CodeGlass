@@ -39,7 +39,8 @@ dojo.declare("CodeGlass.plugins.dojo.themes",
 			injectToolbar: this.injectToolbar,
 			iframeProps: {
 				"customHead": '<link rel="stylesheet" type="text/css" href="'+this.sharedVars.baseUrl+'dijit/themes/'+this.themes[this.theme].theme+'/'+this.themes[this.theme].theme+'.css" />',
-				"classBody": " "+this.themes[this.theme].theme+" "
+				"classBody": " "+this.themes[this.theme].theme+" ",
+				"theme": this.themes[this.theme].theme
 			}
 		}
 	},
