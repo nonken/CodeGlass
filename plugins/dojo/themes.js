@@ -11,6 +11,7 @@ dojo.declare("CodeGlass.plugins.dojo.themes",
 	templateString: '<div class="menuItem theme">Theme: <select dojoAttachEvent="onchange: _changeTheme" dojoAttachPoint="themeInput"></select></div>',
 
 	themes: [
+		{ theme: "claro", label: "Claro" },
 		{ theme: "tundra", label: "Tundra" },
 		{ theme: "nihilo", label: "Nihilo" },
 		{ theme: "soria", label: "Soria" }
