@@ -4,8 +4,8 @@
 
 .CodeGlassVieweriphone {
 	background: url(bgH.png) no-repeat;
-	width: 389px;
-	height: 719px;
+	width: 389px !important;
+	height: 719px !important;
 	font-family: Helvetica;
 	z-index: 9999999;
 	position: absolute;
@@ -23,11 +23,45 @@
 	top: 120px;
 }
 
+.CodeGlassVieweriphone .header,
+.CodeGlassVieweriphone .footer {
+	position: relative;
+	right: -380px;
+	overflow: visible;
+	background: #eee;
+	height: auto;
+	float: left;
+	border: 6px white solid;
+}
+
+.CodeGlassVieweriphone .header {
+	border-bottom: none;
+	-moz-box-shadow:0 -1px 4px #AAAAAA;
+}
+
+.CodeGlassVieweriphone .footer {
+	border-top: none;
+	-moz-box-shadow:0 1px 4px #AAAAAA;
+}
+
 .CodeGlassVieweriphone .contentWrapper {
 	padding: 0;
-	margin: 3em 0;
+	margin: 0;
 }
 
 .CodeGlassVieweriphone .contentWrapper iframe {
 	border: none;
+}
+
+.CodeGlassVieweriphone div.close {
+	background:url("buttonClose.png") no-repeat scroll right top transparent;
+	display: block;
+	height: 30px;
+	right: -22px;
+	overflow:hidden;
+	position:absolute;
+	text-indent:-9999px;
+	top: -20px;
+	width:30px;
+	z-index:2;
 }
