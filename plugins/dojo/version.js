@@ -52,7 +52,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 		this.suppVersions = [];
 		// it is possible to inject baseUrls externally
 		if(typeof(CodeGlassConfig) != "undefined" && typeof(CodeGlassConfig.baseUrls) != "undefined"){
-			dojo.mixin(this.baseUrls, CodeGlassConfig.baseUrls);
+			this.baseUrls = this.baseUrls.concat(CodeGlassConfig.baseUrls);
 		}
 		dojo.forEach(this.baseUrls, function(url, i){
 			if ((!start || url.version >= start) && (!end || url.version <= end) || !url.version){
