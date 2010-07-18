@@ -133,13 +133,13 @@ dojo.declare("CodeGlass.base",
 
 		// Register plugins
 		d.forEach(this.plugins, function(plg){
-			d["require"]("CodeGlass.plugins."+plg);
-		}, this);
+			d["require"]("CodeGlass.plugins." + plg);
+		});
 
-		d.addOnLoad(dojo.hitch(this, function(){
+		d.ready(this, function(){
 			this._initPlugins();
 			this._setupViewer();
-		}));
+		});
 	},
 
 	_initPlugins: function(){
@@ -152,7 +152,7 @@ dojo.declare("CodeGlass.base",
 		this.pluginSharedVars = []; // Resetting plugin shared vars
 
 		dojo.forEach(this.plugins, function(plg){
-			var o = dojo.getObject("CodeGlass.plugins."+plg);
+			var o = dojo.getObject("CodeGlass.plugins." + plg),
 				instance = new o({
 					sharedVars: this.pluginSharedVars,
 					vars: this.pluginArgs,
@@ -163,9 +163,7 @@ dojo.declare("CodeGlass.base",
 			this._preparePlugin(instance);
 		}, this);
 
-		dojo.subscribe("CodeGlass/plugin/change/" + this.id, this, function(p, base){
-			this._refreshViewer();
-		});
+		dojo.subscribe("CodeGlass/plugin/change/" + this.id, this, "_refreshViewer");
 	},
 
 	_preparePlugin: function(instance){

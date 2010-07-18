@@ -11,6 +11,13 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 	templateString: '<div class="menuItem version">Version: <select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput"></select></div>',
 
 	baseUrls: [
+	    {
+	        baseUrl:"http://ajax.googleapis.com/ajax/libs/dojo/1.5/",
+			label: "1.5 (CDN)",
+			xDomain: true,
+			version: "1.5"
+	    },
+	
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.4/",
 			label: "1.4 (CDN)",
