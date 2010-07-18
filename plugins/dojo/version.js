@@ -11,12 +11,12 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 	templateString: '<div class="menuItem version">Version: <select dojoAttachEvent="onchange: _changeVersion" dojoAttachPoint="versionInput"></select></div>',
 
 	baseUrls: [
-	    {
-	        baseUrl:"http://ajax.googleapis.com/ajax/libs/dojo/1.5/",
+		{
+			baseUrl:"http://ajax.googleapis.com/ajax/libs/dojo/1.5/",
 			label: "1.5 (CDN)",
 			xDomain: true,
 			version: "1.5"
-	    },
+		},
 	
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.4/",
@@ -35,6 +35,13 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 			label: "1.2 (CDN)",
 			xDomain: true,
 			version: "1.2"
+		},
+		{
+			// is default location for relative path'd dojo.js (CodeGlass == sibling of dojo/)
+			baseUrl: "../../",
+			label: "Trunk (slow)",
+			xDomain: false,
+			version: "trunk"
 		}
 	],
 
