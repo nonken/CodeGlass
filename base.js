@@ -673,11 +673,10 @@ dojo.declare("CodeGlass.CodeViewer",
 // Extend nodelist
 dojo.extend(dojo.NodeList, {
 	CodeGlass: function(/* Object? */params){
-		this.forEach(function(elm){
-			dojo.mixin({type: "dialog"}, params);
-			var o = dojo.getObject("CodeGlass.base");
+		var o = dojo.getObject("CodeGlass.base");
+		return this.forEach(function(elm){
+			dojo.mixin({ type: "dialog" }, params);
 			new o(params, elm);
 		});
-		return this;
 	}
 });
