@@ -3,7 +3,11 @@
 	<head>
 		<title>CodeGlass test</title>
 		<link type="text/css" rel="stylesheet" href="../resources/CodeGlass.css" />
+
+		<link type="text/css" rel="stylesheet" href="../chromes/uxebu/uxebu.css" />
 		<link type="text/css" rel="stylesheet" href="../chromes/default/default.css" />
+		<link type="text/css" rel="stylesheet" href="../chromes/iphone/iphone.css" />
+
 		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojox/highlight/resources/highlight.css" />
 		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojox/highlight/resources/pygments/colorful.css" />
 
@@ -51,7 +55,7 @@
 
 
 	<p>With an initial selection and weekends disabled</p>
-<div dojoType="CodeGlass.base" pluginArgs="{djConfig: 'parseOnLoad: true', version: '1.2'}" type="dialog" width="600" height="340"><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
+<div dojoType="CodeGlass.base" pluginArgs="{djConfig: 'parseOnLoad: true', version: '1.2'}" chrome="iphone" type="dialog" width="589" height="719"><div label="" lang="javascript"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
   dojo.require(&quot;dijit._Calendar&quot;);
 &lt;/script&gt;</pre></div><div label="" lang="html"><pre>&lt;div id=&quot;mycal&quot; dojoType=&quot;dijit._Calendar&quot; value=&quot;2009-08-07&quot; isDisabledDate=&quot;dojo.date.locale.isWeekend&quot;&gt;&lt;/div&gt;</pre></div></div><p>Programmatic, with a restriction of +/- one week from the current date</p>
 Hi
