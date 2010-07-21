@@ -6,7 +6,7 @@ dojo.require("dijit._Widget");
 dojo.declare("CodeGlass.plugins._base", dijit._Widget, {
 
 	sharedVars: [],
-	
+
 	codeGlassBaseId: null,
 
 	constructor: function(args){
@@ -25,5 +25,5 @@ dojo.declare("CodeGlass.plugins._base", dijit._Widget, {
 
 dojo.provide("CodeGlass.plugins._baseTemplated");
 dojo.declare("CodeGlass.plugins._baseTemplated", [CodeGlass.plugins._base, dijit._Templated],{
-	injectToolbar: "toolbarBottom",
+	injectToolbar: "toolbarBottom"
 });
