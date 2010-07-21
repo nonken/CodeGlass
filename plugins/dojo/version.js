@@ -17,7 +17,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 			xDomain: true,
 			version: "1.5"
 		},
-	
+
 		{
 			baseUrl: "http://ajax.googleapis.com/ajax/libs/dojo/1.4/",
 			label: "1.4 (CDN)",
@@ -52,7 +52,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 	version: "",
 
 	djConfig: "parseOnLoad: true",
-	
+
 	injectToolbar: "toolbarBottom",
 
 	postCreate: function(){
@@ -68,18 +68,20 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 		if(typeof(CodeGlassConfig) != "undefined" && typeof(CodeGlassConfig.baseUrls) != "undefined"){
 			this.baseUrls = this.baseUrls.concat(CodeGlassConfig.baseUrls);
 		}
+
 		dojo.forEach(this.baseUrls, function(url, i){
 			if ((!start || url.version >= start) && (!end || url.version <= end) || !url.version){
 				this.suppVersions.push(i);
 				++cnt;
 			}
 		}, this);
-		//this.baseUrlIndex = cnt > 0 ? 1 : 0; // Always try to use latest CDN unless feature is only supported by trunk
 
-		dojo.forEach(this.suppVersions, function(version, i){
-			dojo.create("option", { innerHTML: this.baseUrls[version].label, value: i }, this.versionInput);
+		this.baseUrlIndex = this.suppVersions[0]; // Set index of first array value
+		dojo.forEach(this.suppVersions, function(version){
+			dojo.create("option", { innerHTML: this.baseUrls[version].label, value: version }, this.versionInput);
 		}, this);
-		this.versionInput.selectedIndex = this.baseUrlIndex;
+
+		this.versionInput.selectedIndex = 0;
 		this.sharedVars.djConfig = [];
 		this._setSharedVars();
 	},
