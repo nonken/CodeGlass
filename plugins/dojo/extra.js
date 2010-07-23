@@ -21,6 +21,6 @@ dojo.declare("CodeGlass.plugins.dojo.extra",
 			iframeProps: {
 				dataUrl: this.dataUrl
 			}
-		}
+		};
 	}
 });

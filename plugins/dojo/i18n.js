@@ -27,7 +27,7 @@ dojo.declare("CodeGlass.plugins.dojo.i18n",
 			iframeProps: {
 				"i18n": this.i18nInput.value
 			}
-		}
+		};
 	},
 
 	_changeI18n: function(){

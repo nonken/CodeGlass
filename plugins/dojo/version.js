@@ -38,7 +38,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 		},
 		{
 			// is default location for relative path'd dojo.js (CodeGlass == sibling of dojo/)
-			baseUrl: "../../",
+			baseUrl: dojo.config.baseUrl + "../../",
 			label: "Trunk (slow)",
 			xDomain: false,
 			version: "trunk"
@@ -66,6 +66,7 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 		this.suppVersions = [];
 		// it is possible to inject baseUrls externally
 		if(typeof(CodeGlassConfig) != "undefined" && typeof(CodeGlassConfig.baseUrls) != "undefined"){
+			alert("before concat");
 			this.baseUrls = this.baseUrls.concat(CodeGlassConfig.baseUrls);
 		}
 
@@ -97,9 +98,11 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 			iframeProps: {
 				"baseUrl": this.baseUrls[this.baseUrlIndex].baseUrl,
 				"baseUrlIndex": this.baseUrlIndex,
-				"customJavaScript": '<script type="text/javascript" src="'+this.baseUrls[this.baseUrlIndex].baseUrl+'dojo/dojo'+(this.baseUrls[this.baseUrlIndex].xDomain ? ".xd" : "")+'.js" djConfig="'+djConfig.join(",")+'"></script>'
+				"customJavaScript": '<scr' + 'ipt src="'
+					+ this.baseUrls[this.baseUrlIndex].baseUrl + 'dojo/dojo' + (this.baseUrls[this.baseUrlIndex].xDomain ? ".xd" : "")
+					+ '.js" djConfig="' + djConfig.join(",") + '"><' + '/scr' + 'ipt>'
 			}
-		}
+		};
 	},
 
 	_setSharedVars: function(){
@@ -116,4 +119,5 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 
 		dojo.publish("CodeGlass/plugin/change/" + this.codeGlassBaseId, ["dojo.version"]);
 	}
+	
 });

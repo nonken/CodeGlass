@@ -20,7 +20,7 @@ dojo.declare("CodeGlass.plugins.dojo.dir",
 			iframeProps: {
 				"html": ' dir="'+this.dir+'" '
 			}
-		}
+		};
 	},
 
 	_changeDir: function(){

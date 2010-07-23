@@ -3,12 +3,14 @@
 <head>
 	<meta charset="utf-8">
 	<title>document.write() to iframe</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js"></script>
+	<script djConfig="isDebug:true" src="http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js"></script>
 </head>
 <body>
-	<a id="click" href="javascript://">Click</a>
-	<div id="container">
-	</div>
+    
+    <h3>This is the code that will be injected:</h3>
+    <textarea rows="10" cols="50" id="foo"></textarea>
+	<a id="click" href="#">Click</a>
+	<div id="container"></div>
 	<script type="text/javascript">
 	var html = [
 		'<!DOCTYPE HTML>',
@@ -16,30 +18,37 @@
 		'<head>',
 		'	<meta charset="utf-8">',
 		'	<title>Test Document</title>',
+		'   <link rel="stylesheet" href="http://o.aolcdn.com/dojo/1.4/dijit/themes/tundra/tundra.css">',
 		'	<style type="text/css">',
 		'		p { color: yellow }',
 		'	</style>',
 		'	<script src="http://o.aolcdn.com/dojo/1.4/dojo/dojo.xd.js"></' + 'script>',
 		'	<script type="text/javascript">',
-		'		alert("typeof dojo: " + typeof dojo);',
+		'       dojo.require("dijit.form.Button"); dojo.require("dojo.parser");',
+		'		console.warn("typeof dojo: " + typeof dojo + " " + dojo.version);',
 		'	<' + '/script>',
 		'</head>',
-		'<body>',
+		'<body class="tundra">',
 		'	<p>Hello World!</p>',
 		'	<p>Foo Bar</p>',
 		'	<script type="text/javascript">',
 		'		document.getElementsByTagName("p")[0].style.color = "green";',
 		'	<' + '/script>',
 		'	<script type="text/javascript">',
-		'		alert("written into the iframe");',
+		'		dojo.require("dojo.io.iframe"); dojo.ready(function(){ dojo.parser.parse(); });',
 		'	<' + '/script>',
+		'   <div dojoType="dijit.form.Button"> yo </', 'div>',
 		'</body>',
 		'</html>'
-	].join("\n");
+	].join("\n\r");
 
-	dojo.connect(document.getElementById("click"), "click", function(){
+	dojo.connect(dojo.byId("click"), "click", function(e){
+	    
+	    e && e.preventDefault();
+	    
 		var b = document.body,
-			f = dojo.create("iframe", {}, document.getElementById("container"));
+			f = dojo.create("iframe", {}, document.getElementById("container")),
+			html = dojo.byId("foo").value
 
 		var doc = f.contentWindow.document;
 		doc.open();
@@ -52,33 +61,41 @@
 				lastBit = bits.pop(),
 				currentScript; // the last script tag written into the iframe
 
-				var readyStateCheck = function(){ // event handler for script blocks
-					if(currentScript.readyState == "complete" || currentScript.readyState == "loaded"){
-						// inline scripts: "complete", external scripts: "loaded"
-						currentScript.detachEvent("onreadystatechange", readyStateCheck);
-						writeNextBitIE();
-					}
-				};
+			var readyStateCheck = function(){ // event handler for script blocks
+				if(currentScript.readyState == "complete" || currentScript.readyState == "loaded"){
+					// inline scripts: "complete", external scripts: "loaded"
+					currentScript.detachEvent("onreadystatechange", readyStateCheck);
+					writeNextBitIE();
+				}
+			};
 
-				var writeNextBitIE = function(){
-					var bit = bits.shift();
+			var writeNextBitIE = function(){
+				var bit = bits.shift();
 
-					if(dojo.isString(bit)){
-						doc.write(bit + "<" + "/script>");
-						currentScript = dojo.query("script", doc).pop();
-						currentScript.attachEvent("onreadystatechange", readyStateCheck);
-						readyStateCheck();
-					}else{
-						doc.write(lastBit);
-						doc.close();
-					}
-				};
+				if(dojo.isString(bit)){
+					doc.write(bit + "<" + "/script>");
+					currentScript = dojo.query("script", doc).pop();
+					currentScript.attachEvent("onreadystatechange", readyStateCheck);
+					readyStateCheck();
+				}else{
+					doc.write(lastBit);
+					doc.close();
+				}
+			};
 
-				writeNextBitIE();
+			writeNextBitIE();
 		}
 
 	});
+	
+	dojo.ready(function(){
+	    console.warn("dojo.byId", dojo.byId("foo"));
+	    dojo.byId("foo").value = html;
+	});
 
 	</script>
+	
+	
+	
 </body>
 </html>

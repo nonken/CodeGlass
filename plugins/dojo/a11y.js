@@ -15,7 +15,7 @@ dojo.declare("CodeGlass.plugins.dojo.a11y",
 			iframeProps: {
 				"classBody": this.a11yInput.checked ? ' dijit_a11y ' : ''
 			}
-		}
+		};
 	},
 
 	_changeA11y: function(){

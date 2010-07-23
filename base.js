@@ -99,7 +99,7 @@ dojo.declare("CodeGlass.base",
 		// Setting template path. This will define the basic l&f of
 		// CodeGlass
 		this["templatePath"] = dojo.moduleUrl(
-			"CodeGlass.chromes."+this.chrome, "template.html"
+			"CodeGlass.chromes." + this.chrome, "template.html"
 		);
 	},
 
@@ -418,12 +418,17 @@ dojo.declare("CodeGlass.CodeViewer",
 
 	// toolbars:
 	//		Array of toolbar items to be shown
-	toolbars: [],
+	toolbars: null,
 
 	// iframeVars:
 	//		Array of variables which get injected into and rendered
 	//		by the iframe
-	iframeVars: [],
+	iframeVars: null,
+
+	constructor: function(args){
+		this.toolbars = this.toolbars || [];
+		this.iframeVars = this.iframeVars || [];
+	},
 
 	postMixInProperties: function(){
 		// summary:
@@ -509,8 +514,9 @@ dojo.declare("CodeGlass.CodeViewer",
 				}
 			}
 		}
-		var template = new dojox.dtl.Template(this.iframeTemplate),
-			context = new dojox.dtl.Context(t);
+		var template = new dojox.dtl.Template(this.iframeTemplate);
+		
+		context = new dojox.dtl.Context(t);
 		this.renderedContent = CodeGlass.style_html(template.render(context), 4);
 	},
 
@@ -533,53 +539,56 @@ dojo.declare("CodeGlass.CodeViewer",
 				doc.write(content);
 				doc.close();
 			}else{
+				
 				var bits = content.split("<" + "/script>"),
 					lastBit = bits.pop(),
 					currentScript; // the last script tag written into the iframe
 
-					var readyStateCheck = function(){ // event handler for script blocks
-						if(currentScript.readyState == "complete" || currentScript.readyState == "loaded"){
-							// inline scripts: "complete", external scripts: "loaded"
-							currentScript.detachEvent("onreadystatechange", readyStateCheck);
-							writeNextBitIE();
-						}
-					};
+				var readyStateCheck = function(){ // event handler for script blocks
+					if(currentScript.readyState == "complete" || currentScript.readyState == "loaded"){
+						// inline scripts: "complete", external scripts: "loaded"
+						currentScript.detachEvent("onreadystatechange", readyStateCheck);
+						writeNextBitIE();
+					}
+				};
 
-					var writeNextBitIE = function(){
-						var bit = bits.shift();
+				var writeNextBitIE = function(){
+					var bit = bits.shift();
 
-						if(dojo.isString(bit)){
-							doc.write(bit + "<" + "/script>");
-							currentScript = dojo.query("script", doc).pop();
-							currentScript.attachEvent("onreadystatechange", readyStateCheck);
-							readyStateCheck();
-						}else{
-							doc.write(lastBit);
-							if(dojo.isIE > 7){ // otherwise IE8 freezes
-								setTimeout(function(){
-									doc.close();
-								}, 100);
-							}
-							else {
+					if(dojo.isString(bit)){
+						doc.write(bit + "<" + "/script>");
+						currentScript = dojo.query("script", doc).pop();
+						currentScript.attachEvent("onreadystatechange", readyStateCheck);
+						readyStateCheck();
+					}else{
+						doc.write(lastBit);
+						if(dojo.isIE > 7){ // otherwise IE8 freezes
+							setTimeout(function(){
 								doc.close();
-							}
-
+							}, 100);
 						}
-					};
-					writeNextBitIE();
+						else {
+							doc.close();
+						}
+
+					}
+				};
+				writeNextBitIE();
 			}
  			doc.pub = dojo.hitch(this, function(){
  				dojo.publish("codeglass/loaded", [this]);
  			});
 		}else{
+			
+			var e;
 			// dojo.connect doesn't work on iframes in IE, see #9609
 			if (this.iframe.addEventListener) {
-				var e = this.iframe.addEventListener("load", dojo.hitch(this, function(){
+				e = this.iframe.addEventListener("load", dojo.hitch(this, function(){
 					dojo.publish("codeglass/loaded", [this]);
 					this.iframe.removeEventListener(e);
 				}) , false);
 			} else if (this.iframe.attachEvent) {
-				var e = this.iframe.attachEvent("onload", dojo.hitch(this, function(){
+				e = this.iframe.attachEvent("onload", dojo.hitch(this, function(){
 					dojo.publish("codeglass/loaded", [this]);
 					this.iframe.detachEvent(e);
 				}));
@@ -664,7 +673,7 @@ dojo.declare("CodeGlass.CodeViewer",
 		// summary:
 		//		Helper function to copy code samples to clipboard
 
-		alert("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nThat would be awesome!!");
+		console.warn("Not working yet :(\nDo you know flash and can write something to support this feature cross browser?\nThat would be awesome!!");
 	}
 });
 
