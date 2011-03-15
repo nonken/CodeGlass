@@ -12,6 +12,13 @@ dojo.declare("CodeGlass.plugins.dojo.version",
 
 	baseUrls: [
 		{
+			baseUrl:"http://ajax.googleapis.com/ajax/libs/dojo/1.6/",
+			label: "1.6 (CDN)",
+			xDomain: true,
+			version: "1.6"
+		},
+
+		{
 			baseUrl:"http://ajax.googleapis.com/ajax/libs/dojo/1.5/",
 			label: "1.5 (CDN)",
 			xDomain: true,
